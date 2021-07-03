@@ -1,0 +1,8 @@
+frontend/.idea
+frontend/node_modules
+frontend/dist
+backend/key.json
+backend/target
+backend/.env
+backend/handler.exe
+.DS_Store
