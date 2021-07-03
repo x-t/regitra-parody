@@ -26,9 +26,9 @@ const examName = "DEMO NAUDOTOJAS";
 const testRandNumber = Math.floor(Math.random() * 3000 + 9000);
 
 const apiGetQuestionsUrlLt =
-  "https://regitra-parody-backend.azurewebsites.net/api/get_questions?lang=en";
-const apiGetQuestionsUrlEn =
   "https://regitra-parody-backend.azurewebsites.net/api/get_questions?lang=lt";
+const apiGetQuestionsUrlEn =
+  "https://regitra-parody-backend.azurewebsites.net/api/get_questions?lang=en";
 const apiGetAnswersUrlEn =
   "https://regitra-parody-backend.azurewebsites.net/api/get_answers?lang=en";
 const apiGetAnswersUrlLt =
