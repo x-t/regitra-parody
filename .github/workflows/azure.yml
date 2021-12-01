@@ -3,7 +3,8 @@ name: Deploy Backend to Azure Functions
 on:
   push:
     paths:
-      - "backend/"
+      - "backend/**"
+      - ".github/workflows/azure.yml"
 
 env:
   AZURE_WEBAPP_NAME: regitra-parody-backend
