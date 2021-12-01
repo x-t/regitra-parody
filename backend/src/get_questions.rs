@@ -52,7 +52,10 @@ pub async fn get_questions(q: HashMap<String, String>) -> Result<impl Reply> {
 
     let res = hub
         .spreadsheets()
-        .values_get(&spreadsheet_id, &format!("Q_{}!A2", language.to_uppercase()))
+        .values_get(
+            &spreadsheet_id,
+            &format!("Q_{}!A2", language.to_uppercase()),
+        )
         .major_dimension("ROWS")
         .doit()
         .await;

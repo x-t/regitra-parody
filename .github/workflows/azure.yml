@@ -1,0 +1,45 @@
+name: Deploy Backend to Azure Functions
+
+on:
+  push:
+    paths:
+      - "backend/"
+
+env:
+  AZURE_WEBAPP_NAME: regitra-parody-backend
+  AZURE_WEBAPP_PACKAGE_PATH: './backend'
+
+jobs:
+  build-and-deploy:
+    name: Build and Deploy
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: cargo build
+      run: |
+        cd backend
+        cargo build --release
+        cp target/release/handler.exe .
+
+    - name: Create key.json from B64_SECRET1
+      id: secret-file1
+      run: |
+        $secretFile = Join-Path -Path $env:RUNNER_TEMP -ChildPath "backend/key.json";
+        $encodedBytes = [System.Convert]::FromBase64String($env:SECRET_DATA1);
+        Set-Content $secretFile -Value $encodedBytes -AsByteStream;
+        $secretFileHash = Get-FileHash $secretFile;
+        Write-Output "::set-output name=SECRET_FILE::$secretFile";
+        Write-Output "::set-output name=SECRET_FILE_HASH::$($secretFileHash.Hash)";
+        Write-Output "Secret file $secretFile has hash $($secretFileHash.Hash)";
+      shell: pwsh
+      env:
+        SECRET_DATA1: ${{ secrets.B64_SECRET1 }}
+
+    - name: 'Deploy to Azure Functions'
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ env.AZURE_WEBAPP_NAME }}
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
