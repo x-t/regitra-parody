@@ -18,16 +18,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
-    - name: cargo build
-      run: |
-        cd backend
-        cargo build --release
-        cp target/release/handler.exe .
-
-    - name: Create key.json from B64_SECRET1
+    - name: Create secret key.json
       id: secret-file1
       run: |
-        $secretFile = Join-Path -Path $env:RUNNER_TEMP -ChildPath "backend/key.json";
+        $secretFile = Join-Path -Path $env:RUNNER_TEMP -ChildPath "key.json";
         $encodedBytes = [System.Convert]::FromBase64String($env:SECRET_DATA1);
         Set-Content $secretFile -Value $encodedBytes -AsByteStream;
         $secretFileHash = Get-FileHash $secretFile;
@@ -37,6 +31,13 @@ jobs:
       shell: pwsh
       env:
         SECRET_DATA1: ${{ secrets.B64_SECRET1 }}
+      working-directory: './backend'
+
+    - name: cargo build
+      run: |
+        cargo build --release
+        cp target/release/handler.exe .
+      working-directory: './backend'
 
     - name: 'Deploy to Azure Functions'
       uses: Azure/functions-action@v1
