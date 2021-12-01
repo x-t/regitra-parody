@@ -29,7 +29,7 @@ jobs:
         Write-Output "::set-output name=SECRET_FILE_HASH::$($secretFileHash.Hash)";
         Write-Output "Secret file $secretFile has hash $($secretFileHash.Hash)";
         Copy-Item $secretFile .
-        ls -l
+        ls .
 
       shell: pwsh
       env:
