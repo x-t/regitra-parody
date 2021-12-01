@@ -21,8 +21,6 @@ jobs:
     - name: Create secret key.json
       id: secret-file1
       run: |
-        ls
-        cd backend
         $secretFile = Join-Path -Path $env:RUNNER_TEMP -ChildPath "key.json";
         $encodedBytes = [System.Convert]::FromBase64String($env:SECRET_DATA1);
         Set-Content $secretFile -Value $encodedBytes -AsByteStream;
@@ -30,9 +28,13 @@ jobs:
         Write-Output "::set-output name=SECRET_FILE::$secretFile";
         Write-Output "::set-output name=SECRET_FILE_HASH::$($secretFileHash.Hash)";
         Write-Output "Secret file $secretFile has hash $($secretFileHash.Hash)";
+        Copy-Item $secretFile .
+        ls -l
+
       shell: pwsh
       env:
         SECRET_DATA1: ${{ secrets.B64_SECRET1 }}
+      working-directory: './backend'
 
     - name: cargo build
       run: |
