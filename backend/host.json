@@ -14,7 +14,7 @@
   },
   "customHandler": {
     "description": {
-      "defaultExecutablePath": "handler.exe",
+      "defaultExecutablePath": "handler",
       "workingDirectory": "",
       "arguments": []
     },

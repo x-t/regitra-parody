@@ -13,7 +13,7 @@ env:
 jobs:
   build-and-deploy:
     name: Build and Deploy
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -37,7 +37,7 @@ jobs:
     - name: cargo build
       run: |
         cargo build --release
-        cp target/release/handler.exe .
+        cp target/release/handler .
       working-directory: './backend'
 
     - name: 'Deploy to Azure Functions'
