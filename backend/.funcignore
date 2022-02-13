@@ -1,8 +1,0 @@
-.git*
-.vscode
-local.settings.json
-test
-src
-target
-Cargo.toml
-Cargo.lock

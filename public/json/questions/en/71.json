@@ -1,0 +1,9 @@
+{
+  "q": "When turning right, do you need to turn on the indicator?",
+  "a": [
+    "Yes, always",
+    "Yes, if you're not a BMW driver",
+    "No"
+  ],
+  "i": "/img/test/iu-2.gif"
+}

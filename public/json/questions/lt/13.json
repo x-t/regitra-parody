@@ -1,0 +1,11 @@
+{
+  "q": "Jūs važiuojate iš A į B, po to C, atgal į A, tiesiai E, į C, ant D, bet A uždarytas, tai važiuojate nuo B. Kur atsirasite?",
+  "a": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ]
+}

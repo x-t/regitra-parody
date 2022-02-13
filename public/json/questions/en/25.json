@@ -1,0 +1,11 @@
+{
+  "q": "You go from A to B, then C, back to A, towards E, into C, onto D, but A is closed, so you go from B. Where do you end up?",
+  "a": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ]
+}

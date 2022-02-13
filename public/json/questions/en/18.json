@@ -1,0 +1,8 @@
+{
+  "q": "There's a sign \"no parking\" near the place you live, how do you act?",
+  "a": [
+    "Stop anyway because this is where I live",
+    "Take the sign down before stopping"
+  ],
+  "i": "/img/test/proxy-image.jpeg"
+}

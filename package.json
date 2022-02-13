@@ -1,0 +1,20 @@
+{
+  "name": "regitra",
+  "version": "0.0.0",
+  "scripts": {
+    "prebuild": "en_c=$(ls public/json/questions/en | wc -l);lt_c=$(ls public/json/questions/lt | wc -l);mkdir -p src/generated;echo \"{\\\"en\\\":${en_c},\\\"lt\\\":${lt_c}}\" > src/generated/count.json",
+    "dev": "npm run prebuild && vite",
+    "build": "npm run prebuild && tsc && vite build",
+    "serve": "npm run prebuild && vite preview"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-legacy": "^1.7.1",
+    "autoprefixer": "^10.4.2",
+    "postcss": "^8.4.6",
+    "typescript": "^4.5.5",
+    "vite": "^2.8.1"
+  },
+  "dependencies": {
+    "draggable_dialog": "^1.0.3"
+  }
+}
