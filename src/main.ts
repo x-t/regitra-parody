@@ -43,7 +43,6 @@ const hydrateFront = () => {
 
   // Significant duplication.... whatever
   document.querySelector<HTMLButtonElement>("#changeLangLT")!.onclick = () => {
-    console.log("called");
     if (getLanguage() === "lt") return;
     localStorage.setItem("selectedLanguage", "lt");
     document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
@@ -55,7 +54,6 @@ const hydrateFront = () => {
   };
 
   document.querySelector<HTMLButtonElement>("#changeLangEN")!.onclick = () => {
-    console.log("called");
     if (getLanguage() === "en") return;
     localStorage.setItem("selectedLanguage", "en");
     document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
@@ -358,7 +356,6 @@ const finishExam = async () => {
     return;
   }
 
-  console.log(answers);
   const answered = localStorage.getItem("selectedAnswers")
     ? JSON.parse(localStorage.getItem("selectedAnswers")!)
     : {};

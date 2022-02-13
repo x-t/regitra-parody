@@ -5,9 +5,14 @@ const randomNum = (min: number, max: number) => {
 };
 
 const random_ids = (min: number, max: number, amount: number) => {
-  const ids = [];
+  const ids: number[] = [];
   for (let i = 0; i < amount; i++) {
-    ids.push(randomNum(min, max));
+    // Generate unique IDs
+    let id = randomNum(min, max);
+    while (ids.includes(id)) {
+      id = randomNum(min, max);
+    }
+    ids.push(id);
   }
   return ids;
 };
