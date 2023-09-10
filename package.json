@@ -8,11 +8,11 @@
     "serve": "npm run prebuild && vite preview"
   },
   "devDependencies": {
-    "@vitejs/plugin-legacy": "^1.7.1",
-    "autoprefixer": "^10.4.2",
-    "postcss": "^8.4.6",
-    "typescript": "^4.5.5",
-    "vite": "^2.8.1"
+    "@vitejs/plugin-legacy": "^4.1.1",
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.29",
+    "typescript": "^5.2.2",
+    "vite": "^4.4.9"
   },
   "dependencies": {
     "draggable_dialog": "^1.0.3"
