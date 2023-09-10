@@ -78,36 +78,15 @@ export const testPage = (
           
           <div class="questionControls">
             <div>
-              <div><button><div data-answered="false">1</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">2</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">3</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">4</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">5</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">6</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">7</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">8</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">9</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">10</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">11</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">12</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">13</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">14</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">15</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">16</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">17</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">18</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">19</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">20</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">21</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">22</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">23</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">24</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">25</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">26</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">27</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">28</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">29</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
-              <div><button><div data-answered="false">30</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>
+              ${
+                (() => {
+                  let controls = "";
+                  for (let i = 1; i <= 30; i++) {
+                    controls += `<div><button><div data-answered="false">${i}</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>`
+                  }
+                  return controls
+                })()
+              }
             </div>
           </div>
       </div>
