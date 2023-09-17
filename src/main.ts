@@ -1,12 +1,11 @@
 import "./regitra.css";
-import { strings } from "./strings";
+import { getLanguage, strings } from "./i18n";
 import { countdownTimer } from "./countdown";
 // @ts-ignore
 import Draggable from "draggable_dialog";
 import { on } from "./event";
 import { beginPage } from "./templates/beginPage";
 import { testPage } from "./templates/testPage";
-import { getLanguage } from "./lang";
 import { generateQuestions } from "./generator";
 import { areArraysEqualSets } from "./array";
 import { get_answer_data, get_question_data } from "./importer";
@@ -36,32 +35,31 @@ localStorage.removeItem("selectedLanguage");
 localStorage.removeItem("examFinished");
 localStorage.setItem("selectedLanguage", "lt");
 localStorage.setItem("examFinished", "false");
-app.innerHTML = beginPage(strings, examName, getLanguage());
 
-const hydrateFront = () => {
+const hydrateFront = async () => {
   document.querySelector<HTMLSpanElement>("#__Loading_Box_Text")!.innerHTML =
-    strings[getLanguage()].wait;
+    await strings("wait");
 
   // Significant duplication.... whatever
-  document.querySelector<HTMLButtonElement>("#changeLangLT")!.onclick = () => {
+  document.querySelector<HTMLButtonElement>("#changeLangLT")!.onclick = async () => {
     if (getLanguage() === "lt") return;
     localStorage.setItem("selectedLanguage", "lt");
     document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
       "/img/ENoff.png";
     document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
       "/img/LTyes.png";
-    app.innerHTML = beginPage(strings, examName, "lt");
+    app.innerHTML = await beginPage(examName, "lt");
     hydrateFront();
   };
 
-  document.querySelector<HTMLButtonElement>("#changeLangEN")!.onclick = () => {
+  document.querySelector<HTMLButtonElement>("#changeLangEN")!.onclick = async () => {
     if (getLanguage() === "en") return;
     localStorage.setItem("selectedLanguage", "en");
     document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
       "/img/LToff.png";
     document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
       "/img/ENyes.png";
-    app.innerHTML = beginPage(strings, examName, "en");
+    app.innerHTML = await beginPage(examName, "en");
     hydrateFront();
   };
 
@@ -77,16 +75,16 @@ const hydrateFront = () => {
       try {
         questions = await get_question_data(getLanguage());
       } catch {
-        alert(strings[getLanguage()].errorStart);
+        alert(await strings("errorStart"));
         return;
       }
 
-      app.innerHTML = testPage(
-        strings[getLanguage()],
+      app.innerHTML = await testPage(
         examName,
         testRandNumber,
-        generateQuestions(questions)
+        await generateQuestions(questions)
       );
+
       const endsDate = new Date(new Date().getTime() + 30 * 60000);
 
       const selectQuestion = (id: number) => {
@@ -252,15 +250,15 @@ const hydrateFront = () => {
       on(
         document.querySelector<HTMLButtonElement>("#finishTestAction")!,
         "click",
-        () => {
+        async () => {
           document.querySelector<HTMLParagraphElement>(
             "#overlayConfirmationContent"
           )!.innerHTML =
             document.querySelectorAll<HTMLDivElement>(
               'div[data-answered="false"]'
             ).length === 0
-              ? strings[getLanguage()].confirmFinish
-              : strings[getLanguage()].warningUnanswered;
+              ? await strings("confirmFinish")
+              : await strings("warningUnanswered");
           document.querySelector<HTMLDivElement>(
             ".confirmationOverlay"
           )!.style.display = "unset";
@@ -353,7 +351,7 @@ const finishExam = async () => {
       JSON.parse(localStorage.getItem("questionIDs")!)
     );
   } catch {
-    alert(strings[getLanguage()].errorEnd);
+    alert(await strings("errorEnd"));
     return;
   }
 
@@ -404,8 +402,8 @@ const finishExam = async () => {
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonIncorrectAnswer"
     )!.length > 6
-      ? strings[getLanguage()].examFail
-      : strings[getLanguage()].examPass;
+      ? await strings("examFail")
+      : await strings("examPass");
   document.querySelector<HTMLDivElement>(
     ".examFinishDialog > div:first-child"
   )!.style.backgroundColor =
@@ -448,4 +446,7 @@ const getTestPercentage = (answers: number): string => {
   return `${x}%`;
 };
 
-hydrateFront();
+window.onload = async () => {
+  app.innerHTML = await beginPage(examName, getLanguage());
+  hydrateFront();
+}

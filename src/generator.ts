@@ -1,8 +1,7 @@
-import { strings } from "./strings";
-import { getLanguage } from "./lang";
+import { strings } from "./i18n";
 import { Question } from "./main";
 
-export const generateQuestion = (qi: Question, idx: number) => {
+export const generateQuestion = async (qi: Question, idx: number) => {
   let divQ = document.createElement("div");
   divQ.setAttribute("class", "testQuestion");
   divQ.setAttribute("data-qId", String(qi.id));
@@ -10,11 +9,11 @@ export const generateQuestion = (qi: Question, idx: number) => {
 
   const imageS = qi.image
     ? `<img alt="${
-        strings[getLanguage()].noIllustration
+        await strings("noIllustration")
       }" aria-label="There is a picture here, but we cannot describe it to you. Sorry." src="${
         qi.image
       }" />`
-    : `<p>${strings[getLanguage()].noIllustration}</p>`;
+    : `<p>${await strings("noIllustration")}</p>`;
   const answerS = qi.answers.reduce((agg, cur, _idx) => {
     return (agg += `
     <button id="answer-${idx}-${_idx + 1}"><div data-answerIndex="${idx}-${
@@ -42,10 +41,14 @@ export const generateQuestion = (qi: Question, idx: number) => {
   return divQ.outerHTML;
 };
 
-export const generateQuestions = (qs: Question[]) => {
+export const generateQuestions = async (qs: Question[]) => {
   let congregate = "";
-  qs.forEach((q, idx) => {
-    congregate += generateQuestion(q, idx);
+  let promises = qs.map((q, idx) => {
+    return generateQuestion(q, idx);
   });
+  let settled = await Promise.all(promises);
+  settled.forEach((q) => {
+    congregate += q;
+  })
   return congregate;
 };
