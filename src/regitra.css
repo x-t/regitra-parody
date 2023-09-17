@@ -1,261 +1,266 @@
 body {
-    font-family: Arial Unicode MS, Arial, sans-serif;
-    font-size: 10pt;
+  font-family:
+    Arial Unicode MS,
+    Arial,
+    sans-serif;
+  font-size: 10pt;
 }
 
 .mainWindow {
-    width: 1000px;
-    height: 700px;
-    text-align: center;
-    margin: 0 auto;
+  width: 1000px;
+  height: 700px;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .mainWindow > div.head {
-    height: 100px;
-    font-size: 50px;
+  height: 100px;
+  font-size: 50px;
 }
 
 .mainWindow > div.name {
-    height: 200px;
-    font-size: 80px;
+  height: 200px;
+  font-size: 80px;
 }
 
 .mainWindow > div.options {
-    height: 150px;
-    font-size: 30px;
+  height: 150px;
+  font-size: 30px;
 }
 
 .mainWindow > div.options > table {
-    margin-left: auto;
-    margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .mainWindow > div.options > table > tbody > tr > td:nth-child(1) {
-    text-align: right;
+  text-align: right;
 }
 
 .mainWindow > div.options > table > tbody > tr > td:nth-child(2) {
-    text-align: left;
+  text-align: left;
 }
 
 .mainWindow > div.options > table > tbody > tr > td > img {
-    cursor: pointer;
+  cursor: pointer;
 }
 
-.mainWindow > div.head, .mainWindow > div.name {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.mainWindow > div.head,
+.mainWindow > div.name {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .beginButton {
-    font-size: 25px;
-    width: 305px;
-    height: 50px;
-    padding-top: 2px;
-    padding-bottom: 2px;
-    margin: 0;
-    border: 1px outset #ccc;
-    background: url("/img/hborder.png") repeat-x 0 -27px;
-    cursor: pointer;
+  font-size: 25px;
+  width: 305px;
+  height: 50px;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  margin: 0;
+  border: 1px outset #ccc;
+  background: url("/img/hborder.png") repeat-x 0 -27px;
+  cursor: pointer;
 }
 
 .beginButton > span {
-    position: relative;
-    bottom: 2px;
-    padding-left: 2px;
+  position: relative;
+  bottom: 2px;
+  padding-left: 2px;
 }
 
 .beginButton > img {
-    margin-left: 15px;
-    margin-bottom: -5px;
+  margin-left: 15px;
+  margin-bottom: -5px;
 }
 
 .exam {
-    width: 100%;
-    height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
-.testTopBar, .testInfo {
-    background-color: #f9f9f9;
+.testTopBar,
+.testInfo {
+  background-color: #f9f9f9;
 }
 
 .testTopBar > div:nth-child(2) {
-    width: 550px;
+  width: 550px;
 }
 
 .testTopBar {
-    display: flex;
-    justify-content: space-between;
-    padding-bottom: 3px;
-    padding-top: 3px;
-    margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 3px;
+  padding-top: 3px;
+  margin-bottom: 10px;
 }
 
 .testControl {
-    border-style: solid;
-    border-width: 1px;
-    border-color: #e0e0e0;
-    margin: 0 3px 0 0;
-    padding: 5px;
-    border-radius: 4px;
-    background: url("/img/grad.png") 100% 100% no-repeat;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #e0e0e0;
+  margin: 0 3px 0 0;
+  padding: 5px;
+  border-radius: 4px;
+  background: url("/img/grad.png") 100% 100% no-repeat;
 }
 
 .testControl {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .testControl > div:nth-child(1) {
-    display: flex;
-    text-align: left;
+  display: flex;
+  text-align: left;
 }
 
 .testControl > div:nth-child(1) > div:nth-child(1) {
-    width: 300px;
+  width: 300px;
 }
 
 .testControl > div:nth-child(2) > button {
-    min-width: 110px;
-    display: none;
+  min-width: 110px;
+  display: none;
 }
 
 .testControl > div button {
-    padding-top: 2px;
-    padding-bottom: 2px;
-    min-width: 200px;
-    min-height: 31px;
-    background: url("/img/hborder.png") repeat-x scroll 0 -27px transparent;
-    border: 2px outset #CCCCCC;
-    cursor: pointer;
-    font-size: small;
-    margin: 0;
-    text-decoration: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  min-width: 200px;
+  min-height: 31px;
+  background: url("/img/hborder.png") repeat-x scroll 0 -27px transparent;
+  border: 2px outset #cccccc;
+  cursor: pointer;
+  font-size: small;
+  margin: 0;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .testControl > div > button[disabled] {
-    color: #888888;
+  color: #888888;
 }
 
 .testControl > div > button[disabled]:hover {
-    border: 2px outset #CCCCCC;
-    cursor: unset;
+  border: 2px outset #cccccc;
+  cursor: unset;
 }
 
 .testControl > div button:hover {
-    border-color: #99CCFF #6699EE #6699EE #77AAFF;
+  border-color: #99ccff #6699ee #6699ee #77aaff;
 }
 
 .testControl > div button[disabled]:hover {
-    border: 2px outset #CCCCCC;
+  border: 2px outset #cccccc;
 }
 
 .testControl > div > button > span {
-    bottom: 3px;
-    padding-left: 5px;
-    padding-right: 5px;
+  bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .testInfo {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 }
 
 .questionControls {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .questionControls > div {
-    display: flex;
-    justify-content: space-around;
+  display: flex;
+  justify-content: space-around;
 }
 
 .questionControls > div > div > button > div {
-    cursor: pointer;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #9a9a9a;
-    font-weight: bold;
-    border-radius: 4px;
-    width: 24px;
-    height: 19px;
-    margin-left: 5px; /* Does not apply to Safari */
+  cursor: pointer;
+  border-style: solid;
+  border-width: 1px;
+  border-color: #9a9a9a;
+  font-weight: bold;
+  border-radius: 4px;
+  width: 24px;
+  height: 19px;
+  margin-left: 5px; /* Does not apply to Safari */
 }
 
 .questionControls > div > div > div:nth-child(2) > img {
-    margin-left: 5px;
-    display: none;
+  margin-left: 5px;
+  display: none;
 }
 
 .questionControls > div > div > button > div[data-answered="false"] {
-    background-color: #ebebeb;
+  background-color: #ebebeb;
 }
 
 .questionControls > div > div > button > div[data-answered="true"] {
-    color: white;
-    background-color: #c6c6c6;
+  color: white;
+  background-color: #c6c6c6;
 }
 
 .questionControls > div > div > button > div:hover {
-    background-color: #488ac7;
+  background-color: #488ac7;
 }
 
 /* ---- TODO ---- */
-.questionIncorrectAnswer{
-    color: #FF7C80;
+.questionIncorrectAnswer {
+  color: #ff7c80;
 }
 
-.questionCorrectAnswer{
-    color: #51A31B;
+.questionCorrectAnswer {
+  color: #51a31b;
 }
 
-.questionButtonIncorrectAnswer{
-    background-color: #FF7C80 !important;
+.questionButtonIncorrectAnswer {
+  background-color: #ff7c80 !important;
 }
 
-.questionButtonCorrectAnswer{
-    background-color: #51A31B !important;
+.questionButtonCorrectAnswer {
+  background-color: #51a31b !important;
 }
 /* -------------- */
 
 .testQuestion {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    display: none;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  display: none;
 }
 
 .testQuestion > div:first-child {
-    display: flex;
-    margin-bottom: 30px;
+  display: flex;
+  margin-bottom: 30px;
 }
 
 .testQuestion > div:first-child > div:nth-child(1) {
-    width: 500px;
+  width: 500px;
 }
 
 .testQuestion > div:first-child > div:nth-child(2) > textarea {
-    font-size: 1.9em;
-    padding-left: 15px;
-    padding-right: 5px;
-    font-family: Arial serif;
-    line-height: 1.6em;
-    border: none;
-    background: white;
-    cursor: default;
-    overflow-y: auto;
-    height: 300px;
-    width: 500px;
+  font-size: 1.9em;
+  padding-left: 15px;
+  padding-right: 5px;
+  font-family: Arial serif;
+  line-height: 1.6em;
+  border: none;
+  background: white;
+  cursor: default;
+  overflow-y: auto;
+  height: 300px;
+  width: 500px;
 }
 
 .testQuestion > div:nth-child(2) {
-    display: flex;
-    flex-direction: column;
-    height: 235px;
+  display: flex;
+  flex-direction: column;
+  height: 235px;
 }
 
 .testQuestion > div:nth-child(2) > button,
@@ -263,239 +268,241 @@ body {
 .overlayCloseButton,
 #changeLangLT,
 #changeLangEN {
-    background: none;
-    color: inherit;
-    border: none;
-    padding: 0;
-    font: inherit;
-    cursor: pointer;
-    outline: inherit;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
 }
 
 .testQuestion > div:nth-child(2) > button > div {
-    width: 100%;
-    height: 30px;
-    background-color: #F9F9F9;
-    border: 1px solid #BBBBBB;
-    display: flex;
-    flex-direction: row;
-    padding-left: 15px;
+  width: 100%;
+  height: 30px;
+  background-color: #f9f9f9;
+  border: 1px solid #bbbbbb;
+  display: flex;
+  flex-direction: row;
+  padding-left: 15px;
 }
 
 .testQuestion > div:nth-child(2) > button > div:hover {
-    background-color:#edeaea;
-    border:1px solid #aaaaaa;
+  background-color: #edeaea;
+  border: 1px solid #aaaaaa;
 }
 
 .testQuestion > div:nth-child(2) > button > div > span:nth-child(1) {
-    font-size: 1.2em;
-    font-family: Arial serif;
-    line-height: 1.9em;
-    margin-right: 5px;
+  font-size: 1.2em;
+  font-family: Arial serif;
+  line-height: 1.9em;
+  margin-right: 5px;
 }
 
 .testQuestion > div:nth-child(2) > button > div > span:nth-of-type(2) {
-    font-family: Arial serif;
-    line-height: 1.5em;
-    font-size: 1.5em;
+  font-family: Arial serif;
+  line-height: 1.5em;
+  font-size: 1.5em;
 }
 
 .checkbox {
-    width: 20px;
-    height: 20px;
-    margin-top: 5px;
-    padding-left: 3px;
-    padding-right: 3px;
-    background-image: url('/img/checkbox.png');
-    background-repeat: no-repeat;
-    background-position: 0 0;
+  width: 20px;
+  height: 20px;
+  margin-top: 5px;
+  padding-left: 3px;
+  padding-right: 3px;
+  background-image: url("/img/checkbox.png");
+  background-repeat: no-repeat;
+  background-position: 0 0;
 }
 
 .checkbox[data-checked="true"] {
-    background-position: 0 -40px;
+  background-position: 0 -40px;
 }
 
 .confirmationOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 10;
-    background-color: #000;
-    opacity: 0.3;
-    height: 100%;
-    width: 100%;
-    display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background-color: #000;
+  opacity: 0.3;
+  height: 100%;
+  width: 100%;
+  display: none;
 }
 
 #overlayDialog {
-    position: fixed;
-    width: 510px;
-    background-color: white;
-    z-index: 20;
+  position: fixed;
+  width: 510px;
+  background-color: white;
+  z-index: 20;
 }
 
 .overlayDialogTitle {
-    height: 27px;
-    background: url("/img/hborder.png") repeat-x 0 -2003px;
+  height: 27px;
+  background: url("/img/hborder.png") repeat-x 0 -2003px;
 }
 
 .overlayCloseButton {
-    position: absolute;
-    right: 0;
-    padding: 0;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 25px;
-    margin-right: 4px;
+  position: absolute;
+  right: 0;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+  margin-right: 4px;
 }
 
 .overlayDialogContent {
-    width: 90%;
-    padding-left: 10px;
-    padding-right: 20px;
-    margin-left: auto;
-    margin-right: auto;
-    font-size: 16px;
-    display: flex;
-    align-content: center;
-    flex-direction: row;
+  width: 90%;
+  padding-left: 10px;
+  padding-right: 20px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 16px;
+  display: flex;
+  align-content: center;
+  flex-direction: row;
 }
 
 .overlayDialogContent > img {
-    width: 30px;
-    height: 30px;
-    align-self: flex-start;
-    margin-top: 16px;
-    margin-right: 10px;
+  width: 30px;
+  height: 30px;
+  align-self: flex-start;
+  margin-top: 16px;
+  margin-right: 10px;
 }
 
 .overlayDialogContent2 {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-content: center;
-    padding-bottom: 10px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: 10px;
 }
 
-.overlayDialogContent2 > button, #__Res_ViewAnswersBtn {
-    margin: 0;
-    padding: 3px 5px;
-    text-decoration: none;
-    font-size: small;
-    cursor: pointer;
-    background: url("/img/hborder.png") repeat-x 0 -27px;
-    border: 1px outset #ccc;
-    display: flex;
-    align-content: center;
-    justify-content: center;
+.overlayDialogContent2 > button,
+#__Res_ViewAnswersBtn {
+  margin: 0;
+  padding: 3px 5px;
+  text-decoration: none;
+  font-size: small;
+  cursor: pointer;
+  background: url("/img/hborder.png") repeat-x 0 -27px;
+  border: 1px outset #ccc;
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
 
-.overlayDialogContent2 > button > img, #__Res_ViewAnswersBtn > img {
-    margin-right: 2px;
+.overlayDialogContent2 > button > img,
+#__Res_ViewAnswersBtn > img {
+  margin-right: 2px;
 }
 
 .examFinishOverlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 5;
-    background-color: #fff;
-    height: 100%;
-    width: 100%;
-    display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+  background-color: #fff;
+  height: 100%;
+  width: 100%;
+  display: none;
 }
 
 .examFinishDialog {
-    z-index: 7;
-    width: 500px;
-    position: absolute;
-    top: 30%;
-    left: 50%;
-    margin-right: -50%;
-    transform: translate(-50%, -50%);
-    /*display: flex;*/
-    flex-direction: column;
-    justify-content: center;
-    align-content: center;
-    text-align: center;
-    display: none;
+  z-index: 7;
+  width: 500px;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  /*display: flex;*/
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  display: none;
 }
 
 .examFinishDialog > div:first-child {
-    height: 80px;
-    background-color: #FF7C80; /* passed: #92D050 */
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    color: white;
-    font-size: 200%;
-    border: 1px solid #e0e0e0;
+  height: 80px;
+  background-color: #ff7c80; /* passed: #92D050 */
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  color: white;
+  font-size: 200%;
+  border: 1px solid #e0e0e0;
 }
 
 .examFinishDialog > div:first-child > p {
-    line-height: 80px;
-    margin: 0;
+  line-height: 80px;
+  margin: 0;
 }
 
 .examFinishDialog > div:nth-child(2) {
-    margin-top: 5px;
-    border: 1px solid #e0e0e0;
-    font-size: 150%;
+  margin-top: 5px;
+  border: 1px solid #e0e0e0;
+  font-size: 150%;
 }
 
 .examFinishDialog > div:nth-child(2) > p {
-    margin: 4px;
+  margin: 4px;
 }
 
 .examFinishDialog > div:nth-child(3) {
-    display: flex;
-    justify-content: center;
-    margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
 }
 
 .resultSpacer {
-    padding-right: 10px;
+  padding-right: 10px;
 }
 
 #__Loading_Box {
-    /*display: flex;*/
-    align-content: center;
-    justify-content: center;
-    border: 1px solid black;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin-top: 5px;
-    margin-right: 5px;
-    z-index: 100;
-    height: 55px;
-    width: 150px;
-    font-size: smaller;
-    color: #9f9f9f;
-    display: none;
+  /*display: flex;*/
+  align-content: center;
+  justify-content: center;
+  border: 1px solid black;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: 5px;
+  margin-right: 5px;
+  z-index: 100;
+  height: 55px;
+  width: 150px;
+  font-size: smaller;
+  color: #9f9f9f;
+  display: none;
 }
 
 #__Loading_Box > div {
-    align-self: center;
+  align-self: center;
 }
 
 #__Loading_Box > div > img {
-    height: 33px;
-    width: 33px;
-    vertical-align: middle;
+  height: 33px;
+  width: 33px;
+  vertical-align: middle;
 }
 
 #__Loading_Box > div > span {
-    vertical-align: middle;
+  vertical-align: middle;
 }
 
 .testQuestion > div > div:nth-child(1) > img {
-    max-width: 400px;
-    max-height: 300px;
+  max-width: 400px;
+  max-height: 300px;
 }

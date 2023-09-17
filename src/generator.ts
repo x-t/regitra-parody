@@ -8,9 +8,9 @@ export const generateQuestion = async (qi: Question, idx: number) => {
   divQ.setAttribute("data-qIdx", String(idx));
 
   const imageS = qi.image
-    ? `<img alt="${
-        await strings("noIllustration")
-      }" aria-label="There is a picture here, but we cannot describe it to you. Sorry." src="${
+    ? `<img alt="${await strings(
+        "noIllustration",
+      )}" aria-label="There is a picture here, but we cannot describe it to you. Sorry." src="${
         qi.image
       }" />`
     : `<p>${await strings("noIllustration")}</p>`;
@@ -49,6 +49,6 @@ export const generateQuestions = async (qs: Question[]) => {
   let settled = await Promise.all(promises);
   settled.forEach((q) => {
     congregate += q;
-  })
+  });
   return congregate;
 };

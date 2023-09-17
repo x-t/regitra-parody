@@ -5,15 +5,19 @@
     "prebuild": "en_c=$(ls src/data/questions/en | wc -l);lt_c=$(ls src/data/questions/lt | wc -l);mkdir -p src/generated;echo \"{\\\"en\\\":${en_c},\\\"lt\\\":${lt_c}}\" > src/generated/count.json",
     "dev": "npm run prebuild && vite",
     "build": "npm run prebuild && tsc && vite build",
-    "serve": "npm run prebuild && vite preview"
+    "serve": "npm run prebuild && vite preview",
+    "test:unit": "vitest run",
+    "fmt": "prettier --write ."
   },
   "devDependencies": {
     "@vitejs/plugin-legacy": "^4.1.1",
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.29",
+    "prettier": "^3.0.3",
     "terser": "^5.19.4",
     "typescript": "^5.2.2",
-    "vite": "^4.4.9"
+    "vite": "^4.4.9",
+    "vitest": "^0.34.4"
   },
   "dependencies": {
     "draggable_dialog": "^1.0.3"

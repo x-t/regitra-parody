@@ -41,34 +41,36 @@ const hydrateFront = async () => {
     await strings("wait");
 
   // Significant duplication.... whatever
-  document.querySelector<HTMLButtonElement>("#changeLangLT")!.onclick = async () => {
-    if (getLanguage() === "lt") return;
-    localStorage.setItem("selectedLanguage", "lt");
-    document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
-      "/img/ENoff.png";
-    document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
-      "/img/LTyes.png";
-    app.innerHTML = await beginPage(examName, "lt");
-    hydrateFront();
-  };
+  document.querySelector<HTMLButtonElement>("#changeLangLT")!.onclick =
+    async () => {
+      if (getLanguage() === "lt") return;
+      localStorage.setItem("selectedLanguage", "lt");
+      document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
+        "/img/ENoff.png";
+      document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
+        "/img/LTyes.png";
+      app.innerHTML = await beginPage(examName, "lt");
+      hydrateFront();
+    };
 
-  document.querySelector<HTMLButtonElement>("#changeLangEN")!.onclick = async () => {
-    if (getLanguage() === "en") return;
-    localStorage.setItem("selectedLanguage", "en");
-    document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
-      "/img/LToff.png";
-    document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
-      "/img/ENyes.png";
-    app.innerHTML = await beginPage(examName, "en");
-    hydrateFront();
-  };
+  document.querySelector<HTMLButtonElement>("#changeLangEN")!.onclick =
+    async () => {
+      if (getLanguage() === "en") return;
+      localStorage.setItem("selectedLanguage", "en");
+      document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
+        "/img/LToff.png";
+      document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
+        "/img/ENyes.png";
+      app.innerHTML = await beginPage(examName, "en");
+      hydrateFront();
+    };
 
   document.querySelector<HTMLButtonElement>(".beginButton")!.onclick =
     async () => {
       document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
         "flex";
       document.querySelector<HTMLDivElement>(
-        ".examFinishOverlay"
+        ".examFinishOverlay",
       )!.style.display = "unset";
 
       let questions: Question[];
@@ -82,7 +84,7 @@ const hydrateFront = async () => {
       app.innerHTML = await testPage(
         examName,
         testRandNumber,
-        await generateQuestions(questions)
+        await generateQuestions(questions),
       );
 
       const endsDate = new Date(new Date().getTime() + 30 * 60000);
@@ -90,73 +92,73 @@ const hydrateFront = async () => {
       const selectQuestion = (id: number) => {
         if (id === 1) {
           document.querySelector<HTMLButtonElement>(
-            ".testControl > div:nth-child(1) > div > button"
+            ".testControl > div:nth-child(1) > div > button",
           )!.disabled = true;
           document.querySelector<HTMLButtonElement>(
-            ".testControl > div:nth-child(1) > div:nth-child(2) > button"
+            ".testControl > div:nth-child(1) > div:nth-child(2) > button",
           )!.disabled = false;
         } else if (id === 30) {
           if (localStorage.getItem("examFinished") !== "true")
             document.querySelector<HTMLButtonElement>(
-              ".testControl > div:nth-child(2) > button"
+              ".testControl > div:nth-child(2) > button",
             )!.style.display = "unset";
           document.querySelector<HTMLButtonElement>(
-            ".testControl > div:nth-child(1) > div > button"
+            ".testControl > div:nth-child(1) > div > button",
           )!.disabled = false;
           document.querySelector<HTMLButtonElement>(
-            ".testControl > div:nth-child(1) > div:nth-child(2) > button"
+            ".testControl > div:nth-child(1) > div:nth-child(2) > button",
           )!.disabled = true;
         } else {
           document.querySelector<HTMLButtonElement>(
-            ".testControl > div:nth-child(1) > div > button"
+            ".testControl > div:nth-child(1) > div > button",
           )!.disabled = false;
           document.querySelector<HTMLButtonElement>(
-            ".testControl > div:nth-child(1) > div:nth-child(2) > button"
+            ".testControl > div:nth-child(1) > div:nth-child(2) > button",
           )!.disabled = false;
           document.querySelector<HTMLButtonElement>(
-            ".testControl > div:nth-child(2) > button"
+            ".testControl > div:nth-child(2) > button",
           )!.style.display = "none";
         }
 
         let currentQuestion = parseInt(
           localStorage.getItem("currentQuestion")
             ? localStorage.getItem("currentQuestion")!
-            : "1"
+            : "1",
         );
         document.querySelector<HTMLImageElement>(
-          `.questionControls > div > div:nth-child(${currentQuestion}) > div > img`
+          `.questionControls > div > div:nth-child(${currentQuestion}) > div > img`,
         )!.style.display = "none";
         document.querySelector<HTMLSpanElement>("#currentQuestion")!.innerHTML =
           String(id);
         document.querySelector<HTMLDivElement>(
-          `.testQuestion[data-qidx="${currentQuestion - 1}"]`
+          `.testQuestion[data-qidx="${currentQuestion - 1}"]`,
         )!.style.display = "none";
         document.querySelector<HTMLDivElement>(
-          `.testQuestion[data-qidx="${id - 1}"]`
+          `.testQuestion[data-qidx="${id - 1}"]`,
         )!.style.display = "unset";
         document.querySelector<HTMLImageElement>(
-          `.questionControls > div > div:nth-child(${id}) > div > img`
+          `.questionControls > div > div:nth-child(${id}) > div > img`,
         )!.style.display = "unset";
         localStorage.setItem("currentQuestion", String(id));
       };
 
       const changeWithOffset = (off: number) => () => {
         let currentQuestion = parseInt(
-          localStorage.getItem("currentQuestion")!
+          localStorage.getItem("currentQuestion")!,
         );
         selectQuestion(currentQuestion + off);
       };
 
       document.querySelector<HTMLButtonElement>(
-        ".testControl > div:nth-child(1) > div:nth-child(2) > button"
+        ".testControl > div:nth-child(1) > div:nth-child(2) > button",
       )!.onclick = changeWithOffset(1);
       document.querySelector<HTMLButtonElement>(
-        ".testControl > div:nth-child(1) > div:nth-child(1) > button"
+        ".testControl > div:nth-child(1) > div:nth-child(1) > button",
       )!.onclick = changeWithOffset(-1);
 
       document
         .querySelectorAll<HTMLButtonElement>(
-          ".questionControls > div > div > button"
+          ".questionControls > div > div > button",
         )
         .forEach((v, idx) => {
           v.onclick = () => {
@@ -168,7 +170,7 @@ const hydrateFront = async () => {
       if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
         document
           .querySelectorAll<HTMLDivElement>(
-            ".questionControls > div > div > button > div"
+            ".questionControls > div > div > button > div",
           )
           .forEach((d) => {
             d.style.marginLeft = "unset";
@@ -178,43 +180,43 @@ const hydrateFront = async () => {
       questions.forEach((q, idxx) => {
         q.answers.forEach((_, idx) => {
           document.querySelector<HTMLButtonElement>(
-            `#answer-${idxx}-${idx + 1}`
+            `#answer-${idxx}-${idx + 1}`,
           )!.onclick = () => {
             document
               .querySelector<HTMLDivElement>(
-                `div[data-answerIndex="${idxx}-${idx + 1}"] > div.checkbox`
+                `div[data-answerIndex="${idxx}-${idx + 1}"] > div.checkbox`,
               )!
               .setAttribute(
                 "data-checked",
                 document
                   .querySelector<HTMLDivElement>(
-                    `div[data-answerIndex="${idxx}-${idx + 1}"] > div.checkbox`
+                    `div[data-answerIndex="${idxx}-${idx + 1}"] > div.checkbox`,
                   )!
                   .getAttribute("data-checked") === "true"
                   ? "false"
-                  : "true"
+                  : "true",
               );
             if (
               document.querySelectorAll(
-                `div[data-qIdx="${idxx}"] > div:nth-child(2) > button > div > div.checkbox[data-checked="true"]`
+                `div[data-qIdx="${idxx}"] > div:nth-child(2) > button > div > div.checkbox[data-checked="true"]`,
               ).length != 0
             ) {
               document
                 .querySelectorAll(
-                  `.questionControls > div > div > button > div`
+                  `.questionControls > div > div > button > div`,
                 )!
                 [idxx].setAttribute("data-answered", "true");
             } else {
               document
                 .querySelectorAll(
-                  `.questionControls > div > div > button > div`
+                  `.questionControls > div > div > button > div`,
                 )!
                 [idxx].setAttribute("data-answered", "false");
             }
             let selectedAnswers = JSON.parse(
               localStorage.getItem("selectedAnswers")
                 ? localStorage.getItem("selectedAnswers")!
-                : "{}"
+                : "{}",
             );
             if (!selectedAnswers[q.id]) selectedAnswers[q.id] = [];
             const yai = selectedAnswers[q.id].indexOf(idx + 1);
@@ -227,7 +229,7 @@ const hydrateFront = async () => {
             }
             localStorage.setItem(
               "selectedAnswers",
-              JSON.stringify(selectedAnswers)
+              JSON.stringify(selectedAnswers),
             );
           };
         });
@@ -252,17 +254,17 @@ const hydrateFront = async () => {
         "click",
         async () => {
           document.querySelector<HTMLParagraphElement>(
-            "#overlayConfirmationContent"
+            "#overlayConfirmationContent",
           )!.innerHTML =
             document.querySelectorAll<HTMLDivElement>(
-              'div[data-answered="false"]'
+              'div[data-answered="false"]',
             ).length === 0
               ? await strings("confirmFinish")
               : await strings("warningUnanswered");
           document.querySelector<HTMLDivElement>(
-            ".confirmationOverlay"
+            ".confirmationOverlay",
           )!.style.display = "unset";
-        }
+        },
       );
 
       on(
@@ -270,9 +272,9 @@ const hydrateFront = async () => {
         "click",
         () => {
           document.querySelector<HTMLDivElement>(
-            ".confirmationOverlay"
+            ".confirmationOverlay",
           )!.style.display = "none";
-        }
+        },
       );
 
       on(
@@ -282,7 +284,7 @@ const hydrateFront = async () => {
           document
             .querySelector<HTMLButtonElement>("#overlayCloseButton")!
             .click();
-        }
+        },
       );
 
       on(
@@ -293,7 +295,7 @@ const hydrateFront = async () => {
             .querySelector<HTMLButtonElement>("#overlayCloseButton")!
             .click();
           finishExam();
-        }
+        },
       );
 
       on(
@@ -301,12 +303,12 @@ const hydrateFront = async () => {
         "click",
         () => {
           document.querySelector<HTMLDivElement>(
-            ".examFinishOverlay"
+            ".examFinishOverlay",
           )!.style.display = "none";
           document.querySelector<HTMLDivElement>(
-            ".examFinishDialog"
+            ".examFinishDialog",
           )!.style.display = "none";
-        }
+        },
       );
 
       document
@@ -318,7 +320,7 @@ const hydrateFront = async () => {
             .querySelector<HTMLDivElement>(
               `div.questionControls > div > div:nth-child(${
                 qIdx + 1
-              }) > button > div`
+              }) > button > div`,
             )!
             .setAttribute("data-jumpId", String(qId));
         });
@@ -327,7 +329,7 @@ const hydrateFront = async () => {
       document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
         "none";
       document.querySelector<HTMLDivElement>(
-        ".examFinishOverlay"
+        ".examFinishOverlay",
       )!.style.display = "none";
       countdownTimer(endsDate, finishExam);
       setInterval(countdownTimer(endsDate, finishExam), 1000);
@@ -341,14 +343,14 @@ const finishExam = async () => {
   document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
     "flex";
   document.querySelector<HTMLButtonElement>(
-    ".testControl > div:nth-child(2) > button"
+    ".testControl > div:nth-child(2) > button",
   )!.style.display = "none";
 
   let answers: AnswerT[];
   try {
     answers = await get_answer_data(
       getLanguage(),
-      JSON.parse(localStorage.getItem("questionIDs")!)
+      JSON.parse(localStorage.getItem("questionIDs")!),
     );
   } catch {
     alert(await strings("errorEnd"));
@@ -361,7 +363,7 @@ const finishExam = async () => {
 
   answers.forEach((answer) => {
     const answerElements = document.querySelectorAll<HTMLDivElement>(
-      `div[data-qid="${answer.id}"] > div:nth-child(2) > button > div > span:nth-of-type(2)`
+      `div[data-qid="${answer.id}"] > div:nth-child(2) > button > div > span:nth-of-type(2)`,
     )!;
     answerElements.forEach((a, idx) => {
       if (answer.correct.includes(idx + 1)) {
@@ -374,7 +376,7 @@ const finishExam = async () => {
 
   document
     .querySelectorAll<HTMLButtonElement>(
-      `div[data-qid] > div:nth-child(2) > button`
+      `div[data-qid] > div:nth-child(2) > button`,
     )!
     .forEach((btn) => {
       btn.disabled = true;
@@ -382,7 +384,7 @@ const finishExam = async () => {
 
   document
     .querySelectorAll<HTMLDivElement>(
-      "div.questionControls > div > div > button > div"
+      "div.questionControls > div > div > button > div",
     )!
     .forEach((qCtrl) => {
       qCtrl.setAttribute("class", "questionButtonIncorrectAnswer");
@@ -400,39 +402,39 @@ const finishExam = async () => {
 
   document.querySelector<HTMLSpanElement>("#__Res_Pass")!.innerHTML =
     document.querySelectorAll<HTMLDivElement>(
-      "div.questionButtonIncorrectAnswer"
+      "div.questionButtonIncorrectAnswer",
     )!.length > 6
       ? await strings("examFail")
       : await strings("examPass");
   document.querySelector<HTMLDivElement>(
-    ".examFinishDialog > div:first-child"
+    ".examFinishDialog > div:first-child",
   )!.style.backgroundColor =
     document.querySelectorAll<HTMLDivElement>(
-      "div.questionButtonIncorrectAnswer"
+      "div.questionButtonIncorrectAnswer",
     )!.length > 6
       ? "#FF7C80"
       : "#92D050";
   document.querySelector<HTMLSpanElement>(
-    "#__Res_CorrectAnswers"
+    "#__Res_CorrectAnswers",
   )!.innerHTML = `${
     document.querySelectorAll<HTMLDivElement>(
-      "div.questionButtonCorrectAnswer"
+      "div.questionButtonCorrectAnswer",
     )!.length
   } (${getTestPercentage(
     document.querySelectorAll<HTMLDivElement>(
-      "div.questionButtonCorrectAnswer"
-    )!.length
+      "div.questionButtonCorrectAnswer",
+    )!.length,
   )})`;
   document.querySelector<HTMLSpanElement>(
-    "#__Res_IncorrectAnswers"
+    "#__Res_IncorrectAnswers",
   )!.innerHTML = `${
     document.querySelectorAll<HTMLDivElement>(
-      "div.questionButtonIncorrectAnswer"
+      "div.questionButtonIncorrectAnswer",
     )!.length
   } (${getTestPercentage(
     document.querySelectorAll<HTMLDivElement>(
-      "div.questionButtonIncorrectAnswer"
-    )!.length
+      "div.questionButtonIncorrectAnswer",
+    )!.length,
   )})`;
 
   document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
@@ -449,4 +451,4 @@ const getTestPercentage = (answers: number): string => {
 window.onload = async () => {
   app.innerHTML = await beginPage(examName, getLanguage());
   hydrateFront();
-}
+};

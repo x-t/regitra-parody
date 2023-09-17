@@ -1,10 +1,6 @@
 import { strings } from "../i18n";
 
-export const testPage = async (
-  name: string,
-  num: number,
-  qs: string
-) => `
+export const testPage = async (name: string, num: number, qs: string) => `
   <div class="mainWindow">
       <div class="testTopBar">
         <div>${name}</div>
@@ -16,16 +12,16 @@ export const testPage = async (
       
       <div class="testControl">
         <div>
-          <div><button disabled><img src="/img/taskPrev.png" alt="Prev" /><span>${
-            await strings("previousTask")
-          }</span></button></div>
-          <div><button><span><strong>${
-            await strings("nextTask")
-          }</strong></span><img src="/img/taskNext.png" alt="Next" /></button></div>
+          <div><button disabled><img src="/img/taskPrev.png" alt="Prev" /><span>${await strings(
+            "previousTask",
+          )}</span></button></div>
+          <div><button><span><strong>${await strings(
+            "nextTask",
+          )}</strong></span><img src="/img/taskNext.png" alt="Next" /></button></div>
         </div>
-        <div><button id="finishTestAction"><img src="/img/finishTest.png" alt="Finish" /><span>${
-          await strings("finishTest")
-        }</span></button></div>
+        <div><button id="finishTestAction"><img src="/img/finishTest.png" alt="Finish" /><span>${await strings(
+          "finishTest",
+        )}</span></button></div>
       </div>
       
       <div class="testQuestionInfo">
@@ -40,15 +36,13 @@ export const testPage = async (
           
           <div class="questionControls">
             <div>
-              ${
-                (() => {
-                  let controls = "";
-                  for (let i = 1; i <= 30; i++) {
-                    controls += `<div><button><div data-answered="false">${i}</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>`
-                  }
-                  return controls
-                })()
-              }
+              ${(() => {
+                let controls = "";
+                for (let i = 1; i <= 30; i++) {
+                  controls += `<div><button><div data-answered="false">${i}</div></button><div><img alt="Current" src="/img/testRun.png" /></div></div>`;
+                }
+                return controls;
+              })()}
             </div>
           </div>
       </div>
@@ -64,11 +58,11 @@ export const testPage = async (
         <p id="overlayConfirmationContent"></p>
       </div>
       <div class="overlayDialogContent2">
-        <button id="finishTestConfirmation"><img src="/img/OKButton.png" alt="OK" />${
-          await strings("ok")
-        }</button> <span style="margin-right: 5px;"></span> <button id="cancelTestConfirmation"><img src="/img/cancelButton.png" alt="Cancel" />${
-  await strings("cancel")
-}</button>
+        <button id="finishTestConfirmation"><img src="/img/OKButton.png" alt="OK" />${await strings(
+          "ok",
+        )}</button> <span style="margin-right: 5px;"></span> <button id="cancelTestConfirmation"><img src="/img/cancelButton.png" alt="Cancel" />${await strings(
+          "cancel",
+        )}</button>
       </div>
     </div>
   </div>
@@ -76,26 +70,32 @@ export const testPage = async (
   <div class="examFinishDialog">
     <div><p><span id="__Res_Pass"></span></p></div>
     <div>
-      <p>${
-        await strings("examRegistrationNumber")
-      } <span class="resultSpacer"></span> ${Math.floor(
-  Math.random() * 10000 + 60000
-)}</p>
-      <p>${await strings("participant")} <span class="resultSpacer"></span> ${name}</p>
+      <p>${await strings(
+        "examRegistrationNumber",
+      )} <span class="resultSpacer"></span> ${Math.floor(
+        Math.random() * 10000 + 60000,
+      )}</p>
+      <p>${await strings(
+        "participant",
+      )} <span class="resultSpacer"></span> ${name}</p>
       <p>${await strings("category")} <span class="resultSpacer"></span> B</p>
-      <p>${await strings("givenAnswers")} <span class="resultSpacer"></span> 30</p>
-      <p>${
-        await strings("correctAnswers")
-      } <span class="resultSpacer"></span> <span id="__Res_CorrectAnswers"></span></p>
-      <p>${
-        await strings("incorrectAnswers")
-      } <span class="resultSpacer"></span> <span id="__Res_IncorrectAnswers"></span></p>
-      <p>${await strings("allowedErrors")} <span class="resultSpacer"></span> 6</p>
+      <p>${await strings(
+        "givenAnswers",
+      )} <span class="resultSpacer"></span> 30</p>
+      <p>${await strings(
+        "correctAnswers",
+      )} <span class="resultSpacer"></span> <span id="__Res_CorrectAnswers"></span></p>
+      <p>${await strings(
+        "incorrectAnswers",
+      )} <span class="resultSpacer"></span> <span id="__Res_IncorrectAnswers"></span></p>
+      <p>${await strings(
+        "allowedErrors",
+      )} <span class="resultSpacer"></span> 6</p>
     </div>
     <div>
-      <button id="__Res_ViewAnswersBtn"><img src="/img/answers.png" alt="Chart" /> ${
-        await strings("viewAnswers")
-      }</button>
+      <button id="__Res_ViewAnswersBtn"><img src="/img/answers.png" alt="Chart" /> ${await strings(
+        "viewAnswers",
+      )}</button>
     </div>
   </div>
 `;

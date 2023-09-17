@@ -31,9 +31,9 @@ export const beginPage = async (name: string, language: string) => `
     </div>
 
     <button class="beginButton">
-      <span>${
-        await strings("startExam")
-      }</span><img src="/img/arrow.png" height="32" width="32" alt="Arrow"/>
+      <span>${await strings(
+        "startExam",
+      )}</span><img src="/img/arrow.png" height="32" width="32" alt="Arrow"/>
     </button>
   </div>
   <div class="examFinishOverlay"></div>
