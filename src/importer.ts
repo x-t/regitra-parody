@@ -21,8 +21,7 @@ export const get_question_data = (lang: string) => {
   // @ts-ignore
   const ids = random_ids(0, count[lang] - 1, 30);
   const promises = ids.map((id) => {
-    return fetch(`/json/questions/${lang}/${id}.json`)
-      .then((res) => res.json())
+    return import(`./data/questions/${lang}/${id}.json`)
       .then((result) => {
         return {
           id: id,
@@ -37,9 +36,17 @@ export const get_question_data = (lang: string) => {
 
 export const get_answer_data = (lang: string, ids: number[]) => {
   const promises = ids.map((id) => {
-    return fetch(`/json/answers/${lang}/${id}.json`)
-      .then((res) => res.json())
-      .then((result) => {
+    return import(`./data/answers/${lang}/${id}.json`)
+      /**
+       * Somehow import()'ing a JSON file which
+       * is an array ([]) in root instead of an
+       * object ({}) will put the value of imported
+       * JSON in obj.default.
+       * Don't know why.
+       * It's just what Vite does.
+       * Because you don't deserve nice things.
+       */
+      .then(({default: result}) => {
         return {
           id: id,
           correct: result,
