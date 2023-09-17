@@ -4,7 +4,8 @@ import { countdownTimer } from "./countdown";
 // @ts-ignore
 import Draggable from "draggable_dialog";
 import { on } from "./event";
-import { beginPage, testPage } from "./templates";
+import { beginPage } from "./templates/beginPage";
+import { testPage } from "./templates/testPage";
 import { getLanguage } from "./lang";
 import { generateQuestions } from "./generator";
 import { areArraysEqualSets } from "./array";
