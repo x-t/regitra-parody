@@ -1,5 +1,5 @@
 import { strings } from "./i18n";
-import { Question } from "./main";
+import { Question } from "./exam";
 
 export const generateQuestion = async (qi: Question, idx: number) => {
   let divQ = document.createElement("div");
