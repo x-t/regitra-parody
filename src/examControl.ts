@@ -1,4 +1,8 @@
 export const selectQuestion = (id: number) => {
+  if (id < 1 || id > 30) {
+    return;
+  }
+
   if (id === 1) {
     document.querySelector<HTMLButtonElement>(
       ".testControl > div:nth-child(1) > div > button",

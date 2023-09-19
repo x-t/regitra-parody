@@ -2,6 +2,7 @@ import "./regitra.css";
 import { getLanguage, strings } from "./i18n";
 import { beginPage } from "./templates/beginPage";
 import { beginExam } from "./exam";
+import { selectQuestion } from "./examControl";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -55,3 +56,20 @@ window.onload = async () => {
   app.innerHTML = await beginPage(examName, getLanguage());
   hydrateFront();
 };
+
+window.addEventListener("keydown", function (event) {
+  if (this.localStorage.getItem("currentPage") === "exam") {
+    switch (event.key) {
+      case "ArrowLeft":
+        selectQuestion(
+          parseInt(this.localStorage.getItem("currentQuestion")!) - 1,
+        );
+        break;
+      case "ArrowRight":
+        selectQuestion(
+          parseInt(this.localStorage.getItem("currentQuestion")!) + 1,
+        );
+        break;
+    }
+  }
+});
