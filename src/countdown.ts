@@ -1,3 +1,5 @@
+import { state } from "./state";
+
 export function countdownTimer(date: Date, hookEnds: () => void) {
   return () => {
     const difference = +date - +new Date();
@@ -13,7 +15,7 @@ export function countdownTimer(date: Date, hookEnds: () => void) {
       }:${parts.seconds < 10 ? "0" + parts.seconds : parts.seconds}`;
     }
 
-    if (localStorage.getItem("examFinished")! === "false") {
+    if (state.examFinished === false) {
       if (remaining === "END") {
         hookEnds();
         return;

@@ -1,3 +1,5 @@
+import { state } from "./state";
+
 interface I18NStrings {
   beginHeader: string;
   category: string;
@@ -32,9 +34,7 @@ interface I18NStrings {
 }
 
 export function getLanguage() {
-  return localStorage.getItem("selectedLanguage")
-    ? localStorage.getItem("selectedLanguage")!
-    : "lt";
+  return state.selectedLanguage ? state.selectedLanguage : "lt";
 }
 
 export async function strings(key: keyof I18NStrings) {

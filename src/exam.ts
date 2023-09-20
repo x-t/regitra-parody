@@ -9,6 +9,7 @@ import { countdownTimer } from "./countdown";
 import { app, examName } from "./main";
 // @ts-ignore
 import Draggable from "draggable_dialog";
+import { state } from "./state";
 
 export interface Question {
   id: number;
@@ -106,11 +107,10 @@ export async function beginExam() {
             .querySelectorAll(`.questionControls > div > div > button > div`)!
             [idxx].setAttribute("data-answered", "false");
         }
-        let selectedAnswers = JSON.parse(
-          localStorage.getItem("selectedAnswers")
-            ? localStorage.getItem("selectedAnswers")!
-            : "{}",
-        );
+        let selectedAnswers = state.selectedAnswers
+          ? state.selectedAnswers
+          : {};
+
         if (!selectedAnswers[q.id]) selectedAnswers[q.id] = [];
         const yai = selectedAnswers[q.id].indexOf(idx + 1);
         if (yai > -1) {
@@ -119,10 +119,7 @@ export async function beginExam() {
         } else {
           selectedAnswers[q.id].push(idx + 1);
         }
-        localStorage.setItem(
-          "selectedAnswers",
-          JSON.stringify(selectedAnswers),
-        );
+        state.selectedAnswers = selectedAnswers;
       };
     });
   });
@@ -131,7 +128,7 @@ export async function beginExam() {
     acc.push(cur.id);
     return acc;
   }, []);
-  localStorage.setItem("questionIDs", JSON.stringify(qIDs));
+  state.questionIDs = qIDs;
 
   new Draggable({
     dialogId: "overlayDialog",
@@ -186,7 +183,7 @@ export async function beginExam() {
       document.querySelector<HTMLDivElement>(
         ".examFinishDialog",
       )!.style.display = "none";
-      localStorage.setItem("currentPage", "exam");
+      state.currentPage = "exam";
     });
 
   document.querySelectorAll<HTMLDivElement>("div[data-qidx]")!.forEach((el) => {
@@ -208,11 +205,11 @@ export async function beginExam() {
     "none";
   countdownTimer(endsDate, finishExam);
   setInterval(countdownTimer(endsDate, finishExam), 1000);
-  localStorage.setItem("currentPage", "exam");
+  state.currentPage = "exam";
 }
 
 export async function finishExam() {
-  localStorage.setItem("examFinished", "true");
+  state.examFinished = true;
   document.querySelector<HTMLDivElement>(".examFinishOverlay")!.style.display =
     "unset";
   document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
@@ -223,18 +220,13 @@ export async function finishExam() {
 
   let answers: AnswerT[];
   try {
-    answers = await get_answer_data(
-      getLanguage(),
-      JSON.parse(localStorage.getItem("questionIDs")!),
-    );
+    answers = await get_answer_data(getLanguage(), state.questionIDs);
   } catch {
     alert(await strings("errorEnd"));
     return;
   }
 
-  const answered = localStorage.getItem("selectedAnswers")
-    ? JSON.parse(localStorage.getItem("selectedAnswers")!)
-    : {};
+  const answered = state.selectedAnswers ? state.selectedAnswers : {};
 
   answers.forEach((answer) => {
     const answerElements = document.querySelectorAll<HTMLDivElement>(
@@ -316,7 +308,7 @@ export async function finishExam() {
     "none";
   document.querySelector<HTMLDivElement>(".examFinishDialog")!.style.display =
     "unset";
-  localStorage.setItem("currentPage", "answers");
+  state.currentPage = "answers";
 }
 
 function getTestPercentage(answers: number): string {

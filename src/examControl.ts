@@ -1,3 +1,5 @@
+import { state } from "./state";
+
 export function selectQuestion(id: number) {
   if (id < 1 || id > 30) {
     return;
@@ -11,7 +13,7 @@ export function selectQuestion(id: number) {
       ".testControl > div:nth-child(1) > div:nth-child(2) > button",
     )!.disabled = false;
   } else if (id === 30) {
-    if (localStorage.getItem("examFinished") !== "true")
+    if (state.examFinished !== true)
       document.querySelector<HTMLButtonElement>(
         ".testControl > div:nth-child(2) > button",
       )!.style.display = "unset";
@@ -33,11 +35,7 @@ export function selectQuestion(id: number) {
     )!.style.display = "none";
   }
 
-  let currentQuestion = parseInt(
-    localStorage.getItem("currentQuestion")
-      ? localStorage.getItem("currentQuestion")!
-      : "1",
-  );
+  let currentQuestion = state.currentQuestion ? state.currentQuestion : 1;
   document.querySelector<HTMLImageElement>(
     `.questionControls > div > div:nth-child(${currentQuestion}) > div > img`,
   )!.style.display = "none";
@@ -52,12 +50,12 @@ export function selectQuestion(id: number) {
   document.querySelector<HTMLImageElement>(
     `.questionControls > div > div:nth-child(${id}) > div > img`,
   )!.style.display = "unset";
-  localStorage.setItem("currentQuestion", String(id));
+  state.currentQuestion = id;
 }
 
 export function changeWithOffset(off: number) {
   return () => {
-    let currentQuestion = parseInt(localStorage.getItem("currentQuestion")!);
+    let currentQuestion = state.currentQuestion;
     selectQuestion(currentQuestion + off);
   };
 }
