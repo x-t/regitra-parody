@@ -9,7 +9,7 @@
       "Truputį pristabdyti",
       "Nufilmuoti naują epizodą \"Aukščiausios Pavaros\" (Top Gear)"
     ],
-    "i": "/img/test/cachedownload.jpeg"
+    "i": "cachedownload.jpeg"
   },
   "2": {
     "q": "Galvokite greitai - pervažiavote šunį, ką darote?",
@@ -28,12 +28,12 @@
   "4": {
     "q": "Šalia jūsų gyvenamos vietos yra ženklas \"statyti negalima\", kaip elgsites?",
     "a": ["Vistiek stovėti, nes čia gyvenu", "Nuimsiu ženklą, tada stovėsiu"],
-    "i": "/img/test/proxy-image.jpeg"
+    "i": "proxy-image.jpeg"
   },
   "5": {
     "q": "Į ką jūs įvažiuojate?",
     "a": ["Apvalus apskiritimas", "Sankryža ratu"],
-    "i": "/img/test/cachedownload-1.txt.jpeg"
+    "i": "cachedownload-1.txt.jpeg"
   },
   "6": {
     "q": "Drakonas užblokavo gatvę ir pradėjo valgyti žmones. Ką darysite?",
@@ -53,7 +53,7 @@
       "Leisiu jam gyventi",
       "Jokio pasigailėjimo. 80 km/h. Susidursiu. Košė."
     ],
-    "i": "/img/test/iu.jpeg"
+    "i": "iu.jpeg"
   },
   "9": {
     "q": "Jūsų greitis 30 km/h. Ką darysite šioje situacijoje?",
@@ -62,7 +62,7 @@
       "Stabdyti",
       "Važiuoti tuo pačiu greičiu"
     ],
-    "i": "/img/test/Untitled-1%20copy%203.png"
+    "i": "Untitled-1%20copy%203.png"
   },
   "10": {
     "q": "Būdamas dviračio vairuotoju, ko turėtumėte bijoti?",
@@ -71,7 +71,7 @@
       "Autobusai nemėgstantis imigrantų",
       "Autobusai nemėgstantis imigrantų"
     ],
-    "i": "/img/test/iu-1.gif"
+    "i": "iu-1.gif"
   },
   "11": {
     "q": "Ką šis ženklas reiškia?",
@@ -82,7 +82,7 @@
       "Važiuoti greičiausiai",
       "Drago lenktynės"
     ],
-    "i": "/img/test/iu-3.gif"
+    "i": "iu-3.gif"
   },
   "12": {
     "q": "Kaip įvažiuosite į automagistralę?",
@@ -140,7 +140,7 @@
       "Ne",
       "Aš modifikavau šį mopedą ne pagal KET jau senai, tai tiesiog važiuosiu"
     ],
-    "i": "/img/test/cachedownload-7.png"
+    "i": "cachedownload-7.png"
   },
   "22": {
     "q": "Kokia geriausia priemonė išvengti padangų sprogimo?",
@@ -153,7 +153,7 @@
   "23": {
     "q": "Ar motociklo vairuotojas gaujos narys?",
     "a": ["Neįmanoma to nuspręsti iš šios nuotraukos", "Taip, žinau jį pats"],
-    "i": "/img/placeholder.png"
+    "i": "placeholder.png"
   },
   "24": {
     "q": "Ar jis gali vairuoti?",
@@ -161,7 +161,7 @@
       "Ne, jis yra animacinis personažas",
       "Jeigu jis įgyjo savo vairuotojo pažymėjimą Europoje"
     ],
-    "i": "/img/test/proxy-image-1.png"
+    "i": "proxy-image-1.png"
   },
   "25": {
     "q": "Jūsų variklis sugedo, ką reikia turėti omenį?",
@@ -173,7 +173,7 @@
   "26": {
     "q": "Jokio būdo išvengti susidūrimo. Ką jūs darote?",
     "a": ["Melstis", "Įjungti posūkį"],
-    "i": "/img/placeholder.png"
+    "i": "placeholder.png"
   },
   "27": {
     "q": "Kažkas išleiskite mane iš šito pragaro",
@@ -202,7 +202,7 @@
       "Ne",
       "Jeigu pavogsi ženklą iš viešos vietos, turiu omenį, sumokėjai už jį mokesčiais, tai jis tavo"
     ],
-    "i": "/img/test/iu-3.gif"
+    "i": "iu-3.gif"
   },
   "31": {
     "q": "Prasidėjo gaisras jūsų galinėje sėdynėje. Kokie bus jūsų veiksmai?",
@@ -211,7 +211,7 @@
   "32": {
     "q": "Koks čia didžiausias greitis?",
     "a": ["50 km/h", "90 km/h", "Ey, ar čia ne GTA?"],
-    "i": "/img/test/cachedownload-3.png"
+    "i": "cachedownload-3.png"
   },
   "33": {
     "q": "Jūsų greitis 130 km/h. Ką darysite šioje situacijoje?",
@@ -220,7 +220,7 @@
       "Stabdyti",
       "Važiuoti tuo pačiu greičiu"
     ],
-    "i": "/img/test/Untitled-1%20copy%202.png"
+    "i": "Untitled-1%20copy%202.png"
   },
   "34": {
     "q": "Iš ko padarytos baltos linijos?",
@@ -230,7 +230,7 @@
       "Dažai su kokainu",
       "Vienas iš visų trijų, priklausomai nuo valdžios korupcijos"
     ],
-    "i": "/img/test/cachedownload.txt.jpeg"
+    "i": "cachedownload.txt.jpeg"
   },
   "35": {
     "q": "Kaip pataisytume kapitalizmą?",
@@ -240,7 +240,7 @@
       "Perimti valdžia",
       "Sukurti beklasę visuomenę"
     ],
-    "i": "/img/test/proxy-image.png"
+    "i": "proxy-image.png"
   },
   "36": {
     "q": "Tu niekaip negalėsi šio klausimo atsakyti teisingai.",
@@ -253,7 +253,7 @@
       "Galima važiuoti, tik pareigūnui leidus",
       "Duoti kelią"
     ],
-    "i": "/img/test/iu-4.gif"
+    "i": "iu-4.gif"
   },
   "38": {
     "q": "Ar galite rūkytį žolę prieš vairuojant?",
@@ -290,12 +290,12 @@
   "42": {
     "q": "Kaip reikia pervažiuoti vaiką?",
     "a": ["Lėtai", "Kantriai", "Ne", "Netyčia, po to kaltinti tėvus"],
-    "i": "/img/test/cachedownload-4.png"
+    "i": "cachedownload-4.png"
   },
   "43": {
     "q": "Būdamas autobuso vairuotoju, ko turėtumėte bijoti?",
     "a": ["Imigrantai", "Imigrantai", "Imigrantai", "Imigrantai"],
-    "i": "/img/test/iu.gif"
+    "i": "iu.gif"
   },
   "44": {
     "q": "Jūsų greitis 900 km/h. Ką darysite šioje situacijoje?",
@@ -304,7 +304,7 @@
       "Stabdyti",
       "Važiuoti tuo pačiu greičiu"
     ],
-    "i": "/img/test/Untitled-1.png"
+    "i": "Untitled-1.png"
   },
   "45": {
     "q": "Ar tiesa, kad obuolys per diena atbaido daktarą?",
@@ -321,7 +321,7 @@
   "48": {
     "q": "Didelis traktorius",
     "a": ["Didelis traktorius 😳", "Didelis traktorius 🤯"],
-    "i": "/img/test/cachedownload-1.png"
+    "i": "cachedownload-1.png"
   },
   "49": {
     "q": "Kur reikia pilti posūkių skystį?",
@@ -355,7 +355,7 @@
       "Driver, gal?",
       "Nežinau. Parašykite man atsakymą: antlered_broking@aleeas.com"
     ],
-    "i": "/img/test/cachedownload-6.png"
+    "i": "cachedownload-6.png"
   },
   "54": {
     "q": "Kokia yra saugiausia automobilio spalva?",
@@ -395,7 +395,7 @@
       "Ar jie mane išmokys vairuoti?",
       "Skillshare is a learning platform with online classes taught by the world's best practitioners. Personalized, on-demand learning in design, photography, and more."
     ],
-    "i": "/img/test/iu-1.jpeg"
+    "i": "iu-1.jpeg"
   },
   "61": {
     "q": "Jūsų mašina sugedo automagistralėje, ką darysite?",
@@ -415,7 +415,7 @@
       "Stabdyti",
       "Važiuoti tuo pačiu greičiu"
     ],
-    "i": "/img/test/Untitled-1%20copy.png"
+    "i": "Untitled-1%20copy.png"
   },
   "64": {
     "q": "Perkant naują mašiną, ko reikia stebėtis?",
@@ -432,7 +432,7 @@
       "Graži gamta",
       "Nei vienas, aš nekenčiu žiemos"
     ],
-    "i": "/img/test/cachedownload-5.png"
+    "i": "cachedownload-5.png"
   },
   "66": {
     "q": "Kokie efektai vairuotojui būna klausantis garsios muzikos?",
@@ -445,7 +445,7 @@
   "67": {
     "q": "Sukant į dešinę, ar reikia įjungti posūkio signalą?",
     "a": ["Taip, visada", "Taip, jeigu jūs nevairuojate BMW", "Ne"],
-    "i": "/img/test/iu-2.gif"
+    "i": "iu-2.gif"
   },
   "68": {
     "q": "Jūs vairuojate",
@@ -458,12 +458,12 @@
       "Damn right, it's better than yours",
       "Damn right, it's better than yours"
     ],
-    "i": "/img/test/cachedownload-2.png"
+    "i": "cachedownload-2.png"
   },
   "70": {
     "q": "Ar šis vyras serga depresija?",
     "a": ["Man neįdomu, nes tai policininkas", "Tai policininkas, tai, taip"],
-    "i": "/img/test/cachedownload.png"
+    "i": "cachedownload.png"
   },
   "71": {
     "q": "Koks yra didžiausias leistinas greitis užmiestyje?",

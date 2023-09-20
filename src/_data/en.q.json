@@ -11,12 +11,12 @@
   "1": {
     "q": "Is this man depressed?",
     "a": ["I don't care it's a cop", "It's a cop, so, yeah"],
-    "i": "/img/test/cachedownload.png"
+    "i": "cachedownload.png"
   },
   "2": {
     "q": "As a bus driver, what should you be afraid of?",
     "a": ["Immigrants", "Immigrants", "Immigrants", "Immigrants"],
-    "i": "/img/test/iu.gif"
+    "i": "iu.gif"
   },
   "3": {
     "q": "What does this sign mean?",
@@ -25,7 +25,7 @@
       "Only go when the police lets you",
       "Give yield"
     ],
-    "i": "/img/test/iu-4.gif"
+    "i": "iu-4.gif"
   },
   "4": {
     "q": "How much does it cost to get a drivers license?",
@@ -39,7 +39,7 @@
   "5": {
     "q": "How do you run over this policeman?",
     "a": ["I'll let him live", "No mercy. 80 km/h. Crash. Pulp."],
-    "i": "/img/test/iu.jpeg"
+    "i": "iu.jpeg"
   },
   "6": {
     "q": "What does this sign mean?",
@@ -48,12 +48,12 @@
       "Damn right, it's better than yours",
       "Damn right, it's better than yours"
     ],
-    "i": "/img/test/cachedownload-2.png"
+    "i": "cachedownload-2.png"
   },
   "7": {
     "q": "No way to avoid a collision. What are you doing?",
     "a": ["Pray", "Use my signal"],
-    "i": "/img/placeholder.png"
+    "i": "placeholder.png"
   },
   "8": {
     "q": "Your speed is 50 km/h. What will you do in this situation?",
@@ -62,12 +62,12 @@
       "Brake",
       "Continue going at the same speed"
     ],
-    "i": "/img/test/Untitled-1%20copy.png"
+    "i": "Untitled-1%20copy.png"
   },
   "9": {
     "q": "What's the fastest speed here?",
     "a": ["50 km/h", "90 km/h", "Ayo isn't this GTA?"],
-    "i": "/img/test/cachedownload-3.png"
+    "i": "cachedownload-3.png"
   },
   "10": {
     "q": "Is it true that an apple a day keeps the doctor away?",
@@ -80,7 +80,7 @@
       "Immigrant hating buses",
       "Immigrant hating buses"
     ],
-    "i": "/img/test/iu-1.gif"
+    "i": "iu-1.gif"
   },
   "12": {
     "q": "How fast do F1 cars go?",
@@ -101,7 +101,7 @@
       "Cocaine-laced paint",
       "Any of the 3 above, depending on the amount of government corruption"
     ],
-    "i": "/img/test/cachedownload.txt.jpeg"
+    "i": "cachedownload.txt.jpeg"
   },
   "15": {
     "q": "Is the biker a gang member?",
@@ -109,7 +109,7 @@
       "There is no way to tell from this photograph",
       "Yes, I know him myself"
     ],
-    "i": "/img/placeholder.png"
+    "i": "placeholder.png"
   },
   "16": {
     "q": "How do we fix capitalism?",
@@ -119,7 +119,7 @@
       "Overthrow the government",
       "Establish classless mutual aid"
     ],
-    "i": "/img/test/proxy-image.png"
+    "i": "proxy-image.png"
   },
   "17": {
     "q": "What's the best way to put out a diesel fire?",
@@ -136,7 +136,7 @@
       "Stop anyway because this is where I live",
       "Take the sign down before stopping"
     ],
-    "i": "/img/test/proxy-image.jpeg"
+    "i": "proxy-image.jpeg"
   },
   "19": {
     "q": "What's the best way to steal a car?",
@@ -160,7 +160,7 @@
       "No",
       "If you steal the sign from public property, I mean, you paid it with taxes, so it's yours"
     ],
-    "i": "/img/test/iu-3.gif"
+    "i": "iu-3.gif"
   },
   "23": {
     "q": "What is the speed limit on rural roads?",
@@ -216,7 +216,7 @@
   "31": {
     "q": "What does this sign mean?",
     "a": ["Go", "Go faster", "Go even faster", "Go the fastest", "Drag strip"],
-    "i": "/img/test/iu-3.gif"
+    "i": "iu-3.gif"
   },
   "32": {
     "q": "You're driving",
@@ -244,7 +244,7 @@
       "Are they going to teach me to drive now?",
       "Skillshare is a learning platform with online classes taught by the world's best practitioners. Personalized, on-demand learning in design, photography, and more."
     ],
-    "i": "/img/test/iu-1.jpeg"
+    "i": "iu-1.jpeg"
   },
   "37": {
     "q": "A car is going 130 km/h clockwise on the A1, the wind is 8 knots East, calculate the drag",
@@ -277,7 +277,7 @@
       "Brake",
       "Continue going at the same speed"
     ],
-    "i": "/img/test/Untitled-1%20copy%202.png"
+    "i": "Untitled-1%20copy%202.png"
   },
   "43": {
     "q": "log(2.4*10^23+e)-sin(238)*10^-23",
@@ -302,12 +302,12 @@
   "47": {
     "q": "What do you do when entering a curved road?",
     "a": ["Slow down a bit", "Shoot a new episode of Top Gear"],
-    "i": "/img/test/cachedownload.jpeg"
+    "i": "cachedownload.jpeg"
   },
   "48": {
     "q": "Big truck",
     "a": ["Big truck 😳", "Big Truck 🤯"],
-    "i": "/img/test/cachedownload-1.png"
+    "i": "cachedownload-1.png"
   },
   "49": {
     "q": "Who is in charge of keeping the roads clean?",
@@ -324,7 +324,7 @@
       "Brake",
       "Continue going at the same speed"
     ],
-    "i": "/img/test/Untitled-1.png"
+    "i": "Untitled-1.png"
   },
   "51": {
     "q": "Your speed is 30 km/h. What will you do in this situation?",
@@ -333,7 +333,7 @@
       "Brake",
       "Continue going at the same speed"
     ],
-    "i": "/img/test/Untitled-1%20copy%203.png"
+    "i": "Untitled-1%20copy%203.png"
   },
   "52": {
     "q": "What is an average car?",
@@ -346,7 +346,7 @@
       "Lovely scenery",
       "None of it, I hate snow"
     ],
-    "i": "/img/test/cachedownload-5.png"
+    "i": "cachedownload-5.png"
   },
   "54": {
     "q": "Your engine broke down, what do you need to consider?",
@@ -365,7 +365,7 @@
       "No",
       "I modified this way beyond regulation long ago anyway, I'll just go"
     ],
-    "i": "/img/test/cachedownload-7.png"
+    "i": "cachedownload-7.png"
   },
   "57": {
     "q": "Which gear will you choose for driving inside the city?",
@@ -378,7 +378,7 @@
       "Driver, maybe?",
       "I don't know. Text me the correct answer: antlered_broking@aleeas.com"
     ],
-    "i": "/img/test/cachedownload-6.png"
+    "i": "cachedownload-6.png"
   },
   "59": {
     "q": "What's the best way to prevent a tire failure?",
@@ -413,7 +413,7 @@
       "Don't",
       "Accidentally, then always blame the parents"
     ],
-    "i": "/img/test/cachedownload-4.png"
+    "i": "cachedownload-4.png"
   },
   "63": {
     "q": "When is it legal to sound the horn in built-up areas? ",
@@ -442,7 +442,7 @@
   "68": {
     "q": "What are you entering?",
     "a": ["A spinny circle", "Roundabout"],
-    "i": "/img/test/cachedownload-1.txt.jpeg"
+    "i": "cachedownload-1.txt.jpeg"
   },
   "69": {
     "q": "When buying a new car, what do you have to look for?",
@@ -458,11 +458,11 @@
       "No, he's a cartoon character",
       "Only if he got his drivers' license in Europe"
     ],
-    "i": "/img/test/proxy-image-1.png"
+    "i": "proxy-image-1.png"
   },
   "71": {
     "q": "When turning right, do you need to turn on the indicator?",
     "a": ["Yes, always", "Yes, if you're not a BMW driver", "No"],
-    "i": "/img/test/iu-2.gif"
+    "i": "iu-2.gif"
   }
 }

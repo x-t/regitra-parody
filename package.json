@@ -2,10 +2,13 @@
   "name": "regitra",
   "version": "0.0.0",
   "scripts": {
-    "build:json": "node ./builder/json.js",
-    "dev": "npm run build:json && vite",
-    "build": "npm run build:json && tsc && vite build",
-    "serve": "npm run build:json && vite preview",
+    "build:internal:json": "node ./builder/json.js",
+    "build:internal:img": "node ./builder/img.js",
+    "build:pre": "npm run build:internal:json && npm run build:internal:img",
+    "dev": "npm run build:pre && vite",
+    "build": "npm run build:pre && tsc && vite build",
+    "build:fast": "tsc && vite build",
+    "serve": "npm run build && vite preview",
     "test:unit": "vitest run",
     "fmt": "prettier --write ."
   },

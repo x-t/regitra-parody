@@ -17,6 +17,7 @@
 
 const fs = require("fs");
 const execSync = require("child_process").execSync;
+const langs = require("./_langs.js");
 
 function ObjectLength(object) {
   var length = 0;
@@ -29,8 +30,6 @@ function ObjectLength(object) {
 }
 
 execSync("mkdir -p ./src/generated");
-
-const langs = ["en", "lt"];
 
 let count = {};
 
