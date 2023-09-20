@@ -5,7 +5,6 @@ import { selectQuestion, changeWithOffset } from "./examControl";
 import { get_question_data } from "./importer";
 import { generateQuestions } from "./generator";
 import { testPage } from "./templates/testPage";
-import { on } from "./event";
 import { countdownTimer } from "./countdown";
 import { app, examName } from "./main";
 // @ts-ignore
@@ -142,10 +141,9 @@ export async function beginExam() {
     showButtonId: "finishTestAction",
   });
 
-  on(
-    document.querySelector<HTMLButtonElement>("#finishTestAction")!,
-    "click",
-    async () => {
+  document
+    .querySelector<HTMLButtonElement>("#finishTestAction")!
+    .addEventListener("click", async () => {
       document.querySelector<HTMLParagraphElement>(
         "#overlayConfirmationContent",
       )!.innerHTML =
@@ -156,40 +154,32 @@ export async function beginExam() {
       document.querySelector<HTMLDivElement>(
         ".confirmationOverlay",
       )!.style.display = "unset";
-    },
-  );
+    });
 
-  on(
-    document.querySelector<HTMLButtonElement>("#overlayCloseButton")!,
-    "click",
-    () => {
+  document
+    .querySelector<HTMLButtonElement>("#overlayCloseButton")!
+    .addEventListener("click", () => {
       document.querySelector<HTMLDivElement>(
         ".confirmationOverlay",
       )!.style.display = "none";
-    },
-  );
+    });
 
-  on(
-    document.querySelector<HTMLButtonElement>("#cancelTestConfirmation")!,
-    "click",
-    () => {
+  document
+    .querySelector<HTMLButtonElement>("#cancelTestConfirmation")!
+    .addEventListener("click", () => {
       document.querySelector<HTMLButtonElement>("#overlayCloseButton")!.click();
-    },
-  );
+    });
 
-  on(
-    document.querySelector<HTMLButtonElement>("#finishTestConfirmation")!,
-    "click",
-    () => {
+  document
+    .querySelector<HTMLButtonElement>("#finishTestConfirmation")!
+    .addEventListener("click", () => {
       document.querySelector<HTMLButtonElement>("#overlayCloseButton")!.click();
       finishExam();
-    },
-  );
+    });
 
-  on(
-    document.querySelector<HTMLButtonElement>("#__Res_ViewAnswersBtn")!,
-    "click",
-    () => {
+  document
+    .querySelector<HTMLButtonElement>("#__Res_ViewAnswersBtn")!
+    .addEventListener("click", () => {
       document.querySelector<HTMLDivElement>(
         ".examFinishOverlay",
       )!.style.display = "none";
@@ -197,8 +187,7 @@ export async function beginExam() {
         ".examFinishDialog",
       )!.style.display = "none";
       localStorage.setItem("currentPage", "exam");
-    },
-  );
+    });
 
   document.querySelectorAll<HTMLDivElement>("div[data-qidx]")!.forEach((el) => {
     const qId = parseInt(el.getAttribute("data-qid")!);
