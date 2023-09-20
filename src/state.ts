@@ -2,7 +2,7 @@ type State = {
   selectedAnswers: any;
   currentQuestion: number;
   questionIDs: number[];
-  selectedLanguage: "en" | "lt";
+  selectedLanguage: string;
   examFinished: boolean;
   currentPage: string;
 };

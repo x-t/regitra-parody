@@ -12,30 +12,25 @@ async function hydrateFront() {
   document.querySelector<HTMLSpanElement>("#__Loading_Box_Text")!.innerHTML =
     await strings("wait");
 
-  // Significant duplication.... whatever
-  document.querySelector<HTMLButtonElement>("#changeLangLT")!.onclick =
-    async () => {
-      if (getLanguage() === "lt") return;
-      state.selectedLanguage = "lt";
-      document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
-        "/img/ENoff.png";
-      document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
-        "/img/LTyes.png";
-      app.innerHTML = await beginPage(examName, "lt");
+  const langs = ["lt", "en"];
+  langs.forEach((lang) => {
+    document.querySelector<HTMLButtonElement>(
+      `#changeLang${lang.toUpperCase()}`,
+    )!.onclick = async () => {
+      if (getLanguage() === lang) return;
+      state.selectedLanguage = lang;
+      langs.forEach((l) => {
+        document.querySelector<HTMLImageElement>(
+          `#changeLang${l.toUpperCase()}Img`,
+        )!.src = `/img/${l.toUpperCase()}off.png`;
+      });
+      document.querySelector<HTMLImageElement>(
+        `#changeLang${lang.toUpperCase()}Img`,
+      )!.src = `/img/${lang.toUpperCase()}yes.png`;
+      app.innerHTML = await beginPage(examName, lang);
       hydrateFront();
     };
-
-  document.querySelector<HTMLButtonElement>("#changeLangEN")!.onclick =
-    async () => {
-      if (getLanguage() === "en") return;
-      state.selectedLanguage = "en";
-      document.querySelector<HTMLImageElement>(`#changeLangLTImg`)!.src =
-        "/img/LToff.png";
-      document.querySelector<HTMLImageElement>(`#changeLangENImg`)!.src =
-        "/img/ENyes.png";
-      app.innerHTML = await beginPage(examName, "en");
-      hydrateFront();
-    };
+  });
 
   document.querySelector<HTMLButtonElement>(".beginButton")!.onclick =
     beginExam;
