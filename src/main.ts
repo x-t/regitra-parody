@@ -19,6 +19,7 @@ async function hydrateFront() {
     )!.onclick = async () => {
       if (getLanguage() === lang) return;
       state.selectedLanguage = lang;
+      document.querySelector("html")?.setAttribute("lang", lang);
       langs.forEach((l) => {
         document.querySelector<HTMLImageElement>(
           `#changeLang${l.toUpperCase()}Img`,
