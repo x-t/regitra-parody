@@ -23,7 +23,7 @@ interface AnswerT {
   correct: number[];
 }
 
-export const beginExam = async () => {
+export async function beginExam() {
   const testRandNumber = Math.floor(Math.random() * 3000 + 9000);
 
   document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
@@ -220,9 +220,9 @@ export const beginExam = async () => {
   countdownTimer(endsDate, finishExam);
   setInterval(countdownTimer(endsDate, finishExam), 1000);
   localStorage.setItem("currentPage", "exam");
-};
+}
 
-export const finishExam = async () => {
+export async function finishExam() {
   localStorage.setItem("examFinished", "true");
   document.querySelector<HTMLDivElement>(".examFinishOverlay")!.style.display =
     "unset";
@@ -328,9 +328,9 @@ export const finishExam = async () => {
   document.querySelector<HTMLDivElement>(".examFinishDialog")!.style.display =
     "unset";
   localStorage.setItem("currentPage", "answers");
-};
+}
 
-const getTestPercentage = (answers: number): string => {
+function getTestPercentage(answers: number): string {
   const x = Math.floor(100 / (30 / answers));
   return `${x}%`;
-};
+}

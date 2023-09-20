@@ -1,6 +1,7 @@
 import { strings } from "../i18n";
 
-export const beginPage = async (name: string, language: string) => `
+export async function beginPage(name: string, language: string) {
+  return `
   <div class="mainWindow">
     <div class="head">
       <span class="beginHeader">${await strings("beginHeader")}</span>
@@ -38,3 +39,4 @@ export const beginPage = async (name: string, language: string) => `
   </div>
   <div class="examFinishOverlay"></div>
 `;
+}

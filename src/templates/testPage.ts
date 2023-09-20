@@ -1,6 +1,7 @@
 import { strings } from "../i18n";
 
-export const testPage = async (name: string, num: number, qs: string) => `
+export async function testPage(name: string, num: number, qs: string) {
+  return `
   <div class="mainWindow">
       <div class="testTopBar">
         <div>${name}</div>
@@ -99,3 +100,4 @@ export const testPage = async (name: string, num: number, qs: string) => `
     </div>
   </div>
 `;
+}

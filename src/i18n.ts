@@ -31,14 +31,14 @@ interface I18NStrings {
   wait: string;
 }
 
-export const getLanguage = () => {
+export function getLanguage() {
   return localStorage.getItem("selectedLanguage")
     ? localStorage.getItem("selectedLanguage")!
     : "lt";
-};
+}
 
-export const strings = async (key: keyof I18NStrings) => {
+export async function strings(key: keyof I18NStrings) {
   const language = getLanguage();
   const map = await import(`./i18n/${language}.json`);
   return map[key];
-};
+}

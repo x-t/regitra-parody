@@ -1,7 +1,7 @@
 import { strings } from "./i18n";
 import { Question } from "./exam";
 
-export const generateQuestion = async (qi: Question, idx: number) => {
+export async function generateQuestion(qi: Question, idx: number) {
   let divQ = document.createElement("div");
   divQ.setAttribute("class", "testQuestion");
   divQ.setAttribute("data-qId", String(qi.id));
@@ -39,9 +39,9 @@ export const generateQuestion = async (qi: Question, idx: number) => {
   `;
 
   return divQ.outerHTML;
-};
+}
 
-export const generateQuestions = async (qs: Question[]) => {
+export async function generateQuestions(qs: Question[]) {
   let congregate = "";
   let promises = qs.map((q, idx) => {
     return generateQuestion(q, idx);
@@ -51,4 +51,4 @@ export const generateQuestions = async (qs: Question[]) => {
     congregate += q;
   });
   return congregate;
-};
+}

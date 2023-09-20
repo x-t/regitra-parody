@@ -1,4 +1,4 @@
-export const selectQuestion = (id: number) => {
+export function selectQuestion(id: number) {
   if (id < 1 || id > 30) {
     return;
   }
@@ -53,9 +53,11 @@ export const selectQuestion = (id: number) => {
     `.questionControls > div > div:nth-child(${id}) > div > img`,
   )!.style.display = "unset";
   localStorage.setItem("currentQuestion", String(id));
-};
+}
 
-export const changeWithOffset = (off: number) => () => {
-  let currentQuestion = parseInt(localStorage.getItem("currentQuestion")!);
-  selectQuestion(currentQuestion + off);
-};
+export function changeWithOffset(off: number) {
+  return () => {
+    let currentQuestion = parseInt(localStorage.getItem("currentQuestion")!);
+    selectQuestion(currentQuestion + off);
+  };
+}

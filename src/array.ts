@@ -5,7 +5,7 @@
  * @param a1 is an array
  * @param a2 is an array
  */
-export const areArraysEqualSets = (a1: any[], a2: any[]): boolean => {
+export function areArraysEqualSets(a1: any[], a2: any[]): boolean {
   const superSet: any = {};
   for (const i of a1) {
     const e = i + typeof i;
@@ -27,4 +27,4 @@ export const areArraysEqualSets = (a1: any[], a2: any[]): boolean => {
   }
 
   return true;
-};
+}

@@ -19,7 +19,7 @@ localStorage.setItem("selectedLanguage", "lt");
 localStorage.setItem("examFinished", "false");
 localStorage.setItem("currentPage", "index");
 
-const hydrateFront = async () => {
+async function hydrateFront() {
   document.querySelector<HTMLSpanElement>("#__Loading_Box_Text")!.innerHTML =
     await strings("wait");
 
@@ -50,9 +50,9 @@ const hydrateFront = async () => {
 
   document.querySelector<HTMLButtonElement>(".beginButton")!.onclick =
     beginExam;
-};
+}
 
-window.onload = async () => {
+window.onload = async function () {
   app.innerHTML = await beginPage(examName, getLanguage());
   hydrateFront();
 };
