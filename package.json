@@ -2,10 +2,10 @@
   "name": "regitra",
   "version": "0.0.0",
   "scripts": {
-    "prebuild": "en_c=$(ls src/data/questions/en | wc -l);lt_c=$(ls src/data/questions/lt | wc -l);mkdir -p src/generated;echo \"{\\\"en\\\":${en_c},\\\"lt\\\":${lt_c}}\" > src/generated/count.json",
-    "dev": "npm run prebuild && vite",
-    "build": "npm run prebuild && tsc && vite build",
-    "serve": "npm run prebuild && vite preview",
+    "build:json": "node ./builder/json.js",
+    "dev": "npm run build:json && vite",
+    "build": "npm run build:json && tsc && vite build",
+    "serve": "npm run build:json && vite preview",
     "test:unit": "vitest run",
     "fmt": "prettier --write ."
   },

@@ -1,9 +1,0 @@
-{
-  "q": "Your speed is 30 km/h. What will you do in this situation?",
-  "a": [
-    "Let go of the accelerator pedal",
-    "Brake",
-    "Continue going at the same speed"
-  ],
-  "i": "/img/test/Untitled-1%20copy%203.png"
-}

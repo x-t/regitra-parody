@@ -11,7 +11,7 @@ Go take a test, I'm sure you'll ~~not~~ pass: [regitra.pages.dev](https://regitr
 
 ## A note for the traveler
 
-The source code is straight abuse of TypeScript, JavaScript, Vite and even Bash ([seriously](https://github.com/x-t/regitra-parody/blob/main/package.json#L5)).
+The source code is straight abuse of TypeScript, JavaScript and Vite.
 
 There is no framework used, because what's the point? Vanilla is fast and good enough.
 
