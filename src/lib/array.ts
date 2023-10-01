@@ -5,8 +5,8 @@
  * @param a1 is an array
  * @param a2 is an array
  */
-export function areArraysEqualSets(a1: any[], a2: any[]): boolean {
-  const superSet: any = {};
+export function areArraysEqualSets<T>(a1: T[], a2: T[]): boolean {
+  const superSet: {[index: string]: number} = {};
   for (const i of a1) {
     const e = i + typeof i;
     superSet[e] = 1;

@@ -6,7 +6,7 @@ export function countdownTimer(date: Date, hookEnds: () => void) {
     let remaining = "END";
 
     if (difference > 0) {
-      const parts: any = {
+      const parts = {
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60),
       };
