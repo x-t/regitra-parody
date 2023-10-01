@@ -1,4 +1,4 @@
-import { state } from "./state";
+import { state } from "./lib/state";
 
 interface I18NStrings {
   beginHeader: string;
@@ -33,12 +33,8 @@ interface I18NStrings {
   wait: string;
 }
 
-export function getLanguage() {
-  return state.selectedLanguage ? state.selectedLanguage : "lt";
-}
-
 export async function strings(key: keyof I18NStrings) {
-  const language = getLanguage();
+  const language = state.selectedLanguage;
   const map = await import(`./i18n/${language}.json`);
   return map[key];
 }

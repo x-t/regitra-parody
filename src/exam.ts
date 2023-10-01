@@ -1,15 +1,15 @@
-import { areArraysEqualSets } from "./array";
+import { areArraysEqualSets } from "./lib/array";
 import { get_answer_data } from "./importer";
-import { getLanguage, strings } from "./i18n";
+import { strings } from "./i18n";
 import { selectQuestion, changeWithOffset } from "./examControl";
 import { get_question_data } from "./importer";
-import { generateQuestions } from "./generator";
+import { generateQuestions } from "./templates/question";
 import { testPage } from "./templates/testPage";
-import { countdownTimer } from "./countdown";
+import { countdownTimer } from "./lib/countdown";
 import { app, examName } from "./main";
 // @ts-ignore
 import Draggable from "draggable_dialog";
-import { state } from "./state";
+import { state } from "./lib/state";
 
 export interface Question {
   id: number;
@@ -33,7 +33,7 @@ export async function beginExam() {
 
   let questions: Question[];
   try {
-    questions = await get_question_data(getLanguage());
+    questions = await get_question_data(state.selectedLanguage);
   } catch {
     alert(await strings("errorStart"));
     return;
@@ -220,7 +220,7 @@ export async function finishExam() {
 
   let answers: AnswerT[];
   try {
-    answers = await get_answer_data(getLanguage(), state.questionIDs);
+    answers = await get_answer_data(state.selectedLanguage, state.questionIDs);
   } catch {
     alert(await strings("errorEnd"));
     return;

@@ -1,9 +1,9 @@
 import "./regitra.css";
-import { getLanguage, strings } from "./i18n";
+import { strings } from "./i18n";
 import { beginPage } from "./templates/beginPage";
 import { beginExam } from "./exam";
 import { selectQuestion } from "./examControl";
-import { state } from "./state";
+import { state } from "./lib/state";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -17,7 +17,7 @@ async function hydrateFront() {
     document.querySelector<HTMLButtonElement>(
       `#changeLang${lang.toUpperCase()}`,
     )!.onclick = async () => {
-      if (getLanguage() === lang) return;
+      if (state.selectedLanguage === lang) return;
       state.selectedLanguage = lang;
       document.querySelector("html")?.setAttribute("lang", lang);
       langs.forEach((l) => {
@@ -38,7 +38,7 @@ async function hydrateFront() {
 }
 
 window.onload = async function () {
-  app.innerHTML = await beginPage(examName, getLanguage());
+  app.innerHTML = await beginPage(examName, state.selectedLanguage);
   hydrateFront();
 };
 

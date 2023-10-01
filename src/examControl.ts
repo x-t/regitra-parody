@@ -1,4 +1,4 @@
-import { state } from "./state";
+import { state } from "./lib/state";
 
 export function selectQuestion(id: number) {
   if (id < 1 || id > 30) {
