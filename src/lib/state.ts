@@ -5,6 +5,8 @@ type State = {
   selectedLanguage: string;
   examFinished: boolean;
   currentPage: string;
+  examCategory: string;
+  numOfQuestions: number;
 };
 
 export const state: State = {
@@ -14,4 +16,6 @@ export const state: State = {
   selectedLanguage: "lt",
   examFinished: false,
   currentPage: "index",
+  examCategory: "b",
+  numOfQuestions: 30,
 };

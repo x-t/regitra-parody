@@ -6,7 +6,7 @@ interface I18NStrings {
   testLang: string;
   startExam: string;
   test: string;
-  bCategory: string;
+  testCategory: string;
   taskNum: string;
   previousTask: string;
   nextTask: string;

@@ -1,4 +1,5 @@
 import { strings } from "../i18n";
+import { state } from "../lib/state";
 
 export async function beginPage(name: string, language: string) {
   return `
@@ -15,7 +16,7 @@ export async function beginPage(name: string, language: string) {
       <table>
         <tr>
           <td>${await strings("category")}</td>
-          <td>B</td>
+          <td>${state.examCategory.toUpperCase()}</td>
         </tr>
         <tr>
           <td>${await strings("testLang")}</td>

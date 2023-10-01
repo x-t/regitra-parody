@@ -1,7 +1,7 @@
 import { state } from "./lib/state";
 
 export function selectQuestion(id: number) {
-  if (id < 1 || id > 30) {
+  if (id < 1 || id > state.numOfQuestions) {
     return;
   }
 
@@ -12,7 +12,7 @@ export function selectQuestion(id: number) {
     document.querySelector<HTMLButtonElement>(
       ".testControl > div:nth-child(1) > div:nth-child(2) > button",
     )!.disabled = false;
-  } else if (id === 30) {
+  } else if (id === state.numOfQuestions) {
     if (state.examFinished !== true)
       document.querySelector<HTMLButtonElement>(
         ".testControl > div:nth-child(2) > button",

@@ -6,7 +6,7 @@
  * @param a2 is an array
  */
 export function areArraysEqualSets<T>(a1: T[], a2: T[]): boolean {
-  const superSet: {[index: string]: number} = {};
+  const superSet: { [index: string]: number } = {};
   for (const i of a1) {
     const e = i + typeof i;
     superSet[e] = 1;

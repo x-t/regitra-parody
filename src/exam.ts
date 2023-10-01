@@ -23,6 +23,8 @@ interface AnswerT {
   correct: number[];
 }
 
+export const allowedErrorCount = state.numOfQuestions - Math.floor(((80/100) * state.numOfQuestions));
+
 export async function beginExam() {
   const testRandNumber = Math.floor(Math.random() * 3000 + 9000);
 
@@ -45,7 +47,7 @@ export async function beginExam() {
     await generateQuestions(questions),
   );
 
-  const endsDate = new Date(new Date().getTime() + 30 * 60000);
+  const endsDate = new Date(new Date().getTime() + state.numOfQuestions * 60000);
 
   document.querySelector<HTMLButtonElement>(
     ".testControl > div:nth-child(1) > div:nth-child(2) > button",
@@ -270,7 +272,7 @@ export async function finishExam() {
   document.querySelector<HTMLSpanElement>("#__Res_Pass")!.innerHTML =
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonIncorrectAnswer",
-    )!.length > 6
+    )!.length > allowedErrorCount
       ? await strings("examFail")
       : await strings("examPass");
   document.querySelector<HTMLDivElement>(
@@ -278,7 +280,7 @@ export async function finishExam() {
   )!.style.backgroundColor =
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonIncorrectAnswer",
-    )!.length > 6
+    )!.length > allowedErrorCount
       ? "#FF7C80"
       : "#92D050";
   document.querySelector<HTMLSpanElement>(
@@ -312,6 +314,6 @@ export async function finishExam() {
 }
 
 function getTestPercentage(answers: number): string {
-  const x = Math.floor(100 / (30 / answers));
+  const x = Math.floor(100 / (state.numOfQuestions / answers));
   return `${x}%`;
 }

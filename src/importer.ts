@@ -1,4 +1,5 @@
 import count from "./generated/count.json";
+import { state } from "./lib/state";
 
 function randomNum(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -19,7 +20,7 @@ function random_ids(min: number, max: number, amount: number) {
 
 export function get_question_data(lang: string) {
   // @ts-ignore
-  const ids = random_ids(0, count[lang] - 1, 30);
+  const ids = random_ids(0, count[lang] - 1, state.numOfQuestions);
   const promises = ids.map((id) => {
     return fetch(`/generated/questions/${lang}/${id}.json`)
       .then((res) => res.json())
