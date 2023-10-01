@@ -20,14 +20,6 @@ async function hydrateFront() {
       if (state.selectedLanguage === lang) return;
       state.selectedLanguage = lang;
       document.querySelector("html")?.setAttribute("lang", lang);
-      langs.forEach((l) => {
-        document.querySelector<HTMLImageElement>(
-          `#changeLang${l.toUpperCase()}Img`,
-        )!.src = `/img/${l.toUpperCase()}off.png`;
-      });
-      document.querySelector<HTMLImageElement>(
-        `#changeLang${lang.toUpperCase()}Img`,
-      )!.src = `/img/${lang.toUpperCase()}yes.png`;
       app.innerHTML = await beginPage(examName, lang);
       hydrateFront();
     };
