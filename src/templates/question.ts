@@ -8,9 +8,7 @@ export async function generateQuestion(qi: Question, idx: number) {
   divQ.setAttribute("data-qIdx", String(idx));
 
   const imageS = qi.image
-    ? `<img alt="${await strings(
-        "noIllustration",
-      )}" aria-label="There is a picture here, but we cannot describe it to you. Sorry." src="${
+    ? `<img alt="${qi.alt ? qi.alt : await strings("noAlt")}" src="${
         qi.image
       }" />`
     : `<p>${await strings("noIllustration")}</p>`;

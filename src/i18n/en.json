@@ -28,5 +28,6 @@
   "close": "Close",
   "errorStart": "Couldn't start the exam.",
   "errorEnd": "Couldn't end the exam.",
-  "wait": "Please wait..."
+  "wait": "Please wait...",
+  "noAlt": "There is a picture here, but we cannot describe it to you. Sorry."
 }

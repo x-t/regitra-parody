@@ -28,5 +28,6 @@
   "close": "Uždaryti",
   "errorStart": "Negalima buvo pradėti egzamino.",
   "errorEnd": "Negalima buvo užbaigti egzamino.",
-  "wait": "Palaukite..."
+  "wait": "Palaukite...",
+  "noAlt": "Čia yra nuotrauka, bet negalime jos apibūdinti. Atleiskite."
 }

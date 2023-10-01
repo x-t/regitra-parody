@@ -30,6 +30,7 @@ export function get_question_data(lang: string) {
           q: result.q,
           answers: result.a,
           image: result.i,
+          alt: result.alt,
         };
       });
   });

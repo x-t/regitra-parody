@@ -16,6 +16,7 @@ export interface Question {
   q: string;
   image?: string;
   answers: string[];
+  alt?: string;
 }
 
 interface AnswerT {

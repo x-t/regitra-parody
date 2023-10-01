@@ -31,6 +31,7 @@ interface I18NStrings {
   errorStart: string;
   errorEnd: string;
   wait: string;
+  noAlt: string;
 }
 
 export async function strings(key: keyof I18NStrings) {
