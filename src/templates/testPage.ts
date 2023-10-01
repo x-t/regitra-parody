@@ -32,7 +32,9 @@ export async function testPage(name: string, num: number, qs: string) {
       <div class="testQuestionInfo">
           <div class="testInfo">
             <div>
-              <span id="currentQuestion"></span> ${(await strings("taskNum")).replace("$$", state.numOfQuestions)}
+              <span id="currentQuestion"></span> ${(
+                await strings("taskNum")
+              ).replace("$$", state.numOfQuestions)}
             </div>
             <div>
               ${await strings("timeLeft")} <span id="countdownEnd"></span>
@@ -84,9 +86,9 @@ export async function testPage(name: string, num: number, qs: string) {
         "participant",
       )} <span class="resultSpacer"></span> ${name}</p>
       <p>${await strings("category")} <span class="resultSpacer"></span> B</p>
-      <p>${await strings(
-        "givenAnswers",
-      )} <span class="resultSpacer"></span> ${state.numOfQuestions}</p>
+      <p>${await strings("givenAnswers")} <span class="resultSpacer"></span> ${
+        state.numOfQuestions
+      }</p>
       <p>${await strings(
         "correctAnswers",
       )} <span class="resultSpacer"></span> <span id="__Res_CorrectAnswers"></span></p>

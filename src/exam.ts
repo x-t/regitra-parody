@@ -23,7 +23,8 @@ interface AnswerT {
   correct: number[];
 }
 
-export const allowedErrorCount = state.numOfQuestions - Math.floor(((80/100) * state.numOfQuestions));
+export const allowedErrorCount =
+  state.numOfQuestions - Math.floor((80 / 100) * state.numOfQuestions);
 
 export async function beginExam() {
   const testRandNumber = Math.floor(Math.random() * 3000 + 9000);
@@ -47,7 +48,9 @@ export async function beginExam() {
     await generateQuestions(questions),
   );
 
-  const endsDate = new Date(new Date().getTime() + state.numOfQuestions * 60000);
+  const endsDate = new Date(
+    new Date().getTime() + state.numOfQuestions * 60000,
+  );
 
   document.querySelector<HTMLButtonElement>(
     ".testControl > div:nth-child(1) > div:nth-child(2) > button",
