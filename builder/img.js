@@ -15,6 +15,7 @@
 const fs = require("fs");
 const execSync = require("child_process").execSync;
 const langs = require("./_langs.js");
+const categories = require("./_categories.js");
 
 function getMimeFromPath(filePath) {
   const mimeType = execSync(
@@ -24,20 +25,26 @@ function getMimeFromPath(filePath) {
 }
 
 for (const l in langs) {
-  fs.readdirSync(`./public/generated/questions/${langs[l]}`).forEach((file) => {
-    const q = JSON.parse(
-      fs.readFileSync(`./public/generated/questions/${langs[l]}/${file}`),
-    );
-    if (q.hasOwnProperty("i")) {
-      const filename = `./src/_data/images/${q["i"].replaceAll("%20", " ")}`;
-      const mimeType = getMimeFromPath(filename);
-      const base64encoded = execSync(`cat "${filename}" | base64`);
-      const uri = `data:${mimeType};base64,${base64encoded}`;
-      q["i"] = uri;
-      fs.writeFileSync(
-        `./public/generated/questions/${langs[l]}/${file}`,
-        JSON.stringify(q),
+  for (const c in categories) {
+    fs.readdirSync(
+      `./public/generated/questions/${langs[l]}/${categories[c]}`,
+    ).forEach((file) => {
+      const q = JSON.parse(
+        fs.readFileSync(
+          `./public/generated/questions/${langs[l]}/${categories[c]}/${file}`,
+        ),
       );
-    }
-  });
+      if (q.hasOwnProperty("i")) {
+        const filename = `./src/_data/images/${q["i"].replaceAll("%20", " ")}`;
+        const mimeType = getMimeFromPath(filename);
+        const base64encoded = execSync(`cat "${filename}" | base64`);
+        const uri = `data:${mimeType};base64,${base64encoded}`;
+        q["i"] = uri;
+        fs.writeFileSync(
+          `./public/generated/questions/${langs[l]}/${categories[c]}/${file}`,
+          JSON.stringify(q),
+        );
+      }
+    });
+  }
 }

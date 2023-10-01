@@ -2,8 +2,9 @@ import "./regitra.css";
 import { strings } from "./i18n";
 import { beginPage } from "./templates/beginPage";
 import { beginExam } from "./exam";
-import { selectQuestion } from "./examControl";
 import { state } from "./lib/state";
+import "./keyboard";
+import "./url";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -33,16 +34,3 @@ window.onload = async function () {
   app.innerHTML = await beginPage(examName, state.selectedLanguage);
   hydrateFront();
 };
-
-window.addEventListener("keydown", function (event) {
-  if (state.currentPage === "exam") {
-    switch (event.key) {
-      case "ArrowLeft":
-        selectQuestion(state.currentQuestion - 1);
-        break;
-      case "ArrowRight":
-        selectQuestion(state.currentQuestion + 1);
-        break;
-    }
-  }
-});

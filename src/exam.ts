@@ -12,14 +12,14 @@ import Draggable from "draggable_dialog";
 import { state } from "./lib/state";
 
 export interface Question {
-  id: number;
+  id: string;
   q: string;
   image?: string;
   answers: string[];
   alt?: string;
 }
 
-interface AnswerT {
+export interface AnswerT {
   id: number;
   correct: number[];
 }
@@ -37,7 +37,7 @@ export async function beginExam() {
 
   let questions: Question[];
   try {
-    questions = await get_question_data(state.selectedLanguage);
+    questions = await get_question_data();
   } catch {
     alert(await strings("errorStart"));
     return;
@@ -130,7 +130,7 @@ export async function beginExam() {
     });
   });
 
-  const qIDs = questions.reduce<number[]>((acc, cur) => {
+  const qIDs = questions.reduce<string[]>((acc, cur) => {
     acc.push(cur.id);
     return acc;
   }, []);
@@ -193,7 +193,7 @@ export async function beginExam() {
     });
 
   document.querySelectorAll<HTMLDivElement>("div[data-qidx]")!.forEach((el) => {
-    const qId = parseInt(el.getAttribute("data-qid")!);
+    const qId = el.getAttribute("data-qid")!;
     const qIdx = parseInt(el.getAttribute("data-qidx")!);
     document
       .querySelector<HTMLDivElement>(
@@ -201,7 +201,7 @@ export async function beginExam() {
           qIdx + 1
         }) > button > div`,
       )!
-      .setAttribute("data-jumpId", String(qId));
+      .setAttribute("data-jumpId", qId);
   });
 
   selectQuestion(1);
@@ -226,7 +226,7 @@ export async function finishExam() {
 
   let answers: AnswerT[];
   try {
-    answers = await get_answer_data(state.selectedLanguage, state.questionIDs);
+    answers = await get_answer_data(state.questionIDs);
   } catch {
     alert(await strings("errorEnd"));
     return;

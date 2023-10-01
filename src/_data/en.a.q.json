@@ -1,0 +1,42 @@
+{
+  "0": {
+    "q": "Where can you go with a motorcycle?",
+    "a": ["In a tree", "To the moon", "Fugging, Austria"]
+  },
+  "1": {
+    "q": "What's the max power of a moped from the AM category?",
+    "a": ["4kW", "8J", "3W", "18V"]
+  },
+  "2": {
+    "q": "What's the max power of a motorcycle from the A1 category?",
+    "a": ["19e7mV", "9kWh", "0"]
+  },
+  "3": {
+    "q": "What's the max power of a motorcycle from the A2 category?",
+    "a": ["8mm", "8km", "0,8zł"]
+  },
+  "4": {
+    "q": "What's the max power of a motorcycle from the A25 category?",
+    "a": ["1", "2", "3", "4", "5", "6", "7"]
+  },
+  "5": {
+    "q": "Can you filter in between cars in a traffic jam?",
+    "a": ["Yes", "No", "I want to", "I don't want to"]
+  },
+  "6": {
+    "q": "What sound do motorcycles make?",
+    "a": ["prrrrrrffff", "rrrrrneeeeuuuuuoooo", "brrrrbrrrrbrrrr"]
+  },
+  "7": {
+    "q": "What's the speed limit for motorcycle on the highway during the summer?",
+    "a": ["90 km/h", "120 km/h", "130 km/h", "250 km/h + €350"]
+  },
+  "8": {
+    "q": "How can you tell apart an A1 category motorcycle from the A2 category?",
+    "a": ["Bigger", "Smaller", "About the same", "The same", "Red"]
+  },
+  "9": {
+    "q": "Can you modify an A1 category motorcycle into the A2 category?",
+    "a": ["Yes", "No", "If you save"]
+  }
+}

@@ -18,6 +18,7 @@
 const fs = require("fs");
 const execSync = require("child_process").execSync;
 const langs = require("./_langs.js");
+const categories = require("./_categories.js");
 
 function ObjectLength(object) {
   var length = 0;
@@ -34,27 +35,40 @@ execSync("mkdir -p ./src/generated");
 let count = {};
 
 for (const i in langs) {
-  const questions = JSON.parse(
-    fs.readFileSync(`./src/_data/${langs[i]}.q.json`, "utf8"),
-  );
-  count[langs[i]] = ObjectLength(questions);
-  execSync(`mkdir -p ./public/generated/questions/${langs[i]}`);
-  for (const q in questions) {
-    fs.writeFileSync(
-      `./public/generated/questions/${langs[i]}/${q}.json`,
-      JSON.stringify(questions[q]),
+  for (const c in categories) {
+    const questions = JSON.parse(
+      fs.readFileSync(
+        `./src/_data/${langs[i]}.${categories[c]}.q.json`,
+        "utf8",
+      ),
     );
-  }
+    if (!(langs[i] in count)) count[langs[i]] = {};
+    count[langs[i]][categories[c]] = ObjectLength(questions);
+    execSync(
+      `mkdir -p ./public/generated/questions/${langs[i]}/${categories[c]}`,
+    );
+    for (const q in questions) {
+      fs.writeFileSync(
+        `./public/generated/questions/${langs[i]}/${categories[c]}/${q}.json`,
+        JSON.stringify(questions[q]),
+      );
+    }
 
-  const answers = JSON.parse(
-    fs.readFileSync(`./src/_data/${langs[i]}.a.json`, "utf8"),
-  );
-  execSync(`mkdir -p ./public/generated/answers/${langs[i]}`);
-  for (const a in answers) {
-    fs.writeFileSync(
-      `./public/generated/answers/${langs[i]}/${a}.json`,
-      JSON.stringify(answers[a]),
+    const answers = JSON.parse(
+      fs.readFileSync(
+        `./src/_data/${langs[i]}.${categories[c]}.a.json`,
+        "utf8",
+      ),
     );
+    execSync(
+      `mkdir -p ./public/generated/answers/${langs[i]}/${categories[c]}`,
+    );
+    for (const a in answers) {
+      fs.writeFileSync(
+        `./public/generated/answers/${langs[i]}/${categories[c]}/${a}.json`,
+        JSON.stringify(answers[a]),
+      );
+    }
   }
 }
 

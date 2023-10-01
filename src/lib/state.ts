@@ -1,12 +1,13 @@
 type State = {
   selectedAnswers: any;
   currentQuestion: number;
-  questionIDs: number[];
+  questionIDs: string[];
   selectedLanguage: string;
   examFinished: boolean;
   currentPage: string;
   examCategory: string;
   numOfQuestions: number;
+  categoryMakeup: { [category: string]: number };
 };
 
 export const state: State = {
@@ -18,4 +19,5 @@ export const state: State = {
   currentPage: "index",
   examCategory: "b",
   numOfQuestions: 30,
+  categoryMakeup: { b: 30 },
 };

@@ -1,4 +1,6 @@
+import { AnswerT, Question } from "./exam";
 import count from "./generated/count.json";
+import { shuffle } from "./lib/array";
 import { state } from "./lib/state";
 
 function randomNum(min: number, max: number) {
@@ -18,11 +20,22 @@ function random_ids(min: number, max: number, amount: number) {
   return ids;
 }
 
-export function get_question_data(lang: string) {
-  // @ts-ignore
-  const ids = random_ids(0, count[lang] - 1, state.numOfQuestions);
+export function get_question_data() {
+  let ids: string[] = [];
+  for (const c in state.categoryMakeup) {
+    const cids = random_ids(
+      0,
+      // @ts-ignore
+      count[state.selectedLanguage][c] - 1,
+      state.categoryMakeup[c],
+    );
+    ids = [...ids, ...cids.map((cid) => `${c}/${cid}`)];
+  }
+
+  shuffle(ids);
+
   const promises = ids.map((id) => {
-    return fetch(`/generated/questions/${lang}/${id}.json`)
+    return fetch(`/generated/questions/${state.selectedLanguage}/${id}.json`)
       .then((res) => res.json())
       .then((result) => {
         return {
@@ -34,12 +47,12 @@ export function get_question_data(lang: string) {
         };
       });
   });
-  return Promise.all(promises);
+  return Promise.all(promises) as unknown as Question[];
 }
 
-export async function get_answer_data(lang: string, ids: number[]) {
+export async function get_answer_data(ids: string[]) {
   const promises = ids.map((id) => {
-    return fetch(`/generated/answers/${lang}/${id}.json`)
+    return fetch(`/generated/answers/${state.selectedLanguage}/${id}.json`)
       .then((res) => res.json())
       .then((result) => {
         return {
@@ -48,5 +61,5 @@ export async function get_answer_data(lang: string, ids: number[]) {
         };
       });
   });
-  return await Promise.all(promises);
+  return (await Promise.all(promises)) as unknown as AnswerT[];
 }

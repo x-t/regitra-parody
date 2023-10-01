@@ -10,7 +10,8 @@
     "build:fast": "tsc && vite build",
     "serve": "npm run build && vite preview",
     "test:unit": "vitest run",
-    "fmt": "prettier --write ."
+    "fmt": "prettier --write .",
+    "clean": "rm -rf ./src/generated && rm -rf ./public/generated && rm -rf ./dist"
   },
   "devDependencies": {
     "@vitejs/plugin-legacy": "^4.1.1",

@@ -51,7 +51,7 @@ export async function testPage(name: string, num: number, qs: string) {
                 return controls;
               })()}
             </div>
-          </div>
+        </div>
       </div>
   </div>
   <div class="confirmationOverlay"></div>
