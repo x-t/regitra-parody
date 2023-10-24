@@ -29,5 +29,6 @@
   "errorStart": "Negalima buvo pradėti egzamino.",
   "errorEnd": "Negalima buvo užbaigti egzamino.",
   "wait": "Palaukite...",
-  "noAlt": "Čia yra nuotrauka, bet negalime jos apibūdinti. Atleiskite."
+  "noAlt": "Čia yra nuotrauka, bet negalime jos apibūdinti. Atleiskite.",
+  "affiliationWarning": "Regitra Parodija yra nesusijusi su V.Į. Regitra ar jos veikla."
 }

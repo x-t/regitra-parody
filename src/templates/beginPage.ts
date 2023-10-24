@@ -37,6 +37,7 @@ export async function beginPage(name: string, language: string) {
         "startExam",
       )}</span><img src="/img/arrow.png" height="32" width="32" alt="Arrow"/>
     </button>
+    <p style="color:gray;font-size:0.8em;">${await strings("affiliationWarning")}</p>
   </div>
   <div class="examFinishOverlay"></div>
 `;

@@ -32,6 +32,7 @@ interface I18NStrings {
   errorEnd: string;
   wait: string;
   noAlt: string;
+  affiliationWarning: string;
 }
 
 export async function strings(key: keyof I18NStrings) {
