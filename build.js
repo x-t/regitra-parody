@@ -380,10 +380,9 @@ function iterateCatsAndDogs(db, callback) {
         if (err) {
           console.error("Error executing the SELECT query:", err);
         } else {
-          let countsAmount = langs.length * cats.length;
           langs.forEach((lang) => {
             cats.forEach((cat) => {
-              callback(lang, cat, countsAmount);
+              callback(lang, cat);
             });
           });
         }
@@ -395,20 +394,17 @@ function iterateCatsAndDogs(db, callback) {
 function BuildCount() {
   let counts = {};
   let db = new sqlite3.Database(dbName);
-  iterateCatsAndDogs(db, (lang, cat, countsAmount) => {
+
+  execSync(`mkdir -p ./src/generated`);
+
+  iterateCatsAndDogs(db, (lang, cat) => {
     if (!(lang.language_code in counts)) counts[lang.language_code] = {};
     db.get(
       `select count(*) from questions where language = ? and category = ?`,
       [lang.language_code, cat.name],
       (err, row) => {
         counts[lang.language_code][cat.name] = row["count(*)"];
-        countsAmount--;
-        if (countsAmount == 0) {
-          fs.writeFileSync(
-            "./src/generated/count.json",
-            JSON.stringify(counts),
-          );
-        }
+        fs.writeFileSync("./src/generated/count.json", JSON.stringify(counts));
       },
     );
   });
@@ -416,7 +412,7 @@ function BuildCount() {
 
 function Build() {
   let db = new sqlite3.Database(dbName);
-  iterateCatsAndDogs(db, (lang, cat, countsAmount) => {
+  iterateCatsAndDogs(db, (lang, cat) => {
     execSync(
       `mkdir -p ./public/generated/questions/${lang.language_code}/${cat.name}`,
     );
