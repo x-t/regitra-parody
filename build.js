@@ -27,12 +27,6 @@ switch (process.argv[2]) {
   case "db:new":
     NewDatabase();
     break;
-  case "migrate:images":
-    MigrateImages();
-    break;
-  case "migrate:json":
-    MigrateJson();
-    break;
   case "build:count":
     BuildCount();
     break;
