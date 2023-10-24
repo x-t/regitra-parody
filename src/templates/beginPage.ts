@@ -37,7 +37,8 @@ export async function beginPage(name: string, language: string) {
         "startExam",
       )}</span><img src="/img/arrow.png" height="32" width="32" alt="Arrow"/>
     </button>
-    <p style="color:gray;font-size:0.8em;">${await strings("affiliationWarning")}</p>
+    <p class="infoSmall">${await strings("affiliationWarning")}</p>
+    <p class="infoSmall">©️ <a href="https://x-t.github.io">x-t</a> ${new Date().getFullYear()} <a href="https://github.com/x-t/regitra-parody/blob/main/LICENSE">MPL-2.0</a></p>
   </div>
   <div class="examFinishOverlay"></div>
 `;
