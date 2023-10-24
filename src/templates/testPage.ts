@@ -85,7 +85,7 @@ export async function testPage(name: string, num: number, qs: string) {
       <p>${await strings(
         "participant",
       )} <span class="resultSpacer"></span> ${name}</p>
-      <p>${await strings("category")} <span class="resultSpacer"></span> B</p>
+      <p>${await strings("category")} <span class="resultSpacer"></span> ${state.examCategory.toUpperCase()}</p>
       <p>${await strings("givenAnswers")} <span class="resultSpacer"></span> ${
         state.numOfQuestions
       }</p>
