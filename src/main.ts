@@ -1,6 +1,6 @@
 import "./regitra.css";
 import { strings } from "./i18n";
-import { beginPage } from "./templates/beginPage";
+import { beginPage } from "./templates/beginPage.html";
 import { beginExam } from "./exam";
 import { state } from "./lib/state";
 import "./keyboard";

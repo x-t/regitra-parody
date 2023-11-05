@@ -3,8 +3,8 @@ import { get_answer_data } from "./importer";
 import { strings } from "./i18n";
 import { selectQuestion, changeWithOffset } from "./examControl";
 import { get_question_data } from "./importer";
-import { generateQuestions } from "./templates/question";
-import { testPage } from "./templates/testPage";
+import { generateQuestions } from "./templates/question.html";
+import { testPage } from "./templates/testPage.html";
 import { countdownTimer } from "./lib/countdown";
 import { app, examName } from "./main";
 // @ts-ignore
