@@ -59,17 +59,13 @@ export async function beginExam() {
     new Date().getTime() + state.numOfQuestions * 60000,
   );
 
-  document.querySelector<HTMLButtonElement>(
-    "#examNextTask",
-  )!.onclick = changeWithOffset(1);
-  document.querySelector<HTMLButtonElement>(
-    "#examPreviousTask",
-  )!.onclick = changeWithOffset(-1);
+  document.querySelector<HTMLButtonElement>("#examNextTask")!.onclick =
+    changeWithOffset(1);
+  document.querySelector<HTMLButtonElement>("#examPreviousTask")!.onclick =
+    changeWithOffset(-1);
 
   document
-    .querySelectorAll<HTMLButtonElement>(
-      ".examTaskSelector",
-    )
+    .querySelectorAll<HTMLButtonElement>(".examTaskSelector")
     .forEach((v, idx) => {
       v.onclick = () => {
         selectQuestion(idx + 1);
@@ -231,9 +227,7 @@ export async function finishExam() {
     });
 
   document
-    .querySelectorAll<HTMLDivElement>(
-      ".examTaskSelector > div",
-    )!
+    .querySelectorAll<HTMLDivElement>(".examTaskSelector > div")!
     .forEach((qCtrl) => {
       qCtrl.setAttribute("class", "questionButtonIncorrectAnswer");
     });

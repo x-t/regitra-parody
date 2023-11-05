@@ -36,7 +36,9 @@ export function selectQuestion(id: number) {
   }
 
   document.querySelector<HTMLImageElement>(
-    `.examTaskSelectorContainer[data-questionNumber="${state.currentQuestion - 1}"] > div > img`,
+    `.examTaskSelectorContainer[data-questionNumber="${
+      state.currentQuestion - 1
+    }"] > div > img`,
   )!.style.display = "none";
   document.querySelector<HTMLSpanElement>("#currentQuestion")!.innerHTML =
     String(id);

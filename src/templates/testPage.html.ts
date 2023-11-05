@@ -46,18 +46,19 @@ export async function testPage(name: string, num: number, qs: string) {
               ${(() => {
                 let controls = "";
                 for (let q in state.questionIDs) {
-                  controls += 
-                  `<div class="examTaskSelectorContainer"
+                  controls += `<div class="examTaskSelectorContainer"
                     data-questionNumber="${parseInt(q)}">
                     <button class="examTaskSelector">
                       <div data-answered="false" 
-                        data-jumpId="${state.questionIDs[q]}">${parseInt(q) + 1}</div>
+                        data-jumpId="${state.questionIDs[q]}">${
+                          parseInt(q) + 1
+                        }</div>
                     </button>
                     <div style="min-height:19.5px;">
                       <img alt="Current" src="/img/testRun.png" />
                     </div>
                   </div>`;
-                  if (state.questionIDs.length > 30 && (parseInt(q) + 1 === 30)) {
+                  if (state.questionIDs.length > 30 && parseInt(q) + 1 === 30) {
                     controls += `<div class="examTaskSelectorSpacer"></div>`;
                   }
                 }
