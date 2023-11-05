@@ -10,6 +10,16 @@
  * I hate callbacks so much.
  */
 
+/**
+ * MIGRATIONS:
+ * Updates in schema between versions/commits.
+ * Run them to upgrade a database to the newest version.
+ * 
+ * From c0878ae - Add back alt text support for images
+ ** ALTER TABLE images
+ ** ADD COLUMN alt_text TEXT;
+ */
+
 if (process.argv.length === 2) {
   console.error("Expected at least one argument!");
   process.exit(1);
@@ -69,6 +79,7 @@ function NewDatabase() {
         image_id INTEGER PRIMARY KEY,
         image_name TEXT,
         image_data_uri TEXT
+        alt_text TEXT
       );
     `);
 
@@ -233,6 +244,9 @@ function Build() {
                       [row.image_id],
                       (err, img) => {
                         question["i"] = img.image_data_uri;
+                        if (img.alt_text) {
+                          question["alt"] = img.alt_text;
+                        }
                         writeOuts();
                       },
                     );
