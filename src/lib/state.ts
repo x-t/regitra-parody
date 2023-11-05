@@ -12,7 +12,7 @@ type State = {
 
 export const state: State = {
   selectedAnswers: {},
-  currentQuestion: 0,
+  currentQuestion: 1,
   questionIDs: [],
   selectedLanguage: "lt",
   examFinished: false,

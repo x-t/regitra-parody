@@ -43,6 +43,12 @@ export async function beginExam() {
     return;
   }
 
+  const qIDs = questions.reduce<string[]>((acc, cur) => {
+    acc.push(cur.id);
+    return acc;
+  }, []);
+  state.questionIDs = qIDs;
+
   app.innerHTML = await testPage(
     examName,
     testRandNumber,
@@ -106,11 +112,11 @@ export async function beginExam() {
           ).length != 0
         ) {
           document
-            .querySelectorAll(`.questionControls > div > div > button > div`)!
+            .querySelectorAll(`.examTaskSelector > div`)!
             [idxx].setAttribute("data-answered", "true");
         } else {
           document
-            .querySelectorAll(`.questionControls > div > div > button > div`)!
+            .querySelectorAll(`.examTaskSelector > div`)!
             [idxx].setAttribute("data-answered", "false");
         }
         let selectedAnswers = state.selectedAnswers
@@ -129,12 +135,6 @@ export async function beginExam() {
       };
     });
   });
-
-  const qIDs = questions.reduce<string[]>((acc, cur) => {
-    acc.push(cur.id);
-    return acc;
-  }, []);
-  state.questionIDs = qIDs;
 
   new Draggable({
     dialogId: "overlayDialog",
@@ -192,18 +192,6 @@ export async function beginExam() {
       state.currentPage = "exam";
     });
 
-  document.querySelectorAll<HTMLDivElement>("div[data-qidx]")!.forEach((el) => {
-    const qId = el.getAttribute("data-qid")!;
-    const qIdx = parseInt(el.getAttribute("data-qidx")!);
-    document
-      .querySelector<HTMLDivElement>(
-        `div.questionControls > div > div:nth-child(${
-          qIdx + 1
-        }) > button > div`,
-      )!
-      .setAttribute("data-jumpId", qId);
-  });
-
   selectQuestion(1);
   document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =
     "none";
@@ -232,8 +220,6 @@ export async function finishExam() {
     return;
   }
 
-  const answered = state.selectedAnswers ? state.selectedAnswers : {};
-
   answers.forEach((answer) => {
     const answerElements = document.querySelectorAll<HTMLDivElement>(
       `div[data-qid="${answer.id}"] > div:nth-child(2) > button > div > span:nth-of-type(2)`,
@@ -257,7 +243,7 @@ export async function finishExam() {
 
   document
     .querySelectorAll<HTMLDivElement>(
-      "div.questionControls > div > div > button > div",
+      ".examTaskSelector > div",
     )!
     .forEach((qCtrl) => {
       qCtrl.setAttribute("class", "questionButtonIncorrectAnswer");
@@ -265,8 +251,8 @@ export async function finishExam() {
 
   answers.forEach((answer) => {
     if (
-      answered.hasOwnProperty(answer.id) &&
-      areArraysEqualSets(answer.correct, answered[answer.id])
+      state.selectedAnswers.hasOwnProperty(answer.id) &&
+      areArraysEqualSets(answer.correct, state.selectedAnswers[answer.id])
     )
       document
         .querySelector<HTMLDivElement>(`div[data-jumpId="${answer.id}"]`)!

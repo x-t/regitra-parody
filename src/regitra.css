@@ -170,17 +170,14 @@ body {
   justify-content: space-between;
 }
 
-.questionControls {
-  display: flex;
-  justify-content: space-around;
-}
-
+.questionControls,
 .questionControls > div {
   display: flex;
-  justify-content: space-around;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.questionControls > div > div > button > div {
+.examTaskSelector > div {
   cursor: pointer;
   border-style: solid;
   border-width: 1px;
@@ -198,16 +195,16 @@ body {
   display: none;
 }
 
-.questionControls > div > div > button > div[data-answered="false"] {
+.examTaskSelector > div[data-answered="false"] {
   background-color: #ebebeb;
 }
 
-.questionControls > div > div > button > div[data-answered="true"] {
+.examTaskSelector > div[data-answered="true"] {
   color: white;
   background-color: #c6c6c6;
 }
 
-.questionControls > div > div > button > div:hover {
+.examTaskSelector > div:hover {
   background-color: #488ac7;
 }
 
@@ -263,7 +260,7 @@ body {
 }
 
 .testQuestion > div:nth-child(2) > button,
-.questionControls > div > div > button,
+.examTaskSelector,
 .overlayCloseButton,
 #changeLangLT,
 #changeLangEN {
@@ -507,4 +504,8 @@ body {
 .infoSmall {
   color: gray;
   font-size: 0.8em;
+}
+
+.examTaskSelectorSpacer {
+  min-width: 100%;
 }

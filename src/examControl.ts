@@ -35,20 +35,19 @@ export function selectQuestion(id: number) {
     )!.style.display = "none";
   }
 
-  let currentQuestion = state.currentQuestion ? state.currentQuestion : 1;
   document.querySelector<HTMLImageElement>(
-    `.questionControls > div > div:nth-child(${currentQuestion}) > div > img`,
+    `.examTaskSelectorContainer[data-questionNumber="${state.currentQuestion - 1}"] > div > img`,
   )!.style.display = "none";
   document.querySelector<HTMLSpanElement>("#currentQuestion")!.innerHTML =
     String(id);
   document.querySelector<HTMLDivElement>(
-    `.testQuestion[data-qidx="${currentQuestion - 1}"]`,
+    `.testQuestion[data-qidx="${state.currentQuestion - 1}"]`,
   )!.style.display = "none";
   document.querySelector<HTMLDivElement>(
     `.testQuestion[data-qidx="${id - 1}"]`,
   )!.style.display = "unset";
   document.querySelector<HTMLImageElement>(
-    `.questionControls > div > div:nth-child(${id}) > div > img`,
+    `.examTaskSelectorContainer[data-questionNumber="${id - 1}"] > div > img`,
   )!.style.display = "unset";
   state.currentQuestion = id;
 }

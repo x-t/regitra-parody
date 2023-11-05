@@ -20,7 +20,7 @@ function random_ids(min: number, max: number, amount: number) {
   return ids;
 }
 
-export function get_question_data() {
+export async function get_question_data() {
   let ids: string[] = [];
   for (const c in state.categoryMakeup) {
     const cids = random_ids(
@@ -47,7 +47,7 @@ export function get_question_data() {
         };
       });
   });
-  return Promise.all(promises) as unknown as Question[];
+  return Promise.all(promises) as Promise<unknown> as Promise<Question[]>;
 }
 
 export async function get_answer_data(ids: string[]) {
