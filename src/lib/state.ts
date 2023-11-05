@@ -1,5 +1,5 @@
 type State = {
-  selectedAnswers: any;
+  selectedAnswers: { [questionId: string]: number[] };
   currentQuestion: number;
   questionIDs: string[];
   selectedLanguage: string;
@@ -11,7 +11,7 @@ type State = {
 };
 
 export const state: State = {
-  selectedAnswers: [],
+  selectedAnswers: {},
   currentQuestion: 0,
   questionIDs: [],
   selectedLanguage: "lt",
