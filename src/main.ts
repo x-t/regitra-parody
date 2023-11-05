@@ -10,7 +10,7 @@ export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
 
 async function hydrateFront() {
-  document.querySelector<HTMLSpanElement>("#__Loading_Box_Text")!.innerHTML =
+  document.querySelector<HTMLSpanElement>("#globalLoadingBoxText")!.innerHTML =
     await strings("wait");
 
   const langs = ["lt", "en"];

@@ -30,7 +30,7 @@ export const allowedErrorCount =
 export async function beginExam() {
   const testRandNumber = Math.floor(Math.random() * 3000 + 9000);
 
-  document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
+  document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =
     "flex";
   document.querySelector<HTMLDivElement>(".examFinishOverlay")!.style.display =
     "unset";
@@ -54,15 +54,15 @@ export async function beginExam() {
   );
 
   document.querySelector<HTMLButtonElement>(
-    ".testControl > div:nth-child(1) > div:nth-child(2) > button",
+    "#examNextTask",
   )!.onclick = changeWithOffset(1);
   document.querySelector<HTMLButtonElement>(
-    ".testControl > div:nth-child(1) > div:nth-child(1) > button",
+    "#examPreviousTask",
   )!.onclick = changeWithOffset(-1);
 
   document
     .querySelectorAll<HTMLButtonElement>(
-      ".questionControls > div > div > button",
+      ".examTaskSelector",
     )
     .forEach((v, idx) => {
       v.onclick = () => {
@@ -74,7 +74,7 @@ export async function beginExam() {
   if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
     document
       .querySelectorAll<HTMLDivElement>(
-        ".questionControls > div > div > button > div",
+        ".examTaskSelector > div",
       )
       .forEach((d) => {
         d.style.marginLeft = "unset";
@@ -181,7 +181,7 @@ export async function beginExam() {
     });
 
   document
-    .querySelector<HTMLButtonElement>("#__Res_ViewAnswersBtn")!
+    .querySelector<HTMLButtonElement>("#examResultViewAnswers")!
     .addEventListener("click", () => {
       document.querySelector<HTMLDivElement>(
         ".examFinishOverlay",
@@ -205,7 +205,7 @@ export async function beginExam() {
   });
 
   selectQuestion(1);
-  document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
+  document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =
     "none";
   document.querySelector<HTMLDivElement>(".examFinishOverlay")!.style.display =
     "none";
@@ -218,7 +218,7 @@ export async function finishExam() {
   state.examFinished = true;
   document.querySelector<HTMLDivElement>(".examFinishOverlay")!.style.display =
     "unset";
-  document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
+  document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =
     "flex";
   document.querySelector<HTMLButtonElement>(
     ".testControl > div:nth-child(2) > button",
@@ -273,7 +273,7 @@ export async function finishExam() {
         .setAttribute("class", "questionButtonCorrectAnswer");
   });
 
-  document.querySelector<HTMLSpanElement>("#__Res_Pass")!.innerHTML =
+  document.querySelector<HTMLSpanElement>("#examResultPassMessage")!.innerHTML =
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonIncorrectAnswer",
     )!.length > allowedErrorCount
@@ -288,7 +288,7 @@ export async function finishExam() {
       ? "#FF7C80"
       : "#92D050";
   document.querySelector<HTMLSpanElement>(
-    "#__Res_CorrectAnswers",
+    "#examResultCorrectAnswers",
   )!.innerHTML = `${
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonCorrectAnswer",
@@ -299,7 +299,7 @@ export async function finishExam() {
     )!.length,
   )})`;
   document.querySelector<HTMLSpanElement>(
-    "#__Res_IncorrectAnswers",
+    "#examResultIncorrectAnswers",
   )!.innerHTML = `${
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonIncorrectAnswer",
@@ -310,7 +310,7 @@ export async function finishExam() {
     )!.length,
   )})`;
 
-  document.querySelector<HTMLDivElement>("#__Loading_Box")!.style.display =
+  document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =
     "none";
   document.querySelector<HTMLDivElement>(".examFinishDialog")!.style.display =
     "unset";
