@@ -76,17 +76,6 @@ export async function beginExam() {
       };
     });
 
-  // Safari-only styling, as additional default Webkit margins remove the need for 5px margin-left
-  if (/^((?!chrome|android).)*safari/i.test(navigator.userAgent)) {
-    document
-      .querySelectorAll<HTMLDivElement>(
-        ".examTaskSelector > div",
-      )
-      .forEach((d) => {
-        d.style.marginLeft = "unset";
-      });
-  }
-
   questions.forEach((q, idxx) => {
     q.answers.forEach((_, idx) => {
       document.querySelector<HTMLButtonElement>(
