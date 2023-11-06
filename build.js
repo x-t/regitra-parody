@@ -15,6 +15,14 @@
  * Updates in schema between versions/commits.
  * Run them to upgrade a database to the newest version.
  *
+ * From 0920d82 - Image alt should not be associated
+ *                with an ID
+ ** ALTER TABLE images
+ ** DROP COLUMN alt_text;
+ **
+ ** ALTER TABLE images
+ ** ADD COLUMN alt_text INTEGER;
+ * 
  * From 1d3b786 - Add multilingual alt text
  ** CREATE TABLE image_alt_text (
  **   id INTEGER PRIMARY KEY,
@@ -150,8 +158,7 @@ function NewDatabase() {
         image_id INTEGER PRIMARY KEY,
         image_name TEXT,
         image_data_uri TEXT,
-        alt_text INTEGER,
-        FOREIGN KEY (alt_text) REFERENCES image_alt_text (id)
+        alt_text INTEGER
       );
     `);
 
