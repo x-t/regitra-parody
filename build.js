@@ -371,11 +371,18 @@ function Build() {
                        */
                       (err, img) => {
                         question["i"] = img.image_data_uri;
-                        /**
-                         * @todo
-                         * Add alt text support
-                         */
-                        writeOuts();
+                        if (img.alt_text) {
+                          db.get(
+                            `select * from image_alt_text where image_id = ? and language = ?`,
+                            [img.image_id, lang.language_code],
+                            /**
+                             * @param {ImageAltText} alttext
+                             */
+                            (err, alttext) => {
+                              question["alt"] = alttext.alt_text;
+                              writeOuts();
+                            })
+                        }
                       },
                     );
                   } else {
