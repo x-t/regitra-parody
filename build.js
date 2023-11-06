@@ -95,6 +95,7 @@ const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 const { exec, execSync } = require("child_process");
 const https = require("https");
+const { resolve } = require("dns");
 
 const dbName = "./content.db";
 
@@ -110,6 +111,9 @@ switch (process.argv[2]) {
     break;
   case "download":
     DownloadDB();
+    break;
+  case "serve:debug":
+    ServeDebug();
     break;
 }
 
@@ -381,7 +385,8 @@ function Build() {
                             (err, alttext) => {
                               question["alt"] = alttext.alt_text;
                               writeOuts();
-                            })
+                            },
+                          );
                         }
                       },
                     );
@@ -404,4 +409,142 @@ function DownloadDB() {
   const request = https.get(url, function (response) {
     response.pipe(file);
   });
+}
+
+function ServeDebug() {
+  let http = require("http");
+  let db = new sqlite3.Database(dbName);
+
+  /**
+   * @param {string} title
+   * @param {string} slot
+   */
+  const templateHtmlBegin = (title, slot) => `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8" />
+        <title>${title}</title>
+      </head>
+      <body>
+        ${slot}
+      </body>
+    </html>
+  `;
+
+  const templateIndex = () => templateHtmlBegin("regitradebug - idx", `
+    <main>
+      <h1>Debug interface</h1>
+      <h2>Here you can inspect your Regitra Parody database.</h2>
+      <pre>
+Database file: ${dbName}
+      </pre>
+      <p>View:</p>
+      <p><a href="/questions">Questions</a></p>
+      <p><a href="/images">Images</a></p>
+    </main>
+  `)
+
+  /** @returns {Promise<string>} */
+  const templateQuestionsView = () => {
+    return new Promise(
+      /** @param {(s: string) => void} resolve */
+      (resolve) => {
+      /** @param {string} slot */
+      let template = (slot) => templateHtmlBegin("regitradebug - q", `
+      <main>
+        <h1>Current questions in database</h1>
+        <p><a href="/">Go back</a></p>
+        <pre>${slot}</pre>
+      </main>
+      `)
+
+      db.all("select * from questions", 
+        /** @param {Question[]} questions */
+        (err, questions) => {
+          let toGo = questions.length;
+          for (let q in questions) {
+            db.all("select * from possible_answers where question_id = ?",
+              [questions[q].id],
+              /** @param {PossibleAnswer[]} answers */
+              (err, answers) => {
+                questions[q].answers = answers;
+                toGo--;
+                if (toGo === 0) {
+                  toGo = questions.length;
+                  for (let _q in questions) {
+                    db.all(
+                      "select * from correct_answers where question_id = ?",
+                      [questions[_q].id],
+                      /** @param {CorrectAnswer[]} corrects */
+                      (err, corrects) => {
+                        questions[_q].correct_answers = corrects;
+                        toGo--;
+                        if (toGo === 0) {
+                          resolve(template(JSON.stringify(questions, null, 2)))
+                        }
+                      })
+                  }
+                }
+              })
+          }
+      })
+    })
+  }
+
+  /** @returns {Promise<string>} */
+  const templateImagesView = () => {
+    return new Promise(
+      /** @param {(s: string) => void} resolve */
+      (resolve) => {
+        /** @param {string} slot */
+        let template = (slot) => templateHtmlBegin("regitradebug - i", `
+        <main>
+          <h1>Current images in database</h1>
+          <p><a href="/">Go back</a></p>
+          ${slot}
+        </main>
+        `);
+
+        db.all(
+          "select * from images",
+          /** @param {Image[]} images */
+          (err, images) => {
+            let concat = "";
+            let toGo = images.length;
+            for (let i in images) {
+              concat += `
+                <p>${images[i].image_id} - ${images[i].image_name}</p>
+                <img height="256" width="256" src="${images[i].image_data_uri}" />
+              `
+              toGo--;
+              if (toGo === 0) {
+                resolve(template(concat));
+              }
+            }
+          })
+      })
+  }
+
+  http
+    .createServer(async function (req, res) {
+      res.writeHead(200, { "Content-Type": "text/html" });
+      switch (req.url) {
+      case "/":
+        res.write(templateIndex());
+        break;
+      case "/questions":
+        res.write(await templateQuestionsView());
+        break;
+      case "/images":
+        res.write(await templateImagesView());
+        break;
+      default:
+        res.write("404");
+        break;
+      }
+      res.end();
+    })
+    .listen(8080);
+  console.log("Listening on http://localhost:8080")
 }
