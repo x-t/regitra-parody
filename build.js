@@ -95,7 +95,6 @@ const path = require("path");
 const sqlite3 = require("sqlite3").verbose();
 const { exec, execSync } = require("child_process");
 const https = require("https");
-const { resolve } = require("dns");
 
 const dbName = "./content.db";
 
