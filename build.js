@@ -387,6 +387,8 @@ function Build() {
                               writeOuts();
                             },
                           );
+                        } else {
+                          writeOuts();
                         }
                       },
                     );
@@ -432,7 +434,10 @@ function ServeDebug() {
     </html>
   `;
 
-  const templateIndex = () => templateHtmlBegin("regitradebug - idx", `
+  const templateIndex = () =>
+    templateHtmlBegin(
+      "regitradebug - idx",
+      `
     <main>
       <h1>Debug interface</h1>
       <h2>Here you can inspect your Regitra Parody database.</h2>
@@ -443,54 +448,67 @@ Database file: ${dbName}
       <p><a href="/questions">Questions</a></p>
       <p><a href="/images">Images</a></p>
     </main>
-  `)
+  `,
+    );
 
   /** @returns {Promise<string>} */
   const templateQuestionsView = () => {
     return new Promise(
       /** @param {(s: string) => void} resolve */
       (resolve) => {
-      /** @param {string} slot */
-      let template = (slot) => templateHtmlBegin("regitradebug - q", `
+        /** @param {string} slot */
+        let template = (slot) =>
+          templateHtmlBegin(
+            "regitradebug - q",
+            `
       <main>
         <h1>Current questions in database</h1>
         <p><a href="/">Go back</a></p>
         <pre>${slot}</pre>
       </main>
-      `)
+      `,
+          );
 
-      db.all("select * from questions", 
-        /** @param {Question[]} questions */
-        (err, questions) => {
-          let toGo = questions.length;
-          for (let q in questions) {
-            db.all("select * from possible_answers where question_id = ?",
-              [questions[q].id],
-              /** @param {PossibleAnswer[]} answers */
-              (err, answers) => {
-                questions[q].answers = answers;
-                toGo--;
-                if (toGo === 0) {
-                  toGo = questions.length;
-                  for (let _q in questions) {
-                    db.all(
-                      "select * from correct_answers where question_id = ?",
-                      [questions[_q].id],
-                      /** @param {CorrectAnswer[]} corrects */
-                      (err, corrects) => {
-                        questions[_q].correct_answers = corrects;
-                        toGo--;
-                        if (toGo === 0) {
-                          resolve(template(JSON.stringify(questions, null, 2)))
-                        }
-                      })
+        db.all(
+          "select * from questions",
+          /** @param {Question[]} questions */
+          (err, questions) => {
+            let toGo = questions.length;
+            for (let q in questions) {
+              db.all(
+                "select * from possible_answers where question_id = ?",
+                [questions[q].id],
+                /** @param {PossibleAnswer[]} answers */
+                (err, answers) => {
+                  questions[q].answers = answers;
+                  toGo--;
+                  if (toGo === 0) {
+                    toGo = questions.length;
+                    for (let _q in questions) {
+                      db.all(
+                        "select * from correct_answers where question_id = ?",
+                        [questions[_q].id],
+                        /** @param {CorrectAnswer[]} corrects */
+                        (err, corrects) => {
+                          questions[_q].correct_answers = corrects;
+                          toGo--;
+                          if (toGo === 0) {
+                            resolve(
+                              template(JSON.stringify(questions, null, 2)),
+                            );
+                          }
+                        },
+                      );
+                    }
                   }
-                }
-              })
-          }
-      })
-    })
-  }
+                },
+              );
+            }
+          },
+        );
+      },
+    );
+  };
 
   /** @returns {Promise<string>} */
   const templateImagesView = () => {
@@ -498,13 +516,17 @@ Database file: ${dbName}
       /** @param {(s: string) => void} resolve */
       (resolve) => {
         /** @param {string} slot */
-        let template = (slot) => templateHtmlBegin("regitradebug - i", `
+        let template = (slot) =>
+          templateHtmlBegin(
+            "regitradebug - i",
+            `
         <main>
           <h1>Current images in database</h1>
           <p><a href="/">Go back</a></p>
           ${slot}
         </main>
-        `);
+        `,
+          );
 
         db.all(
           "select * from images",
@@ -516,35 +538,37 @@ Database file: ${dbName}
               concat += `
                 <p>${images[i].image_id} - ${images[i].image_name}</p>
                 <img height="256" width="256" src="${images[i].image_data_uri}" />
-              `
+              `;
               toGo--;
               if (toGo === 0) {
                 resolve(template(concat));
               }
             }
-          })
-      })
-  }
+          },
+        );
+      },
+    );
+  };
 
   http
     .createServer(async function (req, res) {
       res.writeHead(200, { "Content-Type": "text/html" });
       switch (req.url) {
-      case "/":
-        res.write(templateIndex());
-        break;
-      case "/questions":
-        res.write(await templateQuestionsView());
-        break;
-      case "/images":
-        res.write(await templateImagesView());
-        break;
-      default:
-        res.write("404");
-        break;
+        case "/":
+          res.write(templateIndex());
+          break;
+        case "/questions":
+          res.write(await templateQuestionsView());
+          break;
+        case "/images":
+          res.write(await templateImagesView());
+          break;
+        default:
+          res.write("404");
+          break;
       }
       res.end();
     })
     .listen(8080);
-  console.log("Listening on http://localhost:8080")
+  console.log("Listening on http://localhost:8080");
 }
