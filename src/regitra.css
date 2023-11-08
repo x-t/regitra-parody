@@ -116,12 +116,8 @@ body {
 .testControl > div:nth-child(1) {
   display: flex;
   text-align: left;
-  flex-wrap: wrap;
 }
 
-.testControl > div:nth-child(1) > div:nth-child(1) {
-  width: 300px;
-}
 
 .testControl > div:nth-child(2) > button {
   min-width: 110px;
@@ -131,7 +127,7 @@ body {
 .testControl > div button {
   padding-top: 2px;
   padding-bottom: 2px;
-  min-width: 200px;
+  min-width: 50px;
   min-height: 31px;
   background: url("/img/hborder.png") repeat-x scroll 0 -27px transparent;
   border: 2px outset #cccccc;
@@ -142,6 +138,10 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.testControl > div button > span {
+  display: none;
 }
 
 .testControl > div > button[disabled] {
@@ -248,7 +248,6 @@ body {
 
 .testQuestion > div:first-child > div:nth-child(2) > span {
   font-size: 1.9em;
-  padding-left: 15px;
   padding-right: 5px;
   font-family: Arial serif;
   line-height: 1.6em;
@@ -560,5 +559,25 @@ body {
 
   .examFinishDialog {
     width: 500px;
+  }
+
+  .testControl > div:nth-child(1) > div:nth-child(1) {
+    width: 300px;
+  }
+
+  .testControl > div button > span {
+    display: initial;
+  }
+
+  .testControl > div button {
+    min-width: 200px;
+  }
+
+  .testControl > div:nth-child(1) > div:nth-child(1) {
+    width: 300px;
+  }
+
+  .testQuestion > div:first-child > div:nth-child(2) > span {
+    padding-left: 15px;
   }
 }
