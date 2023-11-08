@@ -28,7 +28,7 @@ export async function generateQuestion(qi: Question, idx: number) {
             ${imageS}
           </div>
           <div>
-          <textarea readonly>${qi.q}</textarea>
+          <span>${qi.q}</span>
           </div>
         </div>
         <div>

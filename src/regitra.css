@@ -7,20 +7,20 @@ body {
 }
 
 .mainWindow {
-  width: 1000px;
-  height: 700px;
+  max-width: 1000px;
+  max-height: 700px;
   text-align: center;
   margin: 0 auto;
 }
 
 .mainWindow > div.head {
   height: 100px;
-  font-size: 50px;
+  font-size: 25px;
 }
 
 .mainWindow > div.name {
   height: 200px;
-  font-size: 80px;
+  font-size: 40px;
 }
 
 .mainWindow > div.options {
@@ -105,6 +105,7 @@ body {
   padding: 5px;
   border-radius: 4px;
   background: url("/img/grad.png") 100% 100% no-repeat;
+  flex-wrap: wrap;
 }
 
 .testControl {
@@ -115,6 +116,7 @@ body {
 .testControl > div:nth-child(1) {
   display: flex;
   text-align: left;
+  flex-wrap: wrap;
 }
 
 .testControl > div:nth-child(1) > div:nth-child(1) {
@@ -232,13 +234,19 @@ body {
 .testQuestion > div:first-child {
   display: flex;
   margin-bottom: 30px;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .testQuestion > div:first-child > div:nth-child(1) {
-  width: 500px;
+  width: 100%;
 }
 
-.testQuestion > div:first-child > div:nth-child(2) > textarea {
+.testQuestion > div:first-child > div:nth-child(2)  {
+  width: 100%;
+}
+
+.testQuestion > div:first-child > div:nth-child(2) > span {
   font-size: 1.9em;
   padding-left: 15px;
   padding-right: 5px;
@@ -248,14 +256,16 @@ body {
   background: white;
   cursor: default;
   overflow-y: auto;
-  height: 300px;
-  width: 500px;
+  text-align: left;
+  width: 100%;
+  display: block;
+  text-align: center;
 }
 
 .testQuestion > div:nth-child(2) {
   display: flex;
   flex-direction: column;
-  height: 235px;
+  min-height: 235px;
 }
 
 .testQuestion > div:nth-child(2) > button,
@@ -273,8 +283,7 @@ body {
 }
 
 .testQuestion > div:nth-child(2) > button > div {
-  width: 100%;
-  height: 30px;
+  min-height: 30px;
   background-color: #f9f9f9;
   border: 1px solid #bbbbbb;
   display: flex;
@@ -298,6 +307,7 @@ body {
   font-family: Arial serif;
   line-height: 1.5em;
   font-size: 1.5em;
+  margin-right: 5px;
 }
 
 .checkbox {
@@ -305,7 +315,7 @@ body {
   height: 20px;
   margin-top: 5px;
   padding-left: 3px;
-  padding-right: 3px;
+  padding-right: 9px;
   background-image: url("/img/checkbox.png");
   background-repeat: no-repeat;
   background-position: 0 0;
@@ -331,7 +341,7 @@ body {
 
 #overlayDialog {
   position: fixed;
-  width: 510px;
+  width: 350px;
   background-color: white;
   z-index: 20;
 }
@@ -415,7 +425,7 @@ body {
 
 .examFinishDialog {
   z-index: 7;
-  width: 500px;
+  width: 350px;
   position: absolute;
   top: 30%;
   left: 50%;
@@ -496,8 +506,8 @@ body {
 }
 
 .testQuestion > div > div:nth-child(1) > img {
-  max-width: 400px;
-  max-height: 300px;
+  max-width: 300px;
+  max-height: 200px;
 }
 
 .infoSmall {
@@ -505,6 +515,50 @@ body {
   font-size: 0.8em;
 }
 
-.examTaskSelectorSpacer {
-  min-width: 100%;
+@media only screen and (min-width: 768px) {
+  .examTaskSelectorSpacer {
+    min-width: 100%;
+  }
+
+  .testQuestion > div > div:nth-child(1) > img {
+    max-width: 400px;
+    max-height: 300px;
+  }
+
+  #overlayDialog {
+    width: 510px;
+  }
+
+  .checkbox {
+    padding-right: 3px;
+  }
+
+  .testQuestion > div:first-child {
+    flex-wrap: nowrap;
+    align-items: initial;
+  }
+
+  .testControl {
+    flex-wrap: nowrap;
+  }
+
+  .testControl > div:nth-child(1) {
+    flex-wrap: nowrap;
+  }
+
+  .mainWindow > div.head {
+    font-size: 50px;
+  }
+
+  .mainWindow > div.name {
+    font-size: 80px;
+  }
+
+  .testQuestion > div:first-child > div:nth-child(2) > span {
+    min-height: 300px;
+  }
+
+  .examFinishDialog {
+    width: 500px;
+  }
 }
