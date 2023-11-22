@@ -160,15 +160,15 @@ regitra-parody is licensed under MPL-2.0 and includes no warranty.`,
 
 function InvokeImport() {
   switch (process.argv[3]) {
-  case "migrate_v0_images":
-    MigrateLegacyImages();
-    break;
-  case "migrate_v0_json":
-    MigrateLegacyJson();
-    break;
-  default:
-    PrintHelp();
-    break;
+    case "migrate_v0_images":
+      MigrateLegacyImages();
+      break;
+    case "migrate_v0_json":
+      MigrateLegacyJson();
+      break;
+    default:
+      PrintHelp();
+      break;
   }
 }
 
