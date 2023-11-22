@@ -22,7 +22,7 @@
  **
  ** ALTER TABLE images
  ** ADD COLUMN alt_text INTEGER;
- * 
+ *
  * From 1d3b786 - Add multilingual alt text
  ** CREATE TABLE image_alt_text (
  **   id INTEGER PRIMARY KEY,
@@ -94,7 +94,7 @@
  */
 
 if (process.argv.length === 2) {
-  console.error("Expected at least one argument!");
+  PrintHelp();
   process.exit(1);
 }
 
@@ -108,9 +108,11 @@ const dbName = "./content.db";
 
 switch (process.argv[2]) {
   case "db:new":
+  case "new_db":
     NewDatabase();
     break;
   case "build:count":
+  case "build_count":
     BuildCount();
     break;
   case "build":
@@ -120,8 +122,32 @@ switch (process.argv[2]) {
     DownloadDB();
     break;
   case "serve:debug":
+  case "debug_server":
     ServeDebug();
     break;
+  case "help":
+  default:
+    PrintHelp();
+    break;
+}
+
+function PrintHelp() {
+  console.log(
+    `The build system for regitra-parody
+
+Usage: node build.js [command]
+
+Available commands:
+    new_db        Creates a new database
+    build_count   Builds ./src/generated/count.json
+    build         Builds ./public/generated
+    download      Downloads .db file from env/DATABASE_URL
+    debug_server  Serves a debug server on :8080
+    help          Prints this message
+
+regitra-parody is in development, some features you expect may not be there.
+regitra-parody is licensed under MPL-2.0 and includes no warranty.`,
+  );
 }
 
 function NewDatabase() {

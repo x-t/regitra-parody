@@ -118,7 +118,6 @@ body {
   text-align: left;
 }
 
-
 .testControl > div:nth-child(2) > button {
   min-width: 110px;
   display: none;
@@ -242,7 +241,7 @@ body {
   width: 100%;
 }
 
-.testQuestion > div:first-child > div:nth-child(2)  {
+.testQuestion > div:first-child > div:nth-child(2) {
   width: 100%;
 }
 
