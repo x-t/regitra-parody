@@ -645,7 +645,7 @@ Database file: ${dbName}
            * - JavaScript is still used to write everything
            * - everything bad will continue being bad
            * - that God no longer loves us
-           * 
+           *
            * No, but seriously, don't do this.
            * This server should never be used in production.
            * Therefore I can get away.
