@@ -459,9 +459,34 @@ function ServeDebug() {
       <head>
         <meta charset="UTF-8" />
         <title>${title}</title>
+        <style>
+html {
+  max-width: 70ch;
+  padding: 3em 1em;
+  margin: auto;
+  line-height: 1.75;
+  font-size: 1.25em;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  margin: 3em 0 1em;
+}
+
+p,ul,ol {
+  margin-bottom: 2em;
+  color: #1d1d1d;
+  font-family: sans-serif;
+}
+pre {
+  white-space: pre-wrap;
+}
+        </style>
       </head>
       <body>
         ${slot}
+        <footer>
+        <p style="font-size:small;">regitra-parody (C) x-t, licensed under MPL-2.0</p>
+        </footer>
       </body>
     </html>
   `;
