@@ -473,6 +473,8 @@ function ServeDebug() {
     <main>
       <h1>Debug interface</h1>
       <h2>Here you can inspect your Regitra Parody database.</h2>
+      <p>Keep in mind: this is for inspection, not development.</p>
+      <p>To create/edit questions use an SQL editor or available import tools.</p>
       <pre>
 Database file: ${dbName}
       </pre>
@@ -564,17 +566,30 @@ Database file: ${dbName}
           "select * from images",
           /** @param {Image[]} images */
           (err, images) => {
-            let concat = "";
+            /** @type string[] */
+            let concat = [];
             let toGo = images.length;
             for (let i in images) {
-              concat += `
-                <p>${images[i].image_id} - ${images[i].image_name}</p>
-                <img height="256" width="256" src="${images[i].image_data_uri}" />
-              `;
-              toGo--;
-              if (toGo === 0) {
-                resolve(template(concat));
-              }
+              db.all(
+                "select * from image_alt_text where image_id = ?",
+                [images[i].image_id],
+                /** @param {ImageAltText[]} alt_t */
+                (err, alt_t) => {
+                  concat.push(`
+                    <p>${images[i].image_id} - ${images[i].image_name}</p>
+                    <img style="max-width:256px;max-height:256px;" src="${images[i].image_data_uri}" />
+                  `);
+                  for (let t in alt_t) {
+                    concat.push(
+                      "<pre>" + JSON.stringify(alt_t[t], null, 2) + "</pre>",
+                    );
+                  }
+                  toGo--;
+                  if (toGo === 0) {
+                    resolve(template(concat.join("")));
+                  }
+                },
+              );
             }
           },
         );
