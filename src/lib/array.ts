@@ -1,4 +1,12 @@
 /**
+ * Copyright (C) zxyz 2023
+ * This Source Code Form is subject to the terms
+ * of the Mozilla Public License, v. 2.0. If a
+ * copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ */
+
+ /**
  * https://stackoverflow.com/questions/6229197/how-to-know-if-two-arrays-have-the-same-values/55614659#55614659
  * assumes array elements are primitive types
  * check whether 2 arrays are equal sets.

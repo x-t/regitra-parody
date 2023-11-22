@@ -636,6 +636,22 @@ Database file: ${dbName}
           res.write(await templateImagesView());
           break;
         default:
+          /**
+           * Return a 200 code with a 404 reponse.
+           * This ensures that:
+           * - churches burn
+           * - the poor starve
+           * - Microsoft prospers
+           * - JavaScript is still used to write everything
+           * - everything bad will continue being bad
+           * - that God no longer loves us
+           * 
+           * No, but seriously, don't do this.
+           * This server should never be used in production.
+           * Therefore I can get away.
+           * You can't.
+           * You can't run.
+           */
           res.write("404");
           break;
       }
