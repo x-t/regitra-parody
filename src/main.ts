@@ -13,6 +13,7 @@ import { beginExam } from "./exam";
 import { state } from "./lib/state";
 import "./keyboard";
 import "./url";
+import { changeCategory } from "./examControl";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -33,6 +34,14 @@ async function hydrateFront() {
       hydrateFront();
     };
   });
+
+  document
+    .querySelector<HTMLSelectElement>("#selectExamCategory")!
+    .addEventListener("change", () => {
+      let e = document.querySelector<HTMLSelectElement>("#selectExamCategory")!;
+      var selected = e.options[e.selectedIndex].value;
+      changeCategory(selected);
+    });
 
   document.querySelector<HTMLButtonElement>(".beginButton")!.onclick =
     beginExam;

@@ -9,6 +9,10 @@
 import { strings } from "../i18n";
 import { state } from "../lib/state";
 
+/** @todo This should probably project-wide,
+ * compiled by build.js */
+const categories = ["a", "b"];
+
 export async function beginPage(name: string, language: string) {
   return `
   <div class="mainWindow">
@@ -24,7 +28,23 @@ export async function beginPage(name: string, language: string) {
       <table>
         <tr>
           <td>${await strings("category")}</td>
-          <td>${state.examCategory.toUpperCase()}</td>
+          <td>
+            <select name="examCategory" id="selectExamCategory">
+            ${(() => {
+              let concat = "";
+              for (let c in categories) {
+                concat += `
+                <option 
+                  value="${categories[c]}"
+                  ${state.examCategory === categories[c] ? "selected" : ""}>
+                  ${categories[c].toUpperCase()}
+                </option>
+                `;
+              }
+              return concat;
+            })()}
+            </select>
+          </td>
         </tr>
         <tr>
           <td>${await strings("testLang")}</td>

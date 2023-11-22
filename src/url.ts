@@ -7,6 +7,7 @@
  */
 
 import { state } from "./lib/state";
+import { changeCategory } from "./examControl";
 
 const urlParams = new URLSearchParams(window.location.search);
 
@@ -24,16 +25,5 @@ if (lang) {
 
 const category = urlParams.get("category");
 if (category) {
-  switch (category) {
-    case "b":
-      state.examCategory = "b";
-      state.categoryMakeup = { b: 30 };
-      state.numOfQuestions = 30;
-      break;
-    case "a":
-      state.examCategory = "a";
-      state.categoryMakeup = { b: 30, a: 5 };
-      state.numOfQuestions = 35;
-      break;
-  }
+  changeCategory(category);
 }
