@@ -125,6 +125,9 @@ switch (process.argv[2]) {
   case "debug_server":
     ServeDebug();
     break;
+  case "import":
+    InvokeImport();
+    break;
   case "help":
   default:
     PrintHelp();
@@ -143,11 +146,30 @@ Available commands:
     build         Builds ./public/generated
     download      Downloads .db file from env/DATABASE_URL
     debug_server  Serves a debug server on :8080
+    import        Imports data in bulk
     help          Prints this message
+
+Import commands: (usage: node build.js import [command])
+    migrate_v0_images   Migrate old images into database
+    migrate_v0_json     Migrate old JSON-format questions
 
 regitra-parody is in development, some features you expect may not be there.
 regitra-parody is licensed under MPL-2.0 and includes no warranty.`,
   );
+}
+
+function InvokeImport() {
+  switch (process.argv[3]) {
+  case "migrate_v0_images":
+    MigrateLegacyImages();
+    break;
+  case "migrate_v0_json":
+    MigrateLegacyJson();
+    break;
+  default:
+    PrintHelp();
+    break;
+  }
 }
 
 function NewDatabase() {
@@ -443,6 +465,237 @@ function DownloadDB() {
   const request = https.get(url, function (response) {
     response.pipe(file);
   });
+}
+
+const imageFolderPath = "./src/_data/images";
+
+function MigrateLegacyImages() {
+  let db = new sqlite3.Database(dbName);
+
+  fs.readdir(imageFolderPath, (err, files) => {
+    if (err) {
+      console.error("Error reading image folder:", err);
+      return;
+    }
+
+    // Process each image file
+    files.forEach((file) => {
+      const imagePath = `${imageFolderPath}/${file}`;
+
+      // Use the 'file' command to determine the MIME type
+      exec(`file --mime-type -b "${imagePath}"`, (error, stdout) => {
+        if (error) {
+          console.error(`Error running 'file' command for ${file}:`, error);
+          return;
+        }
+
+        // Read the image file and convert it to base64
+        const imageBuffer = fs.readFileSync(imagePath);
+        const imageBase64 = imageBuffer.toString("base64");
+
+        // Insert the image data into the 'images' table
+        db.run(
+          "INSERT INTO images (image_name, image_data_uri) VALUES (?, ?)",
+          [file, `data:${stdout.trim()};base64,${imageBase64}`],
+          (insertError) => {
+            if (insertError) {
+              console.error(
+                `Error inserting ${file} into the database:`,
+                insertError,
+              );
+            } else {
+              console.log(`Inserted ${file} into the database.`);
+            }
+          },
+        );
+      });
+    });
+  });
+}
+
+function MigrateLegacyJson() {
+  let db = new sqlite3.Database(dbName);
+
+  /**
+   * Once again, the default.
+   * These were the supported languages
+   * and categories before the SQLite migration
+   */
+
+  const supportedLanguages = ["lt", "en"];
+  const supportedCategories = ["a", "b"];
+
+  // Function to insert a question into the 'questions' table
+  function insertQuestion(question, imageId, callback) {
+    db.run(
+      "INSERT INTO questions (language, category, question_text, image_id) VALUES (?, ?, ?, ?)",
+      [question.language, question.category, question.q, imageId],
+      function (err) {
+        if (err) {
+          console.error("Error inserting question:", err);
+          callback(err);
+        } else {
+          console.log(`Inserted question with ID: ${this.lastID}`);
+          callback(null, this.lastID);
+        }
+      },
+    );
+  }
+
+  // Function to insert possible answers and correct answers
+  function insertAnswers(
+    questionId,
+    possibleAnswers,
+    correctAnswerIndices,
+    callback,
+  ) {
+    const insertPossibleAnswersStmt = db.prepare(
+      "INSERT INTO possible_answers (question_id, answer_text) VALUES (?, ?)",
+    );
+
+    const insertCorrectAnswersStmt = db.prepare(
+      "INSERT INTO correct_answers (question_id, answer_id) VALUES (?, ?)",
+    );
+
+    let insertedAnswerIds = []; // To store the IDs of the inserted possible answers
+
+    // Insert possible answers
+    possibleAnswers.forEach((answerText) => {
+      insertPossibleAnswersStmt.run(questionId, answerText, function (err) {
+        if (err) {
+          console.error("Error inserting possible answer:", err);
+          callback(err);
+        } else {
+          // Get the last inserted row ID, which is the answer ID
+          const answerId = this.lastID;
+          insertedAnswerIds.push(answerId);
+        }
+      });
+    });
+
+    insertPossibleAnswersStmt.finalize((err) => {
+      if (err) {
+        console.error("Error finalizing possible answers:", err);
+        callback(err);
+      } else {
+        // Insert correct answers using the 1-based indices from the JSON
+        correctAnswerIndices.forEach((correctIndex) => {
+          if (correctIndex >= 1 && correctIndex <= insertedAnswerIds.length) {
+            const answerId = insertedAnswerIds[correctIndex - 1];
+            insertCorrectAnswersStmt.run(questionId, answerId, function (err) {
+              if (err) {
+                console.error("Error inserting correct answer:", err);
+                callback(err);
+              }
+            });
+          }
+        });
+
+        insertCorrectAnswersStmt.finalize((err) => {
+          if (err) {
+            console.error("Error finalizing correct answers:", err);
+            callback(err);
+          } else {
+            callback(null);
+          }
+        });
+      }
+    });
+  }
+  // Function to migrate questions from a JSON file
+  function migrateQuestions(language, category, callback) {
+    const questionsFileName = `${language}.${category}.q.json`;
+    const answersFileName = `${language}.${category}.a.json`;
+
+    const questionsData = JSON.parse(
+      fs.readFileSync(`./src/_data/${questionsFileName}`, "utf8"),
+    );
+
+    const answersData = JSON.parse(
+      fs.readFileSync(`./src/_data/${answersFileName}`, "utf8"),
+    );
+
+    let pendingInserts = Object.keys(questionsData).length;
+
+    for (const questionId in questionsData) {
+      const question = questionsData[questionId];
+      let imageName = question.i;
+      let imageId = null;
+
+      if (imageName) {
+        imageName = imageName.replaceAll("%20", " ");
+      }
+      // Query the 'images' table to get the image ID by name
+      db.get(
+        "SELECT image_id FROM images WHERE image_name = ?",
+        [imageName],
+        (err, row) => {
+          if (err) {
+            console.error("Error querying images:", err);
+          }
+
+          if (!row) {
+            console.error(`Image not found for question: ${questionId}`);
+          } else {
+            imageId = row.image_id;
+          }
+
+          // Insert the question into the 'questions' table
+          insertQuestion(
+            { language, category, ...question },
+            imageId,
+            (err, _questionId) => {
+              if (err) {
+                console.error("Error inserting question:", err);
+              } else {
+                insertAnswers(
+                  _questionId,
+                  question.a,
+                  answersData[questionId],
+                  (err) => {
+                    if (err) {
+                      console.error(
+                        "Error inserting possible and correct answers:",
+                        err,
+                      );
+                    }
+                    pendingInserts--;
+                    if (pendingInserts === 0) {
+                      callback();
+                    }
+                  },
+                );
+              }
+              pendingInserts--;
+              if (pendingInserts === 0) {
+                callback();
+              }
+            },
+          );
+        },
+      );
+    }
+  }
+
+  // Initialize the database schema if needed
+
+  let migrationsCount = 0;
+
+  // For each supported language and category, migrate the questions
+  for (const language of supportedLanguages) {
+    for (const category of supportedCategories) {
+      migrateQuestions(language, category, () => {
+        migrationsCount++;
+        if (
+          migrationsCount ===
+          supportedLanguages.length * supportedCategories.length
+        ) {
+          // All migrations have completed, close the database handle
+          db.close();
+        }
+      });
+    }
+  }
 }
 
 function ServeDebug() {
