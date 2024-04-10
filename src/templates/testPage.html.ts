@@ -119,7 +119,7 @@ export async function testPage(name: string, num: number, qs: string) {
       )} <span class="resultSpacer"></span> <span id="examResultIncorrectAnswers"></span></p>
       <p>${await strings(
         "allowedErrors",
-      )} <span class="resultSpacer"></span> ${allowedErrorCount}</p>
+      )} <span class="resultSpacer"></span> ${allowedErrorCount()}</p>
     </div>
     <div>
       <button id="examResultViewAnswers"><img src="/img/answers.png" alt="Chart" /> ${await strings(
