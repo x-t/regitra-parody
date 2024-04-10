@@ -32,8 +32,9 @@ export interface AnswerT {
   correct: number[];
 }
 
-export const allowedErrorCount =
-  state.numOfQuestions - Math.floor((80 / 100) * state.numOfQuestions);
+export function allowedErrorCount() {
+  return state.numOfQuestions - Math.floor((80 / 100) * state.numOfQuestions);
+}
 
 export async function beginExam() {
   const testRandNumber = Math.floor(Math.random() * 3000 + 9000);
@@ -253,7 +254,7 @@ export async function finishExam() {
   document.querySelector<HTMLSpanElement>("#examResultPassMessage")!.innerHTML =
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonIncorrectAnswer",
-    )!.length > allowedErrorCount
+    )!.length > allowedErrorCount()
       ? await strings("examFail")
       : await strings("examPass");
   document.querySelector<HTMLDivElement>(
@@ -261,7 +262,7 @@ export async function finishExam() {
   )!.style.backgroundColor =
     document.querySelectorAll<HTMLDivElement>(
       "div.questionButtonIncorrectAnswer",
-    )!.length > allowedErrorCount
+    )!.length > allowedErrorCount()
       ? "#FF7C80"
       : "#92D050";
   document.querySelector<HTMLSpanElement>(
