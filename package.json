@@ -1,6 +1,7 @@
 {
   "name": "regitra",
   "version": "0.0.0",
+  "type": "module",
   "scripts": {
     "build:pre": "node build.js build:count && node build.js build",
     "build:prod": "node build.js download && npm run build",
