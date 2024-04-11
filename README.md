@@ -9,7 +9,7 @@ Go take a test, I'm sure you'll ~~not~~ pass: [regitra.pages.dev](https://regitr
 
 ## A note for the traveler
 
-**The source code does not contain the questions nor answers.** In order to see the last commit with the questions present in the source code, visit [here](https://github.com/x-t/regitra-parody/tree/3430fd8ebfb7b5362261705c5d2ee8776c1008e5). Then, you can use the [build.js](build.js) tool to migrate the old JSON format questions into the new SQLite database. Or, you can just start anew and write your own questions in a new database, create it using `node build.js new_db`.
+**The source code does not contain the questions nor answers.** In order to see the last commit with the questions present in the source code, visit [here](https://github.com/x-t/regitra-parody/tree/3430fd8ebfb7b5362261705c5d2ee8776c1008e5). Then, you can use the [build.cjs](build.cjs) tool to migrate the old JSON format questions into the new SQLite database. Or, you can just start anew and write your own questions in a new database, create it using `node build.cjs new_db`.
 
 **This site does not use a backend.** All questions and answers are in static hosted JSON compiled from an SQLite database. This means it's not usable for anyone that wants to make an actual testing system out of this. I don't know why you would, but previous commits have a Rust backend (which doesn't work) with Google Sheets as a database (which is hilarious) [here](https://github.com/x-t/regitra-parody/tree/6ad23dad2284a48f70571239791b52a3f1f3fe4b).
 
