@@ -13,15 +13,15 @@
     "clean": "rm -rf ./src/generated && rm -rf ./public/generated && rm -rf ./dist"
   },
   "devDependencies": {
-    "@vitejs/plugin-legacy": "^4.1.1",
-    "autoprefixer": "^10.4.16",
-    "postcss": "^8.4.31",
-    "prettier": "^3.0.3",
-    "sqlite3": "^5.1.6",
-    "terser": "^5.24.0",
-    "typescript": "^5.2.2",
-    "vite": "^4.5.0",
-    "vitest": "^0.34.6"
+    "@vitejs/plugin-legacy": "^5.3.2",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "prettier": "^3.2.5",
+    "sqlite3": "^5.1.7",
+    "terser": "^5.30.3",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.8",
+    "vitest": "^1.4.0"
   },
   "dependencies": {
     "draggable_dialog": "^1.0.3"
