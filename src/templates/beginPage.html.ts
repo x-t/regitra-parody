@@ -8,9 +8,10 @@
 
 import { strings } from "../i18n";
 import { state } from "../lib/state";
-import { get_category_arr } from "../importer";
+import { get_category_arr, get_version_info } from "../importer";
 
 const categories = get_category_arr();
+const version = get_version_info().version;
 
 export async function beginPage(name: string, language: string) {
   return `
@@ -65,7 +66,7 @@ export async function beginPage(name: string, language: string) {
       )}</span><img src="/img/arrow.png" height="32" width="32" alt="Arrow"/>
     </button>
     <p class="infoSmall">${await strings("affiliationWarning")}</p>
-    <p class="infoSmall">©️ <a href="https://x-t.github.io">x-t</a> ${new Date().getFullYear()} <a href="https://github.com/x-t/regitra-parody/blob/main/LICENSE">MPL-2.0</a></p>
+    <p class="infoSmall"><a href="https://github.com/x-t/regitra-parody">${version}</a> ©️ <a href="https://x-t.github.io">x-t</a> ${new Date().getFullYear()}</p>
   </div>
   <div class="examFinishOverlay"></div>
 `;

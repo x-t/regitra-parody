@@ -21,6 +21,10 @@ body {
   margin: 0 auto;
 }
 
+.mainWindow a {
+  color: blue;
+}
+
 .mainWindow > div.head {
   height: 100px;
   font-size: 25px;
