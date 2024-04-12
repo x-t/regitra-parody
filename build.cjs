@@ -10,44 +10,11 @@
  * I hate callbacks so much.
  */
 
-/**
- * MIGRATIONS:
- * Updates in schema between versions/commits.
- * Run them to upgrade a database to the newest version.
- *
- * From 0920d82 - Image alt should not be associated
- *                with an ID
- ** ALTER TABLE images
- ** DROP COLUMN alt_text;
- **
- ** ALTER TABLE images
- ** ADD COLUMN alt_text INTEGER;
- *
- * From 1d3b786 - Add multilingual alt text
- ** CREATE TABLE image_alt_text (
- **   id INTEGER PRIMARY KEY,
- **   image_id INTEGER,
- **   language TEXT,
- **   alt_text TEXT,
- **   FOREIGN KEY (image_id) REFERENCES images (image_id)
- ** );
- **
- ** ALTER TABLE images
- ** DROP COLUMN alt_text;
- **
- ** ALTER TABLE images
- ** ADD COLUMN alt_text INTEGER REFERENCES images (image_id);
- *
- * From c0878ae - Add back alt text support for images
- ** ALTER TABLE images
- ** ADD COLUMN alt_text TEXT;
- */
+const CURRENT_SCHEMA_VERSION = "v1";
 
 /**
  * Some type definitions for our SQLite tables.
- */
-
-/**
+ *
  * @typedef {{
  *  language_code: string,
  *  display_name: string
@@ -57,6 +24,11 @@
  *  name: string,
  *  display_name: string
  * }} Category
+ *
+ * @typedef {{
+ *  key: string,
+ *  value: string
+ * }} Meta
  *
  * @typedef {{
  *  image_id: number,
@@ -128,6 +100,12 @@ switch (process.argv[2]) {
   case "import":
     InvokeImport();
     break;
+  case "version":
+    CheckVersion();
+    break;
+  case "update":
+    UpdateCLI();
+    break;
   case "help":
   default:
     PrintHelp();
@@ -147,6 +125,8 @@ Available commands:
     download      Downloads .db file from env/DATABASE_URL
     debug_server  Serves a debug server on :8080
     import        Imports data in bulk
+    version       Check the schema version of current database
+    update        Database migration/update CLI
     help          Prints this message
 
 Import commands: (usage: node build.js import [command])
@@ -170,6 +150,77 @@ function InvokeImport() {
       PrintHelp();
       break;
   }
+}
+
+function CheckVersion() {
+  let db = new sqlite3.Database(dbName);
+
+  db.get(`select value from meta where key = 'version'`, (err, value) => {
+    if (err) {
+      if (err.message.includes("no such table: meta")) {
+        console.log("v0");
+      } else {
+        console.error(err);
+        process.exit(1);
+      }
+
+      process.exit(0);
+    } else {
+      console.log(value.value);
+    }
+  });
+}
+
+function UpdateCLI() {
+  switch (process.argv[3]) {
+    case "v0v1":
+      InvokeUpdate("v0v1");
+      return;
+  }
+
+  console.log(`Latest schema version: ${CURRENT_SCHEMA_VERSION}`);
+  console.log(
+    `! Get your current schema version using "node build.cjs version"`,
+  );
+  console.log(`Available migrations:`);
+  console.log(`  v0 => v1 | Invoke using "node build.cjs update v0v1"`);
+}
+
+function InvokeUpdate(migration) {
+  const migrations = {
+    v0v1: {
+      description: "Adds meta table to track schema version.",
+      update: function () {
+        let db = new sqlite3.Database(dbName);
+        db.serialize(() => {
+          db.run(`
+            CREATE TABLE meta (
+              key TEXT PRIMARY KEY,
+              value TEXT
+            );
+          `);
+
+          db.run(`
+            INSERT INTO meta (key, value)
+            VALUES
+            ('version', 'v1');
+          `);
+
+          db.close((error) => {
+            if (error) {
+              return console.error(error.message);
+            }
+          });
+
+          console.log(`Migration successful.`);
+        });
+      },
+    },
+  };
+
+  console.log(`Invoking migration: ${migration}`);
+  console.log(`Description: ${migrations[migration].description}`);
+  migrations[migration].update();
 }
 
 function NewDatabase() {
@@ -198,6 +249,13 @@ function NewDatabase() {
       CREATE TABLE category (
         name TEXT PRIMARY KEY,
         display_name TEXT
+      );
+    `);
+
+    db.run(`
+      CREATE TABLE meta (
+        key TEXT PRIMARY KEY,
+        value TEXT
       );
     `);
 
@@ -264,6 +322,12 @@ function NewDatabase() {
       ('b', 'B');
     `);
 
+    db.run(`
+      INSERT INTO meta (key, value)
+      VALUES
+      ('version', '${CURRENT_SCHEMA_VERSION}');
+    `);
+
     db.close((error) => {
       if (error) {
         return console.error(error.message);
@@ -274,7 +338,7 @@ function NewDatabase() {
           "It only contains the schema. \x1b[31mIt does not contain any questions or answers.\x1b[0m\n" +
           "In order to make those, modify the database accordingly.\n" +
           "Your database includes support for English and Lithuanian languages,\n" +
-          "as well as the support for B and A categories. You should see build.js for:\n" +
+          "as well as the support for B and A categories. You should see build.cjs for:\n" +
           " - Available migrations from previous versions of the schema.\n" +
           " - The schema itself, so you can understand how to populate it.\n" +
           " - Possible methods of bulk importing from different formats.\n\n" +
