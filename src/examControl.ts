@@ -7,6 +7,7 @@
  */
 
 import { state } from "./lib/state";
+import { get_category_list } from "./importer";
 
 export function selectQuestion(id: number) {
   if (id < 1 || id > state.numOfQuestions) {
@@ -70,17 +71,8 @@ export function changeWithOffset(off: number) {
 }
 
 export function changeCategory(category: string) {
-  switch (category) {
-    case "b":
-    default:
-      state.examCategory = "b";
-      state.categoryMakeup = { b: 30 };
-      state.numOfQuestions = 30;
-      break;
-    case "a":
-      state.examCategory = "a";
-      state.categoryMakeup = { b: 30, a: 5 };
-      state.numOfQuestions = 35;
-      break;
-  }
+  const category_list = get_category_list();
+  state.examCategory = category;
+  state.categoryMakeup = category_list[category].makeup;
+  state.numOfQuestions = category_list[category].qNum;
 }

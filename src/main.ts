@@ -14,6 +14,7 @@ import { state } from "./lib/state";
 import "./keyboard";
 import "./url";
 import { changeCategory } from "./examControl";
+import { get_language_list } from "./importer";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -22,7 +23,7 @@ async function hydrateFront() {
   document.querySelector<HTMLSpanElement>("#globalLoadingBoxText")!.innerHTML =
     await strings("wait");
 
-  const langs = ["lt", "en"];
+  const langs = get_language_list();
   langs.forEach((lang) => {
     document.querySelector<HTMLButtonElement>(
       `#changeLang${lang.toUpperCase()}`,

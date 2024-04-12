@@ -22,8 +22,14 @@ const CURRENT_SCHEMA_VERSION = "v2";
  *
  * @typedef {{
  *  name: string,
- *  display_name: string
+ *  display_name: string,
+ *  makeup: CategoryMakeup,
+ *  question_amount: number
  * }} Category
+ *
+ * @typedef {{
+ *  [category: string]: number
+ * }} CategoryMakeup
  *
  * @typedef {{
  *  key: string,
@@ -87,6 +93,9 @@ switch (process.argv[2]) {
   case "build_count":
     BuildCount();
     break;
+  case "build_src":
+    BuildSrc();
+    break;
   case "build":
     Build();
     break;
@@ -120,7 +129,7 @@ Usage: node build.js [command]
 
 Available commands:
     new_db        Creates a new database
-    build_count   Builds ./src/generated/count.json
+    build_src     Builds ./src/generated
     build         Builds ./public/generated
     download      Downloads .db file from env/DATABASE_URL
     debug_server  Serves a debug server on :8080
@@ -524,8 +533,53 @@ function BuildCount() {
   });
 }
 
+function BuildVersionsJson() {}
+
+function BuildSrc() {
+  // Legacy flag
+  BuildCount();
+
+  let db = new sqlite3.Database(dbName);
+  const packageJson = JSON.parse(fs.readFileSync("./package.json"));
+
+  db.serialize(() => {
+    db.get(`select * from meta where key = 'version'`, (err, ver) => {
+      const versionsJson = JSON.stringify({
+        version: packageJson.version,
+        schemaVersion: ver.value,
+      });
+      fs.writeFileSync("./src/generated/versions.json", versionsJson);
+    });
+
+    db.all(`select * from languages`, (err, languages) => {
+      fs.writeFileSync(
+        "./src/generated/languages.json",
+        JSON.stringify(languages.map((l) => l.language_code)))
+    });
+
+    db.all(`select * from category`, (err, categories) => {
+      let categoryMap = {};
+      for (const c of categories) {
+        categoryMap[c["name"]] = {
+          makeup: JSON.parse(c["makeup"]),
+          qNum: c["question_amount"]
+        }
+      }
+
+      fs.writeFileSync(
+        "./src/generated/categories.json",
+        JSON.stringify(categoryMap))
+    })
+
+    db.close((err) => {
+      if (err) console.log(err);
+    });
+  });
+}
+
 function Build() {
   let db = new sqlite3.Database(dbName);
+
   iterateCatsAndDogs(db, (lang, cat) => {
     execSync(
       `mkdir -p ./public/generated/questions/${lang.language_code}/${cat.name}`,

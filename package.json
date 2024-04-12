@@ -1,9 +1,9 @@
 {
   "name": "regitra",
-  "version": "0.0.0",
+  "version": "0.0-beta",
   "type": "module",
   "scripts": {
-    "build:pre": "node build.cjs build:count && node build.cjs build",
+    "build:pre": "node build.cjs build_src && node build.cjs build",
     "build:prod": "node build.cjs download && npm run build",
     "dev": "npm run build:pre && vite",
     "build": "npm run build:pre && tsc && vite build",

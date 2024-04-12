@@ -8,6 +8,9 @@
 
 import { AnswerT, Question } from "./exam";
 import count from "./generated/count.json";
+import category_list from "./generated/categories.json";
+import languages_list from "./generated/languages.json";
+import version_info from "./generated/versions.json";
 import { shuffle } from "./lib/array";
 import { state } from "./lib/state";
 
@@ -70,4 +73,44 @@ export async function get_answer_data(ids: string[]) {
       });
   });
   return (await Promise.all(promises)) as unknown as AnswerT[];
+}
+
+export function get_language_list() {
+  // @ts-ignore
+  return languages_list as unknown as string[];
+}
+
+type CategoryList = {
+  [category: string]: {
+    makeup: {
+      [category: string]: number
+    },
+    qNum: number
+  }
+}
+
+export function get_category_list() {
+  // @ts-ignore
+  return category_list as unknown as CategoryList;
+}
+
+export function get_category_arr() {
+  const categories = get_category_list();
+  let category_arr = [];
+
+  for (const category in categories) {
+    category_arr.push(category);
+  }
+
+  return category_arr;
+}
+
+type VersionInfo = {
+  version: string,
+  schemaVersion: string
+}
+
+export function get_version_info() {
+  // @ts-ignore
+  return version_info as unknown as VersionInfo;
 }
