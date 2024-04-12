@@ -31,7 +31,7 @@ async function hydrateFront() {
       if (state.selectedLanguage === lang) return;
       state.selectedLanguage = lang;
       document.querySelector("html")?.setAttribute("lang", lang);
-      app.innerHTML = await beginPage(examName, lang);
+      app.innerHTML = await beginPage(examName);
       hydrateFront();
     };
   });
@@ -49,6 +49,6 @@ async function hydrateFront() {
 }
 
 window.onload = async function () {
-  app.innerHTML = await beginPage(examName, state.selectedLanguage);
+  app.innerHTML = await beginPage(examName);
   hydrateFront();
 };

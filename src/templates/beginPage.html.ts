@@ -8,12 +8,17 @@
 
 import { strings } from "../i18n";
 import { state } from "../lib/state";
-import { get_category_arr, get_version_info } from "../importer";
+import {
+  get_category_arr,
+  get_version_info,
+  get_language_list,
+} from "../importer";
 
 const categories = get_category_arr();
 const version = get_version_info().version;
+const languages = get_language_list();
 
-export async function beginPage(name: string, language: string) {
+export async function beginPage(name: string) {
   return `
   <div class="mainWindow">
     <div class="head">
@@ -49,12 +54,17 @@ export async function beginPage(name: string, language: string) {
         <tr>
           <td>${await strings("testLang")}</td>
           <td>
-            <button id="changeLangLT"><img id="changeLangLTImg" src="${
-              language === "lt" ? "/img/LTyes.png" : "/img/LToff.png"
-            }" alt="LT"></button>
-            <button id="changeLangEN"><img id="changeLangENImg" src="${
-              language === "en" ? "/img/ENyes.png" : "/img/ENoff.png"
-            }" alt="EN"></button>
+            ${(() => {
+              let language_list = "";
+              for (let language of languages) {
+                language_list += `
+                  <button id="changeLang${language.toUpperCase()}">
+                  <img id="changeLang${language.toUpperCase()}Img" 
+                  src="/img/${language.toUpperCase()}${language == state.selectedLanguage ? "yes" : "off"}.png" 
+                  alt="${language.toUpperCase()}"></button>`;
+              }
+              return language_list;
+            })()}
           </td>
         </tr>
       </table>
