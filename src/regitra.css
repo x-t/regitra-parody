@@ -281,8 +281,8 @@ body {
 .testQuestion > div:nth-child(2) > button,
 .examTaskSelector,
 .overlayCloseButton,
-#changeLangLT,
-#changeLangEN {
+.changeLangButton,
+.changeCategoryButton {
   background: none;
   color: inherit;
   border: none;

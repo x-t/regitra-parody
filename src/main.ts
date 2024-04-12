@@ -14,7 +14,7 @@ import { state } from "./lib/state";
 import "./keyboard";
 import "./url";
 import { changeCategory } from "./examControl";
-import { get_language_list } from "./importer";
+import { get_language_list, get_category_arr } from "./importer";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -24,6 +24,8 @@ async function hydrateFront() {
     await strings("wait");
 
   const langs = get_language_list();
+  const categories = get_category_arr();
+
   langs.forEach((lang) => {
     document.querySelector<HTMLButtonElement>(
       `#changeLang${lang.toUpperCase()}`,
@@ -36,13 +38,16 @@ async function hydrateFront() {
     };
   });
 
-  document
-    .querySelector<HTMLSelectElement>("#selectExamCategory")!
-    .addEventListener("change", () => {
-      let e = document.querySelector<HTMLSelectElement>("#selectExamCategory")!;
-      var selected = e.options[e.selectedIndex].value;
-      changeCategory(selected);
-    });
+  categories.forEach((category) => {
+    document.querySelector<HTMLButtonElement>(
+      `#changeCategory${category.toUpperCase()}`,
+    )!.onclick = async () => {
+      if (state.examCategory === category) return;
+      changeCategory(category);
+      app.innerHTML = await beginPage(examName);
+      hydrateFront();
+    };
+  });
 
   document.querySelector<HTMLButtonElement>(".beginButton")!.onclick =
     beginExam;

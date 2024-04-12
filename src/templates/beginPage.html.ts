@@ -34,21 +34,19 @@ export async function beginPage(name: string) {
         <tr>
           <td>${await strings("category")}</td>
           <td>
-            <select name="examCategory" id="selectExamCategory">
             ${(() => {
               let concat = "";
-              for (let c in categories) {
+              for (let c of categories) {
                 concat += `
-                <option 
-                  value="${categories[c]}"
-                  ${state.examCategory === categories[c] ? "selected" : ""}>
-                  ${categories[c].toUpperCase()}
-                </option>
+                <button class="changeCategoryButton" id="changeCategory${c.toUpperCase()}">
+                <img width=32 height=32 
+                style="background:url(/img/category_${c}.svg) center no-repeat;"
+                src="/img/${c == state.examCategory ? "checkmark" : "blank"}Overlay.png">
+                </button>
                 `;
               }
               return concat;
             })()}
-            </select>
           </td>
         </tr>
         <tr>
@@ -58,7 +56,7 @@ export async function beginPage(name: string) {
               let language_list = "";
               for (let language of languages) {
                 language_list += `
-                  <button id="changeLang${language.toUpperCase()}">
+                  <button class="changeLangButton" id="changeLang${language.toUpperCase()}">
                   <img id="changeLang${language.toUpperCase()}Img" 
                   src="/img/${language.toUpperCase()}${language == state.selectedLanguage ? "yes" : "off"}.png" 
                   alt="${language.toUpperCase()}"></button>`;
