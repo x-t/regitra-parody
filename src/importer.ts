@@ -83,11 +83,11 @@ export function get_language_list() {
 type CategoryList = {
   [category: string]: {
     makeup: {
-      [category: string]: number
-    },
-    qNum: number
-  }
-}
+      [category: string]: number;
+    };
+    qNum: number;
+  };
+};
 
 export function get_category_list() {
   // @ts-ignore
@@ -106,9 +106,9 @@ export function get_category_arr() {
 }
 
 type VersionInfo = {
-  version: string,
-  schemaVersion: string
-}
+  version: string;
+  schemaVersion: string;
+};
 
 export function get_version_info() {
   // @ts-ignore

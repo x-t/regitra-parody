@@ -533,8 +533,6 @@ function BuildCount() {
   });
 }
 
-function BuildVersionsJson() {}
-
 function BuildSrc() {
   // Legacy flag
   BuildCount();
@@ -554,7 +552,8 @@ function BuildSrc() {
     db.all(`select * from languages`, (err, languages) => {
       fs.writeFileSync(
         "./src/generated/languages.json",
-        JSON.stringify(languages.map((l) => l.language_code)))
+        JSON.stringify(languages.map((l) => l.language_code)),
+      );
     });
 
     db.all(`select * from category`, (err, categories) => {
@@ -562,14 +561,15 @@ function BuildSrc() {
       for (const c of categories) {
         categoryMap[c["name"]] = {
           makeup: JSON.parse(c["makeup"]),
-          qNum: c["question_amount"]
-        }
+          qNum: c["question_amount"],
+        };
       }
 
       fs.writeFileSync(
         "./src/generated/categories.json",
-        JSON.stringify(categoryMap))
-    })
+        JSON.stringify(categoryMap),
+      );
+    });
 
     db.close((err) => {
       if (err) console.log(err);

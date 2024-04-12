@@ -10,7 +10,6 @@ import { strings } from "../i18n";
 import { state } from "../lib/state";
 import { get_category_arr } from "../importer";
 
-
 const categories = get_category_arr();
 
 export async function beginPage(name: string, language: string) {
