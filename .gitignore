@@ -199,3 +199,5 @@ src/generated/
 public/generated/
 content.db
 TODO.txt
+
+migration_*.json

@@ -10,7 +10,7 @@
  * I hate callbacks so much.
  */
 
-const CURRENT_SCHEMA_VERSION = "v1";
+const CURRENT_SCHEMA_VERSION = "v2";
 
 /**
  * Some type definitions for our SQLite tables.
@@ -172,10 +172,9 @@ function CheckVersion() {
 }
 
 function UpdateCLI() {
-  switch (process.argv[3]) {
-    case "v0v1":
-      InvokeUpdate("v0v1");
-      return;
+  if (process.argv[3]) {
+    InvokeUpdate(process.argv[3]);
+    return;
   }
 
   console.log(`Latest schema version: ${CURRENT_SCHEMA_VERSION}`);
@@ -183,7 +182,11 @@ function UpdateCLI() {
     `! Get your current schema version using "node build.cjs version"`,
   );
   console.log(`Available migrations:`);
-  console.log(`  v0 => v1 | Invoke using "node build.cjs update v0v1"`);
+  console.log(` Migration | Name | Is breaking?`);
+  console.log(`  v0 => v1 | v0v1 | No`);
+  console.log(`  v1 => v2 | v1v2 | Yes!`);
+  console.log(`Invoke a migration using "node build.cjs update [name]"`);
+  console.log(`Example: node build.cjs update v0v1`);
 }
 
 function InvokeUpdate(migration) {
@@ -214,6 +217,111 @@ function InvokeUpdate(migration) {
 
           console.log(`Migration successful.`);
         });
+      },
+    },
+    v1v2: {
+      description: "Moves information for category makeup into the database.",
+      update: function () {
+        let db = new sqlite3.Database(dbName);
+
+        if (!fs.existsSync("./migration_v1v2.json")) {
+          db.all(`select * from category`, (err, cats) => {
+            console.log("\x1b[31mTHIS IS A BREAKING MIGRATION!\x1b[0m\n");
+            console.log("This is your current category data:");
+            console.log(cats);
+            console.log("\x1b[31mSave this data.\x1b[0m");
+            console.log(
+              '\nA file "migration_v1v2.json" has been created in this folder.',
+            );
+            console.log(
+              "It has been filled with example categories. \x1b[31mThe data you put in this JSON file will replace ALL previous data inside the 'category' table.\x1b[0m",
+            );
+            console.log(
+              "To proceed, edit that file with your desired categories and run this command again.",
+            );
+
+            const exampleData = [
+              {
+                name: "a",
+                display_name: "A",
+                makeup: { b: 30, a: 5 },
+                question_amount: 35,
+              },
+              {
+                name: "b",
+                display_name: "B",
+                makeup: { b: 30 },
+                question_amount: 30,
+              },
+            ];
+
+            fs.writeFileSync(
+              `./migration_v1v2.json`,
+              JSON.stringify(exampleData, null, 2),
+            );
+          });
+        } else {
+          const dataToPut = JSON.parse(
+            fs.readFileSync("./migration_v1v2.json"),
+          );
+          console.log(dataToPut);
+          const readline = require("readline").createInterface({
+            input: process.stdin,
+            output: process.stdout,
+          });
+
+          readline.question(
+            "\n\x1b[31mThis data will replace all data in the category table.\x1b[0m\nProceed? (y/n): ",
+            (confirm) => {
+              if (confirm == "y") {
+                db.serialize(() => {
+                  db.run(`DROP TABLE category;`);
+                  db.run(`
+                  CREATE TABLE category (
+                    name TEXT PRIMARY KEY,
+                    display_name TEXT,
+                    makeup TEXT,
+                    question_amount INTEGER
+                  );
+                `);
+                  for (const category of dataToPut) {
+                    db.run(
+                      `
+                      INSERT INTO category
+                      (name, display_name, makeup, question_amount)
+                      VALUES
+                      (?, ?, ?, ?);`,
+                      [
+                        category["name"],
+                        category["display_name"],
+                        JSON.stringify(category["makeup"]),
+                        category["question_amount"],
+                      ],
+                    );
+                  }
+
+                  db.run(`
+                    UPDATE meta
+                    SET value = 'v2'
+                    WHERE key = 'version';
+                  `);
+
+                  db.close((error) => {
+                    if (error) {
+                      return console.error(error.message);
+                    }
+                  });
+
+                  console.log(`Migration successful.`);
+                  fs.unlinkSync("./migration_v1v2.json");
+                  console.log(`The migration JSON has been deleted.`);
+                });
+              }
+
+              readline.close();
+            },
+          );
+        }
       },
     },
   };
@@ -248,7 +356,9 @@ function NewDatabase() {
     db.run(`
       CREATE TABLE category (
         name TEXT PRIMARY KEY,
-        display_name TEXT
+        display_name TEXT,
+        makeup TEXT,
+        question_amount INTEGER
       );
     `);
 
@@ -316,10 +426,10 @@ function NewDatabase() {
     `);
 
     db.run(`
-      INSERT INTO category (name, display_name)
+      INSERT INTO category (name, display_name, makeup, question_amount)
       VALUES
-      ('a', 'A'),
-      ('b', 'B');
+      ('a', 'A', '{"b": 30, "a": 5}', 35),
+      ('b', 'B', '{"b": 30}', 30);
     `);
 
     db.run(`
