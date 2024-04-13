@@ -403,8 +403,8 @@ body {
 }
 
 .overlayDialogContent2 > button,
-#examResultViewAnswers {
-  margin: 0;
+#examResultViewAnswers,
+#examResultRetakeExam {
   padding: 3px 5px;
   text-decoration: none;
   font-size: small;
@@ -414,10 +414,16 @@ body {
   display: flex;
   align-content: center;
   justify-content: center;
+  margin: 0;
+}
+
+#examResultRetakeExam {
+  margin: auto;
 }
 
 .overlayDialogContent2 > button > img,
-#examResultViewAnswers > img {
+#examResultViewAnswers > img,
+#examResultRetakeExam > img {
   margin-right: 2px;
 }
 
@@ -447,6 +453,7 @@ body {
   align-content: center;
   text-align: center;
   display: none;
+  margin-top: 50px;
 }
 
 .examFinishDialog > div:first-child {
@@ -475,10 +482,16 @@ body {
   margin: 4px;
 }
 
-.examFinishDialog > div:nth-child(3) {
+.examFinishDialog > div:nth-child(3),
+.examFinishDialog > div:nth-child(4) {
   display: flex;
   justify-content: center;
   margin-top: 5px;
+}
+
+.examFinishDialog > div:nth-child(4) {
+  flex-direction: column;
+  margin-top: 10px;
 }
 
 .resultSpacer {
@@ -524,6 +537,10 @@ body {
 .infoSmall {
   color: gray;
   font-size: 0.8em;
+}
+
+#retakeExamAction {
+  display: none;
 }
 
 @media only screen and (min-width: 768px) {

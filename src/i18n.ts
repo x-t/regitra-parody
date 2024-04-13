@@ -41,6 +41,8 @@ interface I18NStrings {
   wait: string;
   noAlt: string;
   affiliationWarning: string;
+  retakeExam: string;
+  maybeRetake: string;
 }
 
 export async function strings(key: keyof I18NStrings) {

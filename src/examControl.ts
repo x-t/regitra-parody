@@ -77,3 +77,7 @@ export function changeCategory(category: string) {
   state.numOfQuestions = category_list[category].qNum;
   localStorage.setItem("setCategory", category);
 }
+
+export function retakeExam() {
+  location.reload();
+}

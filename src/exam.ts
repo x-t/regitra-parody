@@ -9,7 +9,7 @@
 import { areArraysEqualSets } from "./lib/array";
 import { get_answer_data } from "./importer";
 import { strings } from "./i18n";
-import { selectQuestion, changeWithOffset } from "./examControl";
+import { selectQuestion, changeWithOffset, retakeExam } from "./examControl";
 import { get_question_data } from "./importer";
 import { generateQuestions } from "./templates/question.html";
 import { testPage } from "./templates/testPage.html";
@@ -186,6 +186,14 @@ export async function beginExam() {
       state.currentPage = "exam";
     });
 
+  document
+    .querySelector<HTMLButtonElement>("#examResultRetakeExam")!
+    .addEventListener("click", retakeExam);
+
+  document
+    .querySelector<HTMLButtonElement>("#retakeExamAction")!
+    .addEventListener("click", retakeExam);
+
   selectQuestion(1);
   document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =
     "none";
@@ -203,8 +211,12 @@ export async function finishExam() {
   document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =
     "flex";
   document.querySelector<HTMLButtonElement>(
-    ".testControl > div:nth-child(2) > button",
+    ".testControl > div:nth-child(2) > button:first-child",
   )!.style.display = "none";
+
+  document.querySelector<HTMLButtonElement>(
+    "#retakeExamAction",
+  )!.style.display = "initial";
 
   let answers: AnswerT[];
   try {
