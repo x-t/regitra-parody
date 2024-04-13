@@ -75,4 +75,5 @@ export function changeCategory(category: string) {
   state.examCategory = category;
   state.categoryMakeup = category_list[category].makeup;
   state.numOfQuestions = category_list[category].qNum;
+  localStorage.setItem("setCategory", category);
 }

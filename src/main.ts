@@ -7,7 +7,7 @@
  */
 
 import "./regitra.css";
-import { strings } from "./i18n";
+import { strings, changeLanguage } from "./i18n";
 import { beginPage } from "./templates/beginPage.html";
 import { beginExam } from "./exam";
 import { state } from "./lib/state";
@@ -31,8 +31,7 @@ async function hydrateFront() {
       `#changeLang${lang.toUpperCase()}`,
     )!.onclick = async () => {
       if (state.selectedLanguage === lang) return;
-      state.selectedLanguage = lang;
-      document.querySelector("html")?.setAttribute("lang", lang);
+      changeLanguage(lang);
       app.innerHTML = await beginPage(examName);
       hydrateFront();
     };
@@ -54,6 +53,13 @@ async function hydrateFront() {
 }
 
 window.onload = async function () {
+  let setCategory = localStorage.getItem("setCategory");
+  let setLanguage = localStorage.getItem("setLanguage");
+  if (!setCategory) changeCategory("b");
+  else changeCategory(setCategory);
+  if (!setLanguage) changeLanguage("lt");
+  else changeLanguage(setLanguage);
+
   app.innerHTML = await beginPage(examName);
   hydrateFront();
 };
