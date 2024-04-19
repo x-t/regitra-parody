@@ -25,6 +25,8 @@ export interface Question {
   image?: string;
   answers: string[];
   alt?: string;
+  img_sizes?: string[];
+  img_fmts?: string[];
 }
 
 export interface AnswerT {

@@ -25,6 +25,10 @@ body {
   color: blue;
 }
 
+button {
+  color: black;
+}
+
 .mainWindow > div.head {
   height: 100px;
   font-size: 25px;
@@ -529,9 +533,11 @@ body {
   vertical-align: middle;
 }
 
-.testQuestion > div > div:nth-child(1) > img {
+.testQuestion > div > div:nth-child(1) > picture > img {
   max-width: 300px;
   max-height: 200px;
+  height: 100%;
+  width: auto;
 }
 
 .infoSmall {
@@ -548,7 +554,7 @@ body {
     min-width: 100%;
   }
 
-  .testQuestion > div > div:nth-child(1) > img {
+  .testQuestion > div > div:nth-child(1) > picture > img {
     max-width: 400px;
     max-height: 300px;
   }

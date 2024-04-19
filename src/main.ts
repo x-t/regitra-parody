@@ -14,7 +14,11 @@ import { state } from "./lib/state";
 import "./keyboard";
 import "./url";
 import { changeCategory } from "./examControl";
-import { get_language_list, get_category_arr } from "./importer";
+import {
+  get_language_list,
+  get_category_arr,
+  get_defaults_info,
+} from "./importer";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -53,11 +57,12 @@ async function hydrateFront() {
 }
 
 window.onload = async function () {
+  let defaults = get_defaults_info();
   let setCategory = localStorage.getItem("setCategory");
   let setLanguage = localStorage.getItem("setLanguage");
-  if (!setCategory) changeCategory("b");
+  if (!setCategory) changeCategory(defaults.c);
   else changeCategory(setCategory);
-  if (!setLanguage) changeLanguage("lt");
+  if (!setLanguage) changeLanguage(defaults.l);
   else changeLanguage(setLanguage);
 
   app.innerHTML = await beginPage(examName);

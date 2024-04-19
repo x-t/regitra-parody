@@ -2,7 +2,7 @@
 
 ## for regitra-parody
 
-Last updated for 0.2-beta schema v3
+Last updated for 1.0, schema v4
 
 ### Table of contents
 
@@ -15,10 +15,11 @@ Last updated for 0.2-beta schema v3
 1. [Populating the database](#populating-the-database)
 1. [New format import](#new-format-import)
 1. [Maintaining the database](#maintaining-the-database)
-1. [Database debug interface](#database-debug-interface)
 1. [Stylistic choices](#stylistic-choices)
 1. [Building the site](#building-the-site)
 1. [License](#license)
+1. [Contributing](#contributing)
+1. [Developer Certificate of Origin](#developer-certificate-of-origin)
 
 ### This is a content management system
 
@@ -26,9 +27,11 @@ This project does not use a backend. Everything is compiled from one SQLite3 dat
 
 All of the content is compiled using the [build.cjs](build.cjs) tool and is stored inside a `db` file, by default - `./content.db`.
 
-[build.cjs](build.cjs) also includes a meriad of other features for managing the content database, such as importing bulk data, updating the schema in use to a newer version and a debug HTTP server to view the data in the database.
+[build.cjs](build.cjs) also includes a meriad of other features for managing the content database, such as importing bulk data and updating the schema in use to a newer version.
 
-A very old build of regitra-parody includes code for a backend written in Rust, however the code quality is really bad. It can be found [here](https://github.com/x-t/regitra-parody/tree/6ad23dad2284a48f70571239791b52a3f1f3fe4b).
+A very old build of regitra-parody includes code for a backend written in Rust, however the code quality is really bad. It can be found [here](https://github.com/x-t/regitra-parody/tree/6ad23dad2284a48f70571239791b52a3f1f3fe4b).\*
+
+_\* See [license](#license) for usage of old versions._
 
 ### build.cjs and you
 
@@ -58,11 +61,15 @@ The database is configured in a way that can store an infinite amount of languag
 | --------------------------------- | -------------- | ----------- | ----------- |
 |                                   | **Lithuanian** | **English** | **Russian** |
 | **Translation**                   | Yes            | Yes         | No          |
-| **Can render in homepage picker** | Yes            | Yes         | Yes         |
+| **Can render in homepage picker** | Yes            | Yes         | Yes\*       |
+
+_\* Only includes `RUyes.png` and `RUoff.png` files (see [localization](#localization)). Because no translation is included, it won't render the page._
 
 ### Localization
 
-To add or complete language support do the following:
+Development tools and documentation is in `en-150`.
+
+To add or complete language support for the frontend do the following:
 
 #### Translate all the strings
 
@@ -105,10 +112,10 @@ First column is name of field, second is the type, third and onward are created 
 
 #### Meta
 
-|           |        |         |
-| --------- | ------ | ------- |
-| **key**   | _text_ | version |
-| **value** | _text_ | v3      |
+|           |        |         |                  |                  |
+| --------- | ------ | ------- | ---------------- | ---------------- |
+| **key**   | _text_ | version | default_language | default_category |
+| **value** | _text_ | v4      | lt               | b                |
 
 #### Languages
 
@@ -175,20 +182,13 @@ First column is name of field, second is the type, third and onward are created 
 
 ### Populating the database
 
-Ideally, create your own content for your database. By default the database is set up to accept English and Lithuanian questions. To add more follow the previous guide on translating and preparing the frontend and adding the language into your database support.
+You have to create your own content for your database. By default the database is set up to accept English and Lithuanian questions for A and B categories. To add more follow the [localisation](#localization) guide.
 
-However, as a start you can get the legacy format JSON and image files from an old version of regitra-parody [here](https://github.com/x-t/regitra-parody/tree/3430fd8ebfb7b5362261705c5d2ee8776c1008e5) and use [build.cjs](build.cjs) to migrate it into the database.
-
-Put the files into their appropriate places and run:
-
-```
-$ node build.cjs import migrate_v0_images
-$ node build.cjs import migrate_v0_json
-```
+For content, use the [mass import tool](#new-format-import).
 
 ### New format import
 
-To help importing new bulk content, you can use the `import_v2` commands after arranging all files accordingly:
+To help importing new bulk content, you can use the `import_v3` commands after arranging all files accordingly:
 
 ```
 import/
@@ -201,16 +201,18 @@ import/
 build.cjs
 ```
 
+This method also uses a new addition in schema v3, which encodes answer IDs relative to a question ensuring a 1:1 import from JSON to SQLite, which makes it a lot more reliable than previous schema versions.
+
 `alts.json` is a file that holds all alt text information for the images. It follows this format:
 
 ```
 [
 	{
-	"name": "img1.jpg",
-	"alt": {
-		"en": "First image",
-		[...]
-	}
+		"name": "img1.jpg",
+		"alt": {
+			"en": "First image",
+			[...]
+		}
 	},
 
 	[...]
@@ -225,17 +227,25 @@ build.cjs
 	{
 		// Language
 		"l": "en",
+
 		// Category
 		"c": "a",
+
 		// Question
 		"q": "...",
+
 		// Possible answers
 		"a": [
 			"...",
 			"..."
 		],
+
 		// Correct answers
-		"ca": [1, ...]
+		"ca": [1, ...],
+
+		// Image file (optional)
+		// For questions without images, don't include this attribute
+		"i": "img1.jpg"
 	},
 
 	[...]
@@ -246,7 +256,7 @@ build.cjs
 Then use this command to import the data:
 
 ```
-$ node build.cjs import import_v2
+$ node build.cjs import import_v3
 ```
 
 ### Maintaining the database
@@ -265,7 +275,7 @@ Find out available migrations in [build.cjs](build.cjs):
 $ node build.cjs update
 ```
 
-You can only migrate one version up. For example, if you're on `v0`, you'll first need to run the `v0 => v1` migration, then `v1 => v2`. If a migration deletes data from the database, you will get warned about that and be prompted to replace that data.
+You can only migrate one version up. For example, if you're on `v0`\*, you'll first need to run the `v0 => v1` migration, then `v1 => v2`. If a migration deletes data from the database, you will get warned about that and be prompted to replace that data.
 
 Run a migration using its name:
 
@@ -273,15 +283,7 @@ Run a migration using its name:
 $ node build.cjs update v1v2
 ```
 
-Sidenote: `v0` is a version number for any version of the schema before `v1`. For migrations before the very last version (`0b0ca3c`) of `v0` you need to follow the steps in the beginning of the `build.cjs` file.
-
-### Database debug interface
-
-There is a crude debug interface to view the contents of your database. Start it using:
-
-```
-$ node build.cjs debug_server
-```
+_\* `v0` is a version number for any version of the schema before `v1`. For migrations before the very last version (`0b0ca3c`) of `v0` you need to follow the steps in the beginning of the `build.cjs` file._
 
 ### Stylistic choices
 
@@ -337,7 +339,9 @@ $ npm run clean
 
 ### License
 
-The project is licensed under [MPL-2.0](LICENSE). Some of site's content is from State Enterprise Regitra and Font Awesome. Depends on a couple of open source libraries: [package.json](package.json)
+The project is licensed under [MPL-2.0](LICENSE). Some of site's content is from [State Enterprise Regitra](https://www.regitra.lt), [Font Awesome](https://fontawesome.com) and [Haiku](https://www.haiku-os.org). Depends on a couple of open source libraries: [package.json](package.json)
+
+Old versions of Regitra Parody (before commit `dbd479f` on Sep 17, 2023) do not come with a license and therefore by default all rights are reserved. While I will not retroactively add a license to this code, I will not enforce any infringements made in good faith.
 
 The official content database used in [regitra.pages.dev](regitra.pages.dev) is not shared and closed.
 
@@ -345,4 +349,53 @@ While the design is made to mimic the official State Enterprise Regitra's exam i
 
 This project has no affiliation with State Enterprise Regitra.
 
-This project comes with no warranty and no support.
+**This project comes with no warranty and no support.**
+
+### Contributing
+
+While the project is in a completed state, contributions may be considered.
+
+Your commits must be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) and signed-off.
+
+By signing off you agree to the terms of the [Developer Certificate of Origin](#developer-certificate-of-origin) as well as that your code could be used under a different license and will be used in the closed binary distribution found in [regitra.pages.dev](regitra.pages.dev) or any of its domains.
+
+The content database is not shared and closed, any contributions must be done privately. You can find my contact [here](https://x-t.github.io/).
+
+### Developer Certificate of Origin
+
+```
+Developer Certificate of Origin
+Version 1.1
+
+Copyright (C) 2004, 2006 The Linux Foundation and its contributors.
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+
+Developer's Certificate of Origin 1.1
+
+By making a contribution to this project, I certify that:
+
+(a) The contribution was created in whole or in part by me and I
+    have the right to submit it under the open source license
+    indicated in the file; or
+
+(b) The contribution is based upon previous work that, to the best
+    of my knowledge, is covered under an appropriate open source
+    license and I have the right under that license to submit that
+    work with modifications, whether created in whole or in part
+    by me, under the same open source license (unless I am
+    permitted to submit under a different license), as indicated
+    in the file; or
+
+(c) The contribution was provided directly to me by some other
+    person who certified (a), (b) or (c) and I have not modified
+    it.
+
+(d) I understand and agree that this project and the contribution
+    are public and that a record of the contribution (including all
+    personal information I submit with it, including my sign-off) is
+    maintained indefinitely and may be redistributed consistent with
+    this project or the open source license(s) involved.
+```
