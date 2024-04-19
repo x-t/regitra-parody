@@ -1,6 +1,6 @@
 {
   "name": "regitra",
-  "version": "0.2-beta",
+  "version": "1.0",
   "type": "module",
   "scripts": {
     "build:pre": "node build.cjs build_src && node build.cjs build",
@@ -18,11 +18,12 @@
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
     "prettier": "^3.2.5",
+    "sharp": "^0.33.3",
     "sqlite3": "^5.1.7",
     "terser": "^5.30.3",
     "typescript": "^5.4.5",
-    "vite": "^5.2.8",
-    "vitest": "^1.4.0"
+    "vite": "^5.2.9",
+    "vitest": "^1.5.0"
   },
   "dependencies": {
     "draggable_dialog": "^1.0.3"

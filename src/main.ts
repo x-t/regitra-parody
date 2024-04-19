@@ -7,14 +7,18 @@
  */
 
 import "./regitra.css";
-import { strings } from "./i18n";
+import { strings, changeLanguage } from "./i18n";
 import { beginPage } from "./templates/beginPage.html";
 import { beginExam } from "./exam";
 import { state } from "./lib/state";
 import "./keyboard";
 import "./url";
 import { changeCategory } from "./examControl";
-import { get_language_list, get_category_arr } from "./importer";
+import {
+  get_language_list,
+  get_category_arr,
+  get_defaults_info,
+} from "./importer";
 
 export const app = document.querySelector<HTMLDivElement>("#app")!;
 export const examName = "DEMO NAUDOTOJAS";
@@ -31,8 +35,7 @@ async function hydrateFront() {
       `#changeLang${lang.toUpperCase()}`,
     )!.onclick = async () => {
       if (state.selectedLanguage === lang) return;
-      state.selectedLanguage = lang;
-      document.querySelector("html")?.setAttribute("lang", lang);
+      changeLanguage(lang);
       app.innerHTML = await beginPage(examName);
       hydrateFront();
     };
@@ -54,6 +57,14 @@ async function hydrateFront() {
 }
 
 window.onload = async function () {
+  let defaults = get_defaults_info();
+  let setCategory = localStorage.getItem("setCategory");
+  let setLanguage = localStorage.getItem("setLanguage");
+  if (!setCategory) changeCategory(defaults.c);
+  else changeCategory(setCategory);
+  if (!setLanguage) changeLanguage(defaults.l);
+  else changeLanguage(setLanguage);
+
   app.innerHTML = await beginPage(examName);
   hydrateFront();
 };

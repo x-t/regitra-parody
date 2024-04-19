@@ -30,5 +30,7 @@
   "errorEnd": "Couldn't end the exam.",
   "wait": "Please wait...",
   "noAlt": "There is a picture here, but we cannot describe it to you. Sorry.",
-  "affiliationWarning": "Regitra Parody is not associated with State Enterprise Regitra or its work."
+  "affiliationWarning": "Regitra Parody is not associated with State Enterprise Regitra or its work.",
+  "retakeExam": "Retake exam",
+  "maybeRetake": "Maybe with different questions you'll be more lucky?"
 }

@@ -11,6 +11,7 @@ import count from "./generated/count.json";
 import category_list from "./generated/categories.json";
 import languages_list from "./generated/languages.json";
 import version_info from "./generated/versions.json";
+import defaults_info from "./generated/defaults.json";
 import { shuffle } from "./lib/array";
 import { state } from "./lib/state";
 
@@ -54,6 +55,8 @@ export async function get_question_data() {
           q: result.q,
           answers: result.a,
           image: result.i,
+          img_sizes: result.is,
+          img_fmts: result.if,
           alt: result.alt,
         };
       });
@@ -113,4 +116,13 @@ type VersionInfo = {
 export function get_version_info() {
   // @ts-ignore
   return version_info as unknown as VersionInfo;
+}
+
+type DefaultsInfo = {
+  l: string;
+  c: string;
+};
+
+export function get_defaults_info() {
+  return defaults_info as unknown as DefaultsInfo;
 }

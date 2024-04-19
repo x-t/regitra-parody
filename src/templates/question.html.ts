@@ -16,9 +16,24 @@ export async function generateQuestion(qi: Question, idx: number) {
   divQ.setAttribute("data-qIdx", String(idx));
 
   const imageS = qi.image
-    ? `<img alt="${qi.alt ? qi.alt : await strings("noAlt")}" src="${
+    ? `<picture>${(() => {
+        let agg = "";
+        for (let fmt of qi.img_fmts!) {
+          agg += `<source srcset="${(() => {
+            let agg2 = "";
+            let count = 0;
+            for (let size of qi.img_sizes!) {
+              count++;
+              agg2 += `/generated/img/${qi.image}-${size}.${fmt} ${count}x`;
+              agg2 += count === qi.img_sizes!.length ? "" : ",";
+            }
+            return agg2;
+          })()}" type="image/${fmt}">`;
+        }
+        return agg;
+      })()}<img alt="${qi.alt ? qi.alt : await strings("noAlt")}" src="/generated/img/${
         qi.image
-      }" />`
+      }-orig.${qi.img_fmts![1]}" decoding="async" /></picture>`
     : `<p>${await strings("noIllustration")}</p>`;
   const answerS = qi.answers.reduce((agg, cur, _idx) => {
     return (agg += `

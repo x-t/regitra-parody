@@ -41,7 +41,8 @@ export async function beginPage(name: string) {
                 <button class="changeCategoryButton" id="changeCategory${c.toUpperCase()}">
                 <img width=32 height=32 
                 style="background:url(/img/category_${c}.svg) center no-repeat;"
-                src="/img/${c == state.examCategory ? "checkmark" : "blank"}Overlay.png">
+                src="/img/${c == state.examCategory ? "checkmark" : "blank"}Overlay.png"
+                alt="${c.toUpperCase()} category ${c == state.examCategory ? "selected" : ""}">
                 </button>
                 `;
               }
@@ -59,7 +60,7 @@ export async function beginPage(name: string) {
                   <button class="changeLangButton" id="changeLang${language.toUpperCase()}">
                   <img id="changeLang${language.toUpperCase()}Img" 
                   src="/img/${language.toUpperCase()}${language == state.selectedLanguage ? "yes" : "off"}.png" 
-                  alt="${language.toUpperCase()}"></button>`;
+                  alt="${language.toUpperCase()} ${language == state.selectedLanguage ? "selected" : ""}"></button>`;
               }
               return language_list;
             })()}

@@ -34,6 +34,9 @@ export async function testPage(name: string, num: number, qs: string) {
         </div>
         <div><button id="finishTestAction"><img src="/img/finishTest.png" alt="Finish" /><span>${await strings(
           "finishTest",
+        )}</span></button>
+        <button id="retakeExamAction"><img src="/img/retake.png" alt="Retake exam" width=16 height=16 /><span>${await strings(
+          "retakeExam",
         )}</span></button></div>
       </div>
       
@@ -122,8 +125,16 @@ export async function testPage(name: string, num: number, qs: string) {
       )} <span class="resultSpacer"></span> ${allowedErrorCount()}</p>
     </div>
     <div>
-      <button id="examResultViewAnswers"><img src="/img/answers.png" alt="Chart" /> ${await strings(
+      <button id="examResultViewAnswers">
+      <img src="/img/answers.png" alt="Chart" width=16 height=16 /> ${await strings(
         "viewAnswers",
+      )}</button>
+    </div>
+    <div>
+      <p>${await strings("maybeRetake")}</p>
+      <button id="examResultRetakeExam">
+      <img src="/img/retake.png" alt="Retake exam" width=16 height=16 /> ${await strings(
+        "retakeExam",
       )}</button>
     </div>
   </div>

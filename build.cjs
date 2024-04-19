@@ -10,7 +10,7 @@
  * I hate callbacks so much.
  */
 
-const CURRENT_SCHEMA_VERSION = "v3";
+const CURRENT_SCHEMA_VERSION = "v4";
 const DB_NAME = "./content.db";
 
 /**
@@ -24,15 +24,13 @@ const DB_NAME = "./content.db";
  * 6 - MIGRATIONS
  * M1 - MIGRATION V0V1
  * M2 - MIGRATION V1V2
+ * M3 - MIGRATION V2V3
+ * M4 - MIGRATION V3V4
  * 7 - ITERATOR
  * 8 - BUILD
  * 9 - DOWNLOAD
- * 10 - LEGACY MIGRATE IMG
- * 11 - LEGACY MIGRATE JSON
- * 12 - IMPORT V3 JSON
- * 13 - IMPORT V3 IMAGES
- * 14 - DEBUG SERVER
- * 15 - DEBUG SERVER TEMPLATES
+ * 10 - IMPORT V3 JSON
+ * 11 - IMPORT V3 IMAGES
  *
  * To navigate to the beginning of a chapter, cmd+f using its name
  * To navigate to the end of a chapter, cmd+f its name again
@@ -158,12 +156,6 @@ switch (process.argv[2]) {
 
 function InvokeImport() {
   switch (process.argv[3]) {
-    case "migrate_v0_images":
-      MigrateLegacyImages();
-      break;
-    case "migrate_v0_json":
-      MigrateLegacyJson();
-      break;
     case "import_v3_json":
       ImportV3JSON();
       break;
@@ -174,7 +166,7 @@ function InvokeImport() {
       ImportV3Images(true);
       break;
     default:
-      PrintHelp();
+      PrintImportHelp();
       break;
   }
 }
@@ -187,7 +179,7 @@ function PrintHelp() {
   console.log(
     `The build system for regitra-parody for schema version ${CURRENT_SCHEMA_VERSION}
 
-Usage: node build.js [command]
+Usage: node build.cjs [command]
 
 Available commands: will be performed on ${DB_NAME}
     new_db        Creates a new database
@@ -200,13 +192,26 @@ Available commands: will be performed on ${DB_NAME}
     update        Database migration/update CLI
     help          Prints this message
 
-Import commands: (usage: node build.js import [command])
-    migrate_v0_images   Migrate old images into database
-    migrate_v0_json     Migrate old JSON-format questions
-    import_v3           Import new-style data
-
 regitra-parody is in development, some features you expect may not be there.
 regitra-parody is licensed under MPL-2.0 and includes no warranty.`,
+  );
+}
+
+function PrintImportHelp() {
+  console.log(
+    `Import system for regitra-parody schema ${CURRENT_SCHEMA_VERSION}
+
+Usage: node build.cjs import [command]
+
+Import commands: (usage: node build.js import [command])
+    import_v3           Import new-style data
+                        Compatibility: v3, v4
+    import_v3_images    Import new-style images exclusively
+                        Compatibility: v3, v4
+    import_v3_json      Import new-style questions exclusively
+                        Compatibility: v3, v4
+
+To see how to arrange your data for import, see the hitchhiker's guide.`,
   );
 }
 
@@ -225,6 +230,7 @@ function UpdateCLI() {
   console.log(`  v0 => v1 | v0v1 | No`);
   console.log(`  v1 => v2 | v1v2 | Yes!`);
   console.log(`  v2 => v3 | v2v3 | No`);
+  console.log(`  v3 => v4 | v3v4 | No`);
   console.log(`Invoke a migration using "node build.cjs update [name]"`);
   console.log(`Example: node build.cjs update v0v1`);
 }
@@ -363,7 +369,9 @@ function NewDatabase() {
     db.run(`
       INSERT INTO meta (key, value)
       VALUES
-      ('version', '${CURRENT_SCHEMA_VERSION}');
+      ('version', '${CURRENT_SCHEMA_VERSION}'),
+      ('default_language', 'lt'),
+      ('default_category', 'b');
     `);
 
     db.close((error) => {
@@ -376,12 +384,8 @@ function NewDatabase() {
           "It only contains the schema. \x1b[31mIt does not contain any questions or answers.\x1b[0m\n" +
           "In order to make those, modify the database accordingly.\n" +
           "Your database includes support for English and Lithuanian languages,\n" +
-          "as well as the support for B and A categories. You should see build.cjs for:\n" +
-          " - Available migrations from previous versions of the schema.\n" +
-          " - The schema itself, so you can understand how to populate it.\n" +
-          " - Possible methods of bulk importing from different formats.\n\n" +
-          "Regitra Parody is built from the ground up and is a work in progress.\n" +
-          "Features you might expect may not be available, so please be patient.\n\n" +
+          "as well as the support for B and A categories.\n" +
+          "For more information, consult the hitchhiker's guide.\n\n" +
           "\x1b[31mRegitra Parody's site in hosted or source form, nor the build tool, nor the\n" +
           "database are given any warranty or legal protection.\n" +
           "Do everything at your own risk.\x1b[0m",
@@ -570,6 +574,37 @@ function InvokeUpdate(migration) {
       },
     },
     /* --- MIGRATION V2V3 --- */
+    /* --- MIGRATION V3V4 --- */
+    v3v4: {
+      description: "Adds default_category=b and default_language=lt to meta.",
+      update: function () {
+        let db = new sqlite3.Database(dbName);
+
+        db.serialize(() => {
+          db.run(`
+            INSERT INTO meta (key, value)
+            VALUES
+            ('default_language', 'lt'),
+            ('default_category', 'b');
+          `);
+
+          db.run(`
+            UPDATE meta
+            SET value = 'v4'
+            WHERE key = 'version';
+          `);
+
+          db.close((error) => {
+            if (error) {
+              return console.error(error.message);
+            }
+
+            console.log("Migration successful.");
+          });
+        });
+      },
+    },
+    /* --- MIGRATION V3V4 --- */
   };
 
   console.log(`Invoking migration: ${migration}`);
@@ -648,6 +683,8 @@ function BuildCount() {
 }
 
 function BuildSrc() {
+  console.log("[build.cjs] Building ./src/generated...");
+
   // Legacy flag
   BuildCount();
 
@@ -655,11 +692,28 @@ function BuildSrc() {
   const packageJson = JSON.parse(fs.readFileSync("./package.json"));
 
   db.serialize(() => {
-    db.get(`select * from meta where key = 'version'`, (err, ver) => {
+    db.all(`select * from meta`, (err, meta_db) => {
+      let meta = {};
+
+      for (let m of meta_db) {
+        meta[m.key] = m.value;
+      }
+
       const versionsJson = JSON.stringify({
         version: packageJson.version,
-        schemaVersion: ver.value,
+        schemaVersion: meta["version"],
       });
+
+      let defaultsMap = {
+        l: meta["default_language"],
+        c: meta["default_category"],
+      };
+
+      fs.writeFileSync(
+        "./src/generated/defaults.json",
+        JSON.stringify(defaultsMap),
+      );
+
       fs.writeFileSync("./src/generated/versions.json", versionsJson);
     });
 
@@ -691,8 +745,35 @@ function BuildSrc() {
   });
 }
 
+function resizeCalc(width, height, maxWidth, maxHeight) {
+  const aspectRatio = height / width;
+  let newDim = [0, 0];
+  if (width > maxWidth) {
+    newDim[0] = maxWidth;
+    newDim[1] = Math.round(maxWidth * aspectRatio);
+  }
+
+  if (height > maxHeight) {
+    newDim[1] = maxHeight;
+    newDim[0] = Math.round(maxHeight / aspectRatio);
+  }
+
+  if (newDim[0] > maxWidth || newDim[1] > maxHeight)
+    return resizeCalc(newDim[0], newDim[1]);
+
+  if (newDim[0] == 0 && newDim[1] == 0) newDim = [width, height];
+
+  return newDim;
+}
+
 function Build() {
+  console.log("[build.cjs] Building ./public/generated...");
+
+  const sharp = require("sharp");
+
   let db = new sqlite3.Database(dbName);
+
+  execSync("mkdir -p ./public/generated/img");
 
   iterateCatsAndDogs(db, (lang, cat) => {
     execSync(
@@ -805,8 +886,93 @@ function Build() {
                       /**
                        * @param {Image} img
                        */
-                      (err, img) => {
-                        question["i"] = img.image_data_uri;
+                      async (err, img) => {
+                        let extension = img.image_data_uri.substring(
+                          img.image_data_uri.indexOf("/") + 1,
+                          img.image_data_uri.indexOf(";"),
+                        );
+
+                        let b64image = img.image_data_uri.substring(
+                          img.image_data_uri.indexOf(",") + 1,
+                        );
+
+                        let imgBuffer = Uint8Array.from(atob(b64image), (c) =>
+                          c.charCodeAt(0),
+                        );
+
+                        const orig_img_sharp = sharp(imgBuffer, {
+                          animated: extension === "gif" ? true : false,
+                        });
+
+                        const orig_img_metadata =
+                          await orig_img_sharp.metadata();
+
+                        const orig_img_dimensions = {
+                          w: orig_img_metadata.width,
+                          h: orig_img_metadata.height,
+                        };
+
+                        // Mobile: Images are viewed in max-width: 300px;max-height: 200px;
+                        // Desktop: Images are viewed in max-width: 400px;max-height: 300px;
+                        const resolution_table = {
+                          sm: { w: 400 * 0.75, h: 300 * 0.75 },
+                          md: { w: 400 * 1.5, h: 300 * 1.5 },
+                          lg: { w: 400 * 2.25, h: 300 * 2.25 },
+                          orig: { w: 400 * 3, h: 300 * 3 },
+                        };
+
+                        let qualifies_for_sizes = [];
+
+                        for (let res in resolution_table) {
+                          if (
+                            orig_img_dimensions.w > resolution_table[res].w &&
+                            orig_img_dimensions.h > resolution_table[res].h
+                          ) {
+                            qualifies_for_sizes.push(res);
+                          }
+                        }
+
+                        if (!qualifies_for_sizes.includes("orig")) {
+                          qualifies_for_sizes.push("orig");
+                        }
+
+                        if (
+                          !fs.existsSync(
+                            `./public/generated/img/${row.image_id}-orig.${extension}`,
+                          )
+                        ) {
+                          for (let res of qualifies_for_sizes) {
+                            let max_width = resolution_table[res].w;
+                            let max_height = resolution_table[res].h;
+
+                            let [new_width, new_height] = resizeCalc(
+                              orig_img_dimensions.w,
+                              orig_img_dimensions.h,
+                              max_width,
+                              max_height,
+                            );
+
+                            let resized_buffer = await orig_img_sharp.resize(
+                              new_width,
+                              new_height,
+                            );
+
+                            await resized_buffer
+                              .webp({ quality: 80 })
+                              .toFile(
+                                `./public/generated/img/${row.image_id}-${res}.webp`,
+                              );
+
+                            await resized_buffer.toFile(
+                              `./public/generated/img/${row.image_id}-${res}.${extension}`,
+                            );
+                          }
+                        }
+
+                        question["i"] = row.image_id;
+                        question["if"] = ["webp", extension];
+                        question["is"] = qualifies_for_sizes;
+
                         if (img.alt_text) {
                           db.get(
                             `select * from image_alt_text where image_id = ? and language = ?`,
@@ -1014,467 +1180,4 @@ function ImportV3Images(cont) {
   });
 }
 
-/* --- IMPORT V2 IMAGES --- */
-
-/* --- LEGACY MIGRATE IMG --- */
-
-const imageFolderPath = "./src/_data/images";
-
-function MigrateLegacyImages() {
-  let db = new sqlite3.Database(dbName);
-
-  fs.readdir(imageFolderPath, (err, files) => {
-    if (err) {
-      console.error("Error reading image folder:", err);
-      return;
-    }
-
-    // Process each image file
-    files.forEach((file) => {
-      const imagePath = `${imageFolderPath}/${file}`;
-
-      // Use the 'file' command to determine the MIME type
-      exec(`file --mime-type -b "${imagePath}"`, (error, stdout) => {
-        if (error) {
-          console.error(`Error running 'file' command for ${file}:`, error);
-          return;
-        }
-
-        // Read the image file and convert it to base64
-        const imageBuffer = fs.readFileSync(imagePath);
-        const imageBase64 = imageBuffer.toString("base64");
-
-        // Insert the image data into the 'images' table
-        db.run(
-          "INSERT INTO images (image_name, image_data_uri) VALUES (?, ?)",
-          [file, `data:${stdout.trim()};base64,${imageBase64}`],
-          (insertError) => {
-            if (insertError) {
-              console.error(
-                `Error inserting ${file} into the database:`,
-                insertError,
-              );
-            } else {
-              console.log(`Inserted ${file} into the database.`);
-            }
-          },
-        );
-      });
-    });
-  });
-}
-
-/* --- LEGACY MIGRATE IMG --- */
-
-/* --- LEGACY MIGRATE JSON --- */
-
-function MigrateLegacyJson() {
-  let db = new sqlite3.Database(dbName);
-
-  /**
-   * Once again, the default.
-   * These were the supported languages
-   * and categories before the SQLite migration
-   */
-
-  const supportedLanguages = ["lt", "en"];
-  const supportedCategories = ["a", "b"];
-
-  // Function to insert a question into the 'questions' table
-  function insertQuestion(question, imageId, callback) {
-    db.run(
-      "INSERT INTO questions (language, category, question_text, image_id) VALUES (?, ?, ?, ?)",
-      [question.language, question.category, question.q, imageId],
-      function (err) {
-        if (err) {
-          console.error("Error inserting question:", err);
-          callback(err);
-        } else {
-          console.log(`Inserted question with ID: ${this.lastID}`);
-          callback(null, this.lastID);
-        }
-      },
-    );
-  }
-
-  // Function to insert possible answers and correct answers
-  function insertAnswers(
-    questionId,
-    possibleAnswers,
-    correctAnswerIndices,
-    callback,
-  ) {
-    const insertPossibleAnswersStmt = db.prepare(
-      "INSERT INTO possible_answers (question_id, answer_text) VALUES (?, ?)",
-    );
-
-    const insertCorrectAnswersStmt = db.prepare(
-      "INSERT INTO correct_answers (question_id, answer_id) VALUES (?, ?)",
-    );
-
-    let insertedAnswerIds = []; // To store the IDs of the inserted possible answers
-
-    // Insert possible answers
-    possibleAnswers.forEach((answerText) => {
-      insertPossibleAnswersStmt.run(questionId, answerText, function (err) {
-        if (err) {
-          console.error("Error inserting possible answer:", err);
-          callback(err);
-        } else {
-          // Get the last inserted row ID, which is the answer ID
-          const answerId = this.lastID;
-          insertedAnswerIds.push(answerId);
-        }
-      });
-    });
-
-    insertPossibleAnswersStmt.finalize((err) => {
-      if (err) {
-        console.error("Error finalizing possible answers:", err);
-        callback(err);
-      } else {
-        // Insert correct answers using the 1-based indices from the JSON
-        correctAnswerIndices.forEach((correctIndex) => {
-          if (correctIndex >= 1 && correctIndex <= insertedAnswerIds.length) {
-            const answerId = insertedAnswerIds[correctIndex - 1];
-            insertCorrectAnswersStmt.run(questionId, answerId, function (err) {
-              if (err) {
-                console.error("Error inserting correct answer:", err);
-                callback(err);
-              }
-            });
-          }
-        });
-
-        insertCorrectAnswersStmt.finalize((err) => {
-          if (err) {
-            console.error("Error finalizing correct answers:", err);
-            callback(err);
-          } else {
-            callback(null);
-          }
-        });
-      }
-    });
-  }
-  // Function to migrate questions from a JSON file
-  function migrateQuestions(language, category, callback) {
-    const questionsFileName = `${language}.${category}.q.json`;
-    const answersFileName = `${language}.${category}.a.json`;
-
-    const questionsData = JSON.parse(
-      fs.readFileSync(`./src/_data/${questionsFileName}`, "utf8"),
-    );
-
-    const answersData = JSON.parse(
-      fs.readFileSync(`./src/_data/${answersFileName}`, "utf8"),
-    );
-
-    let pendingInserts = Object.keys(questionsData).length;
-
-    for (const questionId in questionsData) {
-      const question = questionsData[questionId];
-      let imageName = question.i;
-      let imageId = null;
-
-      if (imageName) {
-        imageName = imageName.replaceAll("%20", " ");
-      }
-      // Query the 'images' table to get the image ID by name
-      db.get(
-        "SELECT image_id FROM images WHERE image_name = ?",
-        [imageName],
-        (err, row) => {
-          if (err) {
-            console.error("Error querying images:", err);
-          }
-
-          if (!row) {
-            console.error(`Image not found for question: ${questionId}`);
-          } else {
-            imageId = row.image_id;
-          }
-
-          // Insert the question into the 'questions' table
-          insertQuestion(
-            { language, category, ...question },
-            imageId,
-            (err, _questionId) => {
-              if (err) {
-                console.error("Error inserting question:", err);
-              } else {
-                insertAnswers(
-                  _questionId,
-                  question.a,
-                  answersData[questionId],
-                  (err) => {
-                    if (err) {
-                      console.error(
-                        "Error inserting possible and correct answers:",
-                        err,
-                      );
-                    }
-                    pendingInserts--;
-                    if (pendingInserts === 0) {
-                      callback();
-                    }
-                  },
-                );
-              }
-              pendingInserts--;
-              if (pendingInserts === 0) {
-                callback();
-              }
-            },
-          );
-        },
-      );
-    }
-  }
-
-  // Initialize the database schema if needed
-
-  let migrationsCount = 0;
-
-  // For each supported language and category, migrate the questions
-  for (const language of supportedLanguages) {
-    for (const category of supportedCategories) {
-      migrateQuestions(language, category, () => {
-        migrationsCount++;
-        if (
-          migrationsCount ===
-          supportedLanguages.length * supportedCategories.length
-        ) {
-          // All migrations have completed, close the database handle
-          db.close();
-        }
-      });
-    }
-  }
-}
-
-/* --- LEGACY MIGRATE JSON --- */
-
-/* --- DEBUG SERVER --- */
-
-function ServeDebug() {
-  let http = require("http");
-  let db = new sqlite3.Database(dbName);
-
-  /* --- DEBUG SERVER TEMPLATES --- */
-
-  /**
-   * @param {string} title
-   * @param {string} slot
-   */
-  const templateHtmlBegin = (title, slot) => `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="UTF-8" />
-        <title>${title}</title>
-        <style>
-html {
-  max-width: 70ch;
-  padding: 3em 1em;
-  margin: auto;
-  line-height: 1.75;
-  font-size: 1.25em;
-}
-
-h1,h2,h3,h4,h5,h6 {
-  margin: 3em 0 1em;
-}
-
-p,ul,ol {
-  margin-bottom: 2em;
-  color: #1d1d1d;
-  font-family: sans-serif;
-}
-pre {
-  white-space: pre-wrap;
-}
-        </style>
-      </head>
-      <body>
-        ${slot}
-        <footer>
-        <p style="font-size:small;">regitra-parody (C) x-t, licensed under MPL-2.0</p>
-        </footer>
-      </body>
-    </html>
-  `;
-
-  const templateIndex = () =>
-    templateHtmlBegin(
-      "regitradebug - idx",
-      `
-    <main>
-      <h1>Debug interface</h1>
-      <h2>Here you can inspect your Regitra Parody database.</h2>
-      <p>Keep in mind: this is for inspection, not development.</p>
-      <p>To create/edit questions use an SQL editor or available import tools.</p>
-      <pre>
-Database file: ${dbName}
-      </pre>
-      <p>View:</p>
-      <p><a href="/questions">Questions</a></p>
-      <p><a href="/images">Images</a></p>
-    </main>
-  `,
-    );
-
-  /** @returns {Promise<string>} */
-  const templateQuestionsView = () => {
-    return new Promise(
-      /** @param {(s: string) => void} resolve */
-      (resolve) => {
-        /** @param {string} slot */
-        let template = (slot) =>
-          templateHtmlBegin(
-            "regitradebug - q",
-            `
-      <main>
-        <h1>Current questions in database</h1>
-        <p><a href="/">Go back</a></p>
-        <pre>${slot}</pre>
-      </main>
-      `,
-          );
-
-        db.all(
-          "select * from questions",
-          /** @param {Question[]} questions */
-          (err, questions) => {
-            let toGo = questions.length;
-            for (let q in questions) {
-              db.all(
-                "select * from possible_answers where question_id = ?",
-                [questions[q].id],
-                /** @param {PossibleAnswer[]} answers */
-                (err, answers) => {
-                  questions[q].answers = answers;
-                  toGo--;
-                  if (toGo === 0) {
-                    toGo = questions.length;
-                    for (let _q in questions) {
-                      db.all(
-                        "select * from correct_answers where question_id = ?",
-                        [questions[_q].id],
-                        /** @param {CorrectAnswer[]} corrects */
-                        (err, corrects) => {
-                          questions[_q].correct_answers = corrects;
-                          toGo--;
-                          if (toGo === 0) {
-                            resolve(
-                              template(JSON.stringify(questions, null, 2)),
-                            );
-                          }
-                        },
-                      );
-                    }
-                  }
-                },
-              );
-            }
-          },
-        );
-      },
-    );
-  };
-
-  /** @returns {Promise<string>} */
-  const templateImagesView = () => {
-    return new Promise(
-      /** @param {(s: string) => void} resolve */
-      (resolve) => {
-        /** @param {string} slot */
-        let template = (slot) =>
-          templateHtmlBegin(
-            "regitradebug - i",
-            `
-        <main>
-          <h1>Current images in database</h1>
-          <p><a href="/">Go back</a></p>
-          ${slot}
-        </main>
-        `,
-          );
-
-        db.all(
-          "select * from images",
-          /** @param {Image[]} images */
-          (err, images) => {
-            /** @type string[] */
-            let concat = [];
-            let toGo = images.length;
-            for (let i in images) {
-              db.all(
-                "select * from image_alt_text where image_id = ?",
-                [images[i].image_id],
-                /** @param {ImageAltText[]} alt_t */
-                (err, alt_t) => {
-                  concat.push(`
-                    <p>${images[i].image_id} - ${images[i].image_name}</p>
-                    <img style="max-width:256px;max-height:256px;" src="${images[i].image_data_uri}" />
-                  `);
-                  for (let t in alt_t) {
-                    concat.push(
-                      "<pre>" + JSON.stringify(alt_t[t], null, 2) + "</pre>",
-                    );
-                  }
-                  toGo--;
-                  if (toGo === 0) {
-                    resolve(template(concat.join("")));
-                  }
-                },
-              );
-            }
-          },
-        );
-      },
-    );
-  };
-
-  /* --- DEBUG SERVER TEMPLATES --- */
-
-  http
-    .createServer(async function (req, res) {
-      res.writeHead(200, { "Content-Type": "text/html" });
-      switch (req.url) {
-        case "/":
-          res.write(templateIndex());
-          break;
-        case "/questions":
-          res.write(await templateQuestionsView());
-          break;
-        case "/images":
-          res.write(await templateImagesView());
-          break;
-        default:
-          /**
-           * Return a 200 code with a 404 reponse.
-           * This ensures that:
-           * - churches burn
-           * - the poor starve
-           * - Microsoft prospers
-           * - JavaScript is still used to write everything
-           * - everything bad will continue being bad
-           * - that God no longer loves us
-           *
-           * No, but seriously, don't do this.
-           * This server should never be used in production.
-           * Therefore I can get away.
-           * You can't.
-           * You can't run.
-           */
-          res.write("404");
-          break;
-      }
-      res.end();
-    })
-    .listen(8080);
-  console.log("Listening on http://localhost:8080");
-}
-
-/* --- DEBUG SERVER --- */
+/* --- IMPORT V3 IMAGES --- */

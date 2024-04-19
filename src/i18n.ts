@@ -41,10 +41,18 @@ interface I18NStrings {
   wait: string;
   noAlt: string;
   affiliationWarning: string;
+  retakeExam: string;
+  maybeRetake: string;
 }
 
 export async function strings(key: keyof I18NStrings) {
   const language = state.selectedLanguage;
   const map = await import(`./i18n/${language}.json`);
   return map[key];
+}
+
+export function changeLanguage(lang: string) {
+  state.selectedLanguage = lang;
+  document.querySelector("html")?.setAttribute("lang", lang);
+  localStorage.setItem("setLanguage", lang);
 }
