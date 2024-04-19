@@ -1,0 +1,13 @@
+{
+  "name": "Regitra Parodija",
+  "icons": [
+    {
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "128x128"
+    }
+  ],
+  "start_url": "./index.html",
+  "display": "minimal-ui",
+  "display_override": ["minimal-ui", "standalone"]
+}
