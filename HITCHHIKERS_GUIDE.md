@@ -14,7 +14,6 @@ Last updated for 1.1, schema v4
 1. [Database schema](#database-schema)
 1. [Populating the database](#populating-the-database)
 1. [New format import](#new-format-import)
-1. [Maintaining the database](#maintaining-the-database)
 1. [Stylistic choices](#stylistic-choices)
 1. [Building the site](#building-the-site)
 1. [License](#license)
@@ -250,32 +249,6 @@ Then use this command to import the data:
 ```
 $ node build.cjs import import_v3
 ```
-
-### Maintaining the database
-
-New features for the frontend will most likely require additional updates to the database schema, thus you'll to use the `update` tool in [build.cjs](build.cjs) to migrate your database to a newer version.
-
-Find out your database schema's current version:
-
-```
-$ node build.cjs version
-```
-
-Find out available migrations in [build.cjs](build.cjs):
-
-```
-$ node build.cjs update
-```
-
-You can only migrate one version up. For example, if you're on `v0`\*, you'll first need to run the `v0 => v1` migration, then `v1 => v2`. If a migration deletes data from the database, you will get warned about that and be prompted to replace that data.
-
-Run a migration using its name:
-
-```
-$ node build.cjs update v1v2
-```
-
-_\* `v0` is a version number for any version of the schema before `v1`. For migrations before the very last version (`0b0ca3c`) of `v0` you need to follow the steps in the beginning of the `build.cjs` file._
 
 ### Stylistic choices
 
