@@ -2,7 +2,7 @@
 
 ## for regitra-parody
 
-Last updated for 1.0, schema v4
+Last updated for 1.1, schema v4
 
 ### Table of contents
 
@@ -55,15 +55,7 @@ $ node build.cjs version
 
 ### Language support
 
-The database is configured in a way that can store an infinite amount of languages. However, the languages supported for the frontend are as follows:
-
-|                                   |                |             |             |
-| --------------------------------- | -------------- | ----------- | ----------- |
-|                                   | **Lithuanian** | **English** | **Russian** |
-| **Translation**                   | Yes            | Yes         | No          |
-| **Can render in homepage picker** | Yes            | Yes         | Yes\*       |
-
-_\* Only includes `RUyes.png` and `RUoff.png` files (see [localization](#localization)). Because no translation is included, it won't render the page._
+The database is configured in a way that can store an infinite amount of languages. However, the frontend only supports rendering Lithuanian and English. See the [localization](#localization) guide below to add more languages.
 
 ### Localization
 
@@ -353,7 +345,7 @@ This project has no affiliation with State Enterprise Regitra.
 
 ### Contributing
 
-While the project is in a completed state, contributions may be considered.
+While the project is in a completed state, contributions may be considered. Development builds are seen in the `next` branch, with the subsequent domain [next.regitra.pages.dev](https://next.regitra.pages.dev/) for the preview.
 
 Your commits must be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) and signed-off.
 
