@@ -34,6 +34,8 @@ export interface AnswerT {
   correct: number[];
 }
 
+let exam_timer: ReturnType<typeof setInterval>;
+
 export function allowedErrorCount() {
   return state.numOfQuestions - Math.floor((80 / 100) * state.numOfQuestions);
 }
@@ -67,7 +69,7 @@ export async function beginExam() {
   );
 
   const endsDate = new Date(
-    new Date().getTime() + state.numOfQuestions * 60000,
+    new Date().getTime() + state.numOfQuestions * 60000 + 1000,
   );
 
   document.querySelector<HTMLButtonElement>("#examNextTask")!.onclick =
@@ -201,13 +203,14 @@ export async function beginExam() {
     "none";
   document.querySelector<HTMLDivElement>(".examFinishOverlay")!.style.display =
     "none";
-  countdownTimer(endsDate, finishExam);
-  setInterval(countdownTimer(endsDate, finishExam), 1000);
+
+  exam_timer = setInterval(countdownTimer(endsDate, finishExam));
   state.currentPage = "exam";
 }
 
 export async function finishExam() {
   state.examFinished = true;
+  clearInterval(exam_timer);
   document.querySelector<HTMLDivElement>(".examFinishOverlay")!.style.display =
     "unset";
   document.querySelector<HTMLDivElement>("#globalLoadingBox")!.style.display =

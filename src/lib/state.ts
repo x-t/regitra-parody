@@ -6,6 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { get_defaults_info } from "../importer";
+import { changeCategory } from "../examControl";
+import { changeLanguage } from "../i18n";
+
 type State = {
   selectedAnswers: { [questionId: string]: number[] };
   currentQuestion: number;
@@ -18,7 +22,7 @@ type State = {
   categoryMakeup: { [category: string]: number };
 };
 
-export const state: State = {
+export const defaultState: State = {
   selectedAnswers: {},
   currentQuestion: 1,
   questionIDs: [],
@@ -29,3 +33,17 @@ export const state: State = {
   numOfQuestions: 30,
   categoryMakeup: { b: 30 },
 };
+
+export let state: State;
+
+export function initialiseState() {
+  state = JSON.parse(JSON.stringify(defaultState));
+
+  let defaults = get_defaults_info();
+  let setCategory = localStorage.getItem("setCategory");
+  let setLanguage = localStorage.getItem("setLanguage");
+  if (!setCategory) changeCategory(defaults.c);
+  else changeCategory(setCategory);
+  if (!setLanguage) changeLanguage(defaults.l);
+  else changeLanguage(setLanguage);
+}
