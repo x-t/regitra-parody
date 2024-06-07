@@ -21,11 +21,11 @@ const DB_NAME = "./content.db";
  * 3 - HELP
  * 4 - VERSION
  * 5 - NEW DATABASE
- * 7 - ITERATOR
- * 8 - BUILD
- * 9 - DOWNLOAD
- * 10 - IMPORT V3 JSON
- * 11 - IMPORT V3 IMAGES
+ * 6 - ITERATOR
+ * 7 - BUILD
+ * 8 - DOWNLOAD
+ * 9 - IMPORT JSON
+ * 10 - IMPORT IMAGES
  *
  * To navigate to the beginning of a chapter, cmd+f using its name
  * To navigate to the end of a chapter, cmd+f its name again
@@ -51,13 +51,8 @@ const dbName = DB_NAME;
 /* --- ARGS --- */
 
 switch (process.argv[2]) {
-  case "db:new":
   case "new_db":
     NewDatabase();
-    break;
-  case "build:count":
-  case "build_count":
-    BuildCount();
     break;
   case "build_src":
     BuildSrc();
@@ -67,10 +62,6 @@ switch (process.argv[2]) {
     break;
   case "download":
     DownloadDB();
-    break;
-  case "serve:debug":
-  case "debug_server":
-    ServeDebug();
     break;
   case "import":
     InvokeImport();
@@ -86,13 +77,13 @@ switch (process.argv[2]) {
 
 function InvokeImport() {
   switch (process.argv[3]) {
-    case "import_v3_json":
+    case "questions":
       ImportV3JSON();
       break;
-    case "import_v3_images":
+    case "images":
       ImportV3Images(false);
       break;
-    case "import_v3":
+    case "all":
       ImportV3Images(true);
       break;
     default:
@@ -116,7 +107,6 @@ Available commands: will be performed on ${DB_NAME}
     build_src     Builds ./src/generated
     build         Builds ./public/generated
     download      Downloads .db file from env/DATABASE_URL
-    debug_server  Serves a debug server on :8080
     import        Imports data in bulk
     version       Check the schema version of current database
     help          Prints this message
@@ -133,12 +123,9 @@ function PrintImportHelp() {
 Usage: node build.cjs import [command]
 
 Import commands: (usage: node build.js import [command])
-    import_v3           Import new-style data
-                        Compatibility: v3, v4
-    import_v3_images    Import new-style images exclusively
-                        Compatibility: v3, v4
-    import_v3_json      Import new-style questions exclusively
-                        Compatibility: v3, v4
+    all           Import all data
+    images        Import images exclusively
+    questions     Import questions exclusively
 
 To see how to arrange your data for import, see the hitchhiker's guide.`,
   );
@@ -262,25 +249,9 @@ function NewDatabase() {
     `);
 
     db.run(`
-      INSERT INTO languages (language_code, display_name)
-      VALUES
-      ('en', 'English'),
-      ('lt', 'Lithuanian');
-    `);
-
-    db.run(`
-      INSERT INTO category (name, display_name, makeup, question_amount)
-      VALUES
-      ('a', 'A', '{"b": 30, "a": 5}', 35),
-      ('b', 'B', '{"b": 30}', 30);
-    `);
-
-    db.run(`
       INSERT INTO meta (key, value)
       VALUES
-      ('version', '${CURRENT_SCHEMA_VERSION}'),
-      ('default_language', 'lt'),
-      ('default_category', 'b');
+      ('version', '${CURRENT_SCHEMA_VERSION}');
     `);
 
     db.close((error) => {
@@ -292,8 +263,6 @@ function NewDatabase() {
         "\nYour database was created with the default settings.\n" +
           "It only contains the schema. \x1b[31mIt does not contain any questions or answers.\x1b[0m\n" +
           "In order to make those, modify the database accordingly.\n" +
-          "Your database includes support for English and Lithuanian languages,\n" +
-          "as well as the support for B and A categories.\n" +
           "For more information, consult the hitchhiker's guide.\n\n" +
           "\x1b[31mRegitra Parody's site in hosted or source form, nor the build tool, nor the\n" +
           "database are given any warranty or legal protection.\n" +
@@ -376,7 +345,6 @@ function BuildCount() {
 function BuildSrc() {
   console.log("[build.cjs] Building ./src/generated...");
 
-  // Legacy flag
   BuildCount();
 
   let db = new sqlite3.Database(dbName);
@@ -708,7 +676,7 @@ function DownloadDB() {
 
 /* --- DOWNLOAD --- */
 
-/* --- IMPORT V3 JSON --- */
+/* --- IMPORT JSON --- */
 
 function ImportV3JSON() {
   let db = new sqlite3.Database(dbName);
@@ -760,9 +728,9 @@ function ImportV3JSON() {
   });
 }
 
-/* --- IMPORT V3 JSON --- */
+/* --- IMPORT JSON --- */
 
-/* --- IMPORT V3 IMAGES --- */
+/* --- IMPORT IMAGES --- */
 
 function ImportV3Images(cont) {
   let db = new sqlite3.Database(dbName);
@@ -871,4 +839,4 @@ function ImportV3Images(cont) {
   });
 }
 
-/* --- IMPORT V3 IMAGES --- */
+/* --- IMPORT IMAGES --- */
