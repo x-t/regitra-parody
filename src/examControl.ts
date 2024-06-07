@@ -8,6 +8,7 @@
 
 import { state } from "./lib/state";
 import { get_category_list } from "./importer";
+import { begin } from "./main";
 
 export function selectQuestion(id: number) {
   if (id < 1 || id > state.numOfQuestions) {
@@ -79,5 +80,5 @@ export function changeCategory(category: string) {
 }
 
 export function retakeExam() {
-  location.reload();
+  begin();
 }

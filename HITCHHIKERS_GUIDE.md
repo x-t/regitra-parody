@@ -2,7 +2,7 @@
 
 ## for regitra-parody
 
-Last updated for 1.0, schema v4
+Last updated for 1.1, schema v4
 
 ### Table of contents
 
@@ -13,8 +13,7 @@ Last updated for 1.0, schema v4
 1. [Starting a new database](#starting-a-new-database)
 1. [Database schema](#database-schema)
 1. [Populating the database](#populating-the-database)
-1. [New format import](#new-format-import)
-1. [Maintaining the database](#maintaining-the-database)
+1. [Import tool](#import-tool)
 1. [Stylistic choices](#stylistic-choices)
 1. [Building the site](#building-the-site)
 1. [License](#license)
@@ -27,11 +26,7 @@ This project does not use a backend. Everything is compiled from one SQLite3 dat
 
 All of the content is compiled using the [build.cjs](build.cjs) tool and is stored inside a `db` file, by default - `./content.db`.
 
-[build.cjs](build.cjs) also includes a meriad of other features for managing the content database, such as importing bulk data and updating the schema in use to a newer version.
-
-A very old build of regitra-parody includes code for a backend written in Rust, however the code quality is really bad. It can be found [here](https://github.com/x-t/regitra-parody/tree/6ad23dad2284a48f70571239791b52a3f1f3fe4b).\*
-
-_\* See [license](#license) for usage of old versions._
+[build.cjs](build.cjs) also includes a meriad of other features for managing the content database, such as importing bulk data.
 
 ### build.cjs and you
 
@@ -41,13 +36,7 @@ To view available commands in [build.cjs](build.cjs) use:
 $ node build.cjs help
 ```
 
-To view available schema migrations (updates) use:
-
-```
-$ node build.cjs update
-```
-
-To see which updates apply to you, check your current database's version using:
+Check your current database's version using:
 
 ```
 $ node build.cjs version
@@ -55,15 +44,7 @@ $ node build.cjs version
 
 ### Language support
 
-The database is configured in a way that can store an infinite amount of languages. However, the languages supported for the frontend are as follows:
-
-|                                   |                |             |             |
-| --------------------------------- | -------------- | ----------- | ----------- |
-|                                   | **Lithuanian** | **English** | **Russian** |
-| **Translation**                   | Yes            | Yes         | No          |
-| **Can render in homepage picker** | Yes            | Yes         | Yes\*       |
-
-_\* Only includes `RUyes.png` and `RUoff.png` files (see [localization](#localization)). Because no translation is included, it won't render the page._
+The database is configured in a way that can store an infinite amount of languages. However, the frontend only supports rendering Lithuanian and English. See the [localization](#localization) guide below to add more languages.
 
 ### Localization
 
@@ -108,30 +89,42 @@ $ node build.cjs new_db
 
 ### Database schema
 
-First column is name of field, second is the type, third and onward are created alongside `build.cjs new_db`.
+First column is name of field, second is the type.
 
 #### Meta
 
-|           |        |         |                  |                  |
-| --------- | ------ | ------- | ---------------- | ---------------- |
-| **key**   | _text_ | version | default_language | default_category |
-| **value** | _text_ | v4      | lt               | b                |
+|           |        |
+| --------- | ------ |
+| **key**   | _text_ |
+| **value** | _text_ |
+
+Two more values are expected to be made manually, `key(default_language)` and `key(default_category)`.
+
+A `key(version)` field is made automatically with the schema version.
 
 #### Languages
 
-|                   |        |         |            |
-| ----------------- | ------ | ------- | ---------- |
-| **language_code** | _text_ | en      | lt         |
-| **display_name**  | _text_ | English | Lithuanian |
+|                   |        |
+| ----------------- | ------ |
+| **language_code** | _text_ |
+| **display_name**  | _text_ |
 
 #### Category
 
-|                     |           |                   |           |
-| ------------------- | --------- | ----------------- | --------- |
-| **name**            | _text_    | a                 | b         |
-| **display_name**    | _text_    | A                 | B         |
-| **makeup**          | _text_    | {"b": 30, "a": 5} | {"b": 30} |
-| **question_amount** | _integer_ | 35                | 30        |
+|                     |           |
+| ------------------- | --------- |
+| **name**            | _text_    |
+| **display_name**    | _text_    |
+| **makeup**          | _text_    |
+| **question_amount** | _integer_ |
+
+`makeup` is a JSON object.
+
+```ts
+type CategoryMakeup = { [category: string]: number };
+```
+
+For example, `{"b": 30, "a": 5}'` or `{"b": 30}`
 
 #### Images
 
@@ -182,13 +175,13 @@ First column is name of field, second is the type, third and onward are created 
 
 ### Populating the database
 
-You have to create your own content for your database. By default the database is set up to accept English and Lithuanian questions for A and B categories. To add more follow the [localisation](#localization) guide.
+You have to create your own content for your database. See the [localisation](#localization) guide.
 
-For content, use the [mass import tool](#new-format-import).
+For content, use the [mass import tool](#import-tool).
 
-### New format import
+### Import tool
 
-To help importing new bulk content, you can use the `import_v3` commands after arranging all files accordingly:
+To help importing new bulk content, you can use the `import` commands after arranging all files accordingly:
 
 ```
 import/
@@ -200,8 +193,6 @@ import/
 
 build.cjs
 ```
-
-This method also uses a new addition in schema v3, which encodes answer IDs relative to a question ensuring a 1:1 import from JSON to SQLite, which makes it a lot more reliable than previous schema versions.
 
 `alts.json` is a file that holds all alt text information for the images. It follows this format:
 
@@ -256,34 +247,8 @@ This method also uses a new addition in schema v3, which encodes answer IDs rela
 Then use this command to import the data:
 
 ```
-$ node build.cjs import import_v3
+$ node build.cjs import all
 ```
-
-### Maintaining the database
-
-New features for the frontend will most likely require additional updates to the database schema, thus you'll to use the `update` tool in [build.cjs](build.cjs) to migrate your database to a newer version.
-
-Find out your database schema's current version:
-
-```
-$ node build.cjs version
-```
-
-Find out available migrations in [build.cjs](build.cjs):
-
-```
-$ node build.cjs update
-```
-
-You can only migrate one version up. For example, if you're on `v0`\*, you'll first need to run the `v0 => v1` migration, then `v1 => v2`. If a migration deletes data from the database, you will get warned about that and be prompted to replace that data.
-
-Run a migration using its name:
-
-```
-$ node build.cjs update v1v2
-```
-
-_\* `v0` is a version number for any version of the schema before `v1`. For migrations before the very last version (`0b0ca3c`) of `v0` you need to follow the steps in the beginning of the `build.cjs` file._
 
 ### Stylistic choices
 
@@ -353,7 +318,7 @@ This project has no affiliation with State Enterprise Regitra.
 
 ### Contributing
 
-While the project is in a completed state, contributions may be considered.
+While the project is in a completed state, contributions may be considered. Development builds are seen in the `next` branch, with the subsequent domain [next.regitra.pages.dev](https://next.regitra.pages.dev/) for the preview.
 
 Your commits must be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits) and signed-off.
 

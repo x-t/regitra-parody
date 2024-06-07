@@ -75,7 +75,7 @@ export async function beginPage(name: string) {
       )}</span><img src="/img/arrow.png" height="32" width="32" alt="Arrow"/>
     </button>
     <p class="infoSmall">${await strings("affiliationWarning")}</p>
-    <p class="infoSmall"><a href="https://github.com/x-t/regitra-parody">${version}</a> ©️ <a href="https://x-t.github.io">x-t</a> ${new Date().getFullYear()}</p>
+    <p class="infoSmall"><a href="https://github.com/x-t/regitra-parody">v${version}</a> ©️ <a href="https://x-t.github.io">x-t</a> ${new Date().getFullYear()}</p>
   </div>
   <div class="examFinishOverlay"></div>
 `;

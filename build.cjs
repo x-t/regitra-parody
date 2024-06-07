@@ -21,81 +21,14 @@ const DB_NAME = "./content.db";
  * 3 - HELP
  * 4 - VERSION
  * 5 - NEW DATABASE
- * 6 - MIGRATIONS
- * M1 - MIGRATION V0V1
- * M2 - MIGRATION V1V2
- * M3 - MIGRATION V2V3
- * M4 - MIGRATION V3V4
- * 7 - ITERATOR
- * 8 - BUILD
- * 9 - DOWNLOAD
- * 10 - IMPORT V3 JSON
- * 11 - IMPORT V3 IMAGES
+ * 6 - ITERATOR
+ * 7 - BUILD
+ * 8 - DOWNLOAD
+ * 9 - IMPORT JSON
+ * 10 - IMPORT IMAGES
  *
  * To navigate to the beginning of a chapter, cmd+f using its name
  * To navigate to the end of a chapter, cmd+f its name again
- */
-
-/**
- * Some type definitions for our SQLite tables.
- *
- * @typedef {{
- *  language_code: string,
- *  display_name: string
- * }} Language
- *
- * @typedef {{
- *  name: string,
- *  display_name: string,
- *  makeup: CategoryMakeup,
- *  question_amount: number
- * }} Category
- *
- * @typedef {{
- *  [category: string]: number
- * }} CategoryMakeup
- *
- * @typedef {{
- *  key: string,
- *  value: string
- * }} Meta
- *
- * @typedef {{
- *  image_id: number,
- *  image_name: string,
- *  image_data_uri: string,
- *  alt_text: number
- * }} Image
- *
- * @typedef {{
- *  id: number,
- *  image_id: number,
- *  language: string,
- *  alt_text: string,
- * }} ImageAltText
- *
- * @typedef {{
- *  id: number,
- *  language: string,
- *  category: string,
- *  question_text: string,
- *  image_id: number,
- *  relative_answers: number
- * }} Question
- *
- * @typedef {{
- *  id: number,
- *  question_id: number,
- *  answer_text: string,
- *  answer_order: number
- * }} PossibleAnswer
- *
- * @typedef {{
- *  id: number,
- *  question_id: number,
- *  answer_id: number,
- *  answer_id_relative: number,
- * }} CorrectAnswer
  */
 
 /* --- START --- */
@@ -118,13 +51,8 @@ const dbName = DB_NAME;
 /* --- ARGS --- */
 
 switch (process.argv[2]) {
-  case "db:new":
   case "new_db":
     NewDatabase();
-    break;
-  case "build:count":
-  case "build_count":
-    BuildCount();
     break;
   case "build_src":
     BuildSrc();
@@ -135,18 +63,11 @@ switch (process.argv[2]) {
   case "download":
     DownloadDB();
     break;
-  case "serve:debug":
-  case "debug_server":
-    ServeDebug();
-    break;
   case "import":
     InvokeImport();
     break;
   case "version":
     CheckVersion();
-    break;
-  case "update":
-    UpdateCLI();
     break;
   case "help":
   default:
@@ -156,13 +77,13 @@ switch (process.argv[2]) {
 
 function InvokeImport() {
   switch (process.argv[3]) {
-    case "import_v3_json":
+    case "questions":
       ImportV3JSON();
       break;
-    case "import_v3_images":
+    case "images":
       ImportV3Images(false);
       break;
-    case "import_v3":
+    case "all":
       ImportV3Images(true);
       break;
     default:
@@ -186,10 +107,8 @@ Available commands: will be performed on ${DB_NAME}
     build_src     Builds ./src/generated
     build         Builds ./public/generated
     download      Downloads .db file from env/DATABASE_URL
-    debug_server  Serves a debug server on :8080
     import        Imports data in bulk
     version       Check the schema version of current database
-    update        Database migration/update CLI
     help          Prints this message
 
 regitra-parody is in development, some features you expect may not be there.
@@ -204,35 +123,12 @@ function PrintImportHelp() {
 Usage: node build.cjs import [command]
 
 Import commands: (usage: node build.js import [command])
-    import_v3           Import new-style data
-                        Compatibility: v3, v4
-    import_v3_images    Import new-style images exclusively
-                        Compatibility: v3, v4
-    import_v3_json      Import new-style questions exclusively
-                        Compatibility: v3, v4
+    all           Import all data
+    images        Import images exclusively
+    questions     Import questions exclusively
 
 To see how to arrange your data for import, see the hitchhiker's guide.`,
   );
-}
-
-function UpdateCLI() {
-  if (process.argv[3]) {
-    InvokeUpdate(process.argv[3]);
-    return;
-  }
-
-  console.log(`Latest schema version: ${CURRENT_SCHEMA_VERSION}`);
-  console.log(
-    `! Get your current schema version using "node build.cjs version"`,
-  );
-  console.log(`Available migrations:`);
-  console.log(` Migration | Name | Is breaking?`);
-  console.log(`  v0 => v1 | v0v1 | No`);
-  console.log(`  v1 => v2 | v1v2 | Yes!`);
-  console.log(`  v2 => v3 | v2v3 | No`);
-  console.log(`  v3 => v4 | v3v4 | No`);
-  console.log(`Invoke a migration using "node build.cjs update [name]"`);
-  console.log(`Example: node build.cjs update v0v1`);
 }
 
 /* --- HELP --- */
@@ -353,25 +249,9 @@ function NewDatabase() {
     `);
 
     db.run(`
-      INSERT INTO languages (language_code, display_name)
-      VALUES
-      ('en', 'English'),
-      ('lt', 'Lithuanian');
-    `);
-
-    db.run(`
-      INSERT INTO category (name, display_name, makeup, question_amount)
-      VALUES
-      ('a', 'A', '{"b": 30, "a": 5}', 35),
-      ('b', 'B', '{"b": 30}', 30);
-    `);
-
-    db.run(`
       INSERT INTO meta (key, value)
       VALUES
-      ('version', '${CURRENT_SCHEMA_VERSION}'),
-      ('default_language', 'lt'),
-      ('default_category', 'b');
+      ('version', '${CURRENT_SCHEMA_VERSION}');
     `);
 
     db.close((error) => {
@@ -383,8 +263,6 @@ function NewDatabase() {
         "\nYour database was created with the default settings.\n" +
           "It only contains the schema. \x1b[31mIt does not contain any questions or answers.\x1b[0m\n" +
           "In order to make those, modify the database accordingly.\n" +
-          "Your database includes support for English and Lithuanian languages,\n" +
-          "as well as the support for B and A categories.\n" +
           "For more information, consult the hitchhiker's guide.\n\n" +
           "\x1b[31mRegitra Parody's site in hosted or source form, nor the build tool, nor the\n" +
           "database are given any warranty or legal protection.\n" +
@@ -395,224 +273,6 @@ function NewDatabase() {
 }
 
 /* --- NEW DATABASE --- */
-
-/* --- MIGRATIONS --- */
-
-function InvokeUpdate(migration) {
-  const migrations = {
-    /* --- MIGRATION V0V1 --- */
-    v0v1: {
-      description: "Adds meta table to track schema version.",
-      update: function () {
-        let db = new sqlite3.Database(dbName);
-        db.serialize(() => {
-          db.run(`
-            CREATE TABLE meta (
-              key TEXT PRIMARY KEY,
-              value TEXT
-            );
-          `);
-
-          db.run(`
-            INSERT INTO meta (key, value)
-            VALUES
-            ('version', 'v1');
-          `);
-
-          db.close((error) => {
-            if (error) {
-              return console.error(error.message);
-            }
-          });
-
-          console.log(`Migration successful.`);
-        });
-      },
-    },
-    /* --- MIGRATION V0V1 --- */
-    /* --- MIGRATION V1V2 --- */
-    v1v2: {
-      description: "Moves information for category makeup into the database.",
-      update: function () {
-        let db = new sqlite3.Database(dbName);
-
-        if (!fs.existsSync("./migration_v1v2.json")) {
-          db.all(`select * from category`, (err, cats) => {
-            console.log("\x1b[31mTHIS IS A BREAKING MIGRATION!\x1b[0m\n");
-            console.log("This is your current category data:");
-            console.log(cats);
-            console.log("\x1b[31mSave this data.\x1b[0m");
-            console.log(
-              '\nA file "migration_v1v2.json" has been created in this folder.',
-            );
-            console.log(
-              "It has been filled with example categories. \x1b[31mThe data you put in this JSON file will replace ALL previous data inside the 'category' table.\x1b[0m",
-            );
-            console.log(
-              "To proceed, edit that file with your desired categories and run this command again.",
-            );
-
-            const exampleData = [
-              {
-                name: "a",
-                display_name: "A",
-                makeup: { b: 30, a: 5 },
-                question_amount: 35,
-              },
-              {
-                name: "b",
-                display_name: "B",
-                makeup: { b: 30 },
-                question_amount: 30,
-              },
-            ];
-
-            fs.writeFileSync(
-              `./migration_v1v2.json`,
-              JSON.stringify(exampleData, null, 2),
-            );
-          });
-        } else {
-          const dataToPut = JSON.parse(
-            fs.readFileSync("./migration_v1v2.json"),
-          );
-          console.log(dataToPut);
-          const readline = require("readline").createInterface({
-            input: process.stdin,
-            output: process.stdout,
-          });
-
-          readline.question(
-            "\n\x1b[31mThis data will replace all data in the category table.\x1b[0m\nProceed? (y/n): ",
-            (confirm) => {
-              if (confirm == "y") {
-                db.serialize(() => {
-                  db.run(`DROP TABLE category;`);
-                  db.run(`
-                  CREATE TABLE category (
-                    name TEXT PRIMARY KEY,
-                    display_name TEXT,
-                    makeup TEXT,
-                    question_amount INTEGER
-                  );
-                `);
-                  for (const category of dataToPut) {
-                    db.run(
-                      `
-                      INSERT INTO category
-                      (name, display_name, makeup, question_amount)
-                      VALUES
-                      (?, ?, ?, ?);`,
-                      [
-                        category["name"],
-                        category["display_name"],
-                        JSON.stringify(category["makeup"]),
-                        category["question_amount"],
-                      ],
-                    );
-                  }
-
-                  db.run(`
-                    UPDATE meta
-                    SET value = 'v2'
-                    WHERE key = 'version';
-                  `);
-
-                  db.close((error) => {
-                    if (error) {
-                      return console.error(error.message);
-                    }
-                  });
-
-                  console.log(`Migration successful.`);
-                  fs.unlinkSync("./migration_v1v2.json");
-                  console.log(`The migration JSON has been deleted.`);
-                });
-              }
-
-              readline.close();
-            },
-          );
-        }
-      },
-    },
-    /* --- MIGRATION V1V2 --- */
-    /* --- MIGRATION V2V3 --- */
-    v2v3: {
-      description:
-        "Stores possible and correct answers in a certain way, which preserves answer order while importing. Backwards compatible with previous answer storage.",
-      update: function () {
-        let db = new sqlite3.Database(dbName);
-
-        db.serialize(() => {
-          db.run(`alter table questions 
-            add column relative_answers integer;`);
-
-          db.run(`alter table possible_answers
-            add column answer_order integer;`);
-
-          db.run(`alter table correct_answers
-            add column answer_id_relative integer;`);
-
-          db.run(`
-            UPDATE meta
-            SET value = 'v3'
-            WHERE key = 'version';
-          `);
-
-          db.close((error) => {
-            if (error) {
-              return console.error(error.message);
-            }
-
-            console.log("Migration successful.");
-            console.log(
-              "You can now use import_v3 to import new-style questions.",
-            );
-          });
-        });
-      },
-    },
-    /* --- MIGRATION V2V3 --- */
-    /* --- MIGRATION V3V4 --- */
-    v3v4: {
-      description: "Adds default_category=b and default_language=lt to meta.",
-      update: function () {
-        let db = new sqlite3.Database(dbName);
-
-        db.serialize(() => {
-          db.run(`
-            INSERT INTO meta (key, value)
-            VALUES
-            ('default_language', 'lt'),
-            ('default_category', 'b');
-          `);
-
-          db.run(`
-            UPDATE meta
-            SET value = 'v4'
-            WHERE key = 'version';
-          `);
-
-          db.close((error) => {
-            if (error) {
-              return console.error(error.message);
-            }
-
-            console.log("Migration successful.");
-          });
-        });
-      },
-    },
-    /* --- MIGRATION V3V4 --- */
-  };
-
-  console.log(`Invoking migration: ${migration}`);
-  console.log(`Description: ${migrations[migration].description}`);
-  migrations[migration].update();
-}
-
-/* --- MIGRATIONS --- */
 
 /* --- ITERATOR --- */
 
@@ -685,7 +345,6 @@ function BuildCount() {
 function BuildSrc() {
   console.log("[build.cjs] Building ./src/generated...");
 
-  // Legacy flag
   BuildCount();
 
   let db = new sqlite3.Database(dbName);
@@ -1017,7 +676,7 @@ function DownloadDB() {
 
 /* --- DOWNLOAD --- */
 
-/* --- IMPORT V3 JSON --- */
+/* --- IMPORT JSON --- */
 
 function ImportV3JSON() {
   let db = new sqlite3.Database(dbName);
@@ -1069,9 +728,9 @@ function ImportV3JSON() {
   });
 }
 
-/* --- IMPORT V3 JSON --- */
+/* --- IMPORT JSON --- */
 
-/* --- IMPORT V3 IMAGES --- */
+/* --- IMPORT IMAGES --- */
 
 function ImportV3Images(cont) {
   let db = new sqlite3.Database(dbName);
@@ -1180,4 +839,4 @@ function ImportV3Images(cont) {
   });
 }
 
-/* --- IMPORT V3 IMAGES --- */
+/* --- IMPORT IMAGES --- */
