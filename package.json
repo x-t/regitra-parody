@@ -1,6 +1,6 @@
 {
   "name": "regitra",
-  "version": "1.1",
+  "version": "1.1.1",
   "type": "module",
   "scripts": {
     "build:pre": "node build.cjs build_src && node build.cjs build",
