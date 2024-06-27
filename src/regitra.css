@@ -160,6 +160,11 @@ button {
   display: none;
 }
 
+#finishTestAction > span,
+#retakeExamAction > span {
+  display: initial;
+}
+
 .testControl > div > button[disabled] {
   color: #888888;
 }
