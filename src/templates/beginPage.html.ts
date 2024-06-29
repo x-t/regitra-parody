@@ -14,11 +14,11 @@ import {
   get_language_list,
 } from "../importer";
 
-const categories = get_category_arr();
-const version = get_version_info().version;
-const languages = get_language_list();
-
 export async function beginPage(name: string) {
+  const categories = await get_category_arr();
+  const version = (await get_version_info()).version;
+  const languages = await get_language_list();
+
   return `
   <div class="mainWindow">
     <div class="head">

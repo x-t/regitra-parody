@@ -71,8 +71,8 @@ export function changeWithOffset(off: number) {
   };
 }
 
-export function changeCategory(category: string) {
-  const category_list = get_category_list();
+export async function changeCategory(category: string) {
+  const category_list = await get_category_list();
   state.examCategory = category;
   state.categoryMakeup = category_list[category].makeup;
   state.numOfQuestions = category_list[category].qNum;

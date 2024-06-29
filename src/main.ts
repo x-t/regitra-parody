@@ -29,8 +29,8 @@ async function hydrateFront() {
   document.querySelector<HTMLSpanElement>("#globalLoadingBoxText")!.innerHTML =
     await strings("wait");
 
-  const langs = get_language_list();
-  const categories = get_category_arr();
+  const langs = await get_language_list();
+  const categories = await get_category_arr();
 
   langs.forEach((lang) => {
     document.querySelector<HTMLButtonElement>(

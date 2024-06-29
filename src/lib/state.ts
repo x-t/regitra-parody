@@ -26,20 +26,20 @@ export const defaultState: State = {
   selectedAnswers: {},
   currentQuestion: 1,
   questionIDs: [],
-  selectedLanguage: "lt",
+  selectedLanguage: "lt",	// Overriden by database defaults
   examFinished: false,
   currentPage: "index",
-  examCategory: "b",
+  examCategory: "b",		// Overriden by database defaults
   numOfQuestions: 30,
   categoryMakeup: { b: 30 },
 };
 
 export let state: State;
 
-export function initialiseState() {
+export async function initialiseState() {
   state = JSON.parse(JSON.stringify(defaultState));
 
-  let defaults = get_defaults_info();
+  let defaults = await get_defaults_info();
   let setCategory = localStorage.getItem("setCategory");
   let setLanguage = localStorage.getItem("setLanguage");
   if (!setCategory) changeCategory(defaults.c);

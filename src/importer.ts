@@ -7,11 +7,6 @@
  */
 
 import { AnswerT, Question } from "./exam";
-import count from "./generated/count.json";
-import category_list from "./generated/categories.json";
-import languages_list from "./generated/languages.json";
-import version_info from "./generated/versions.json";
-import defaults_info from "./generated/defaults.json";
 import { shuffle } from "./lib/array";
 import { state } from "./lib/state";
 
@@ -32,22 +27,60 @@ function random_ids(min: number, max: number, amount: number) {
   return ids;
 }
 
+type VersionInfo = {
+  version: string;
+  schemaVersion: string;
+};
+
+type CategoryList = {
+  [category: string]: {
+    makeup: {
+      [category: string]: number;
+    };
+    qNum: number;
+  };
+};
+
+type DefaultsInfo = {
+  l: string;
+  c: string;
+};
+
+type CountInfo = {
+  [language: string]: {
+    [category: string]: number;
+  };
+};
+
+type UnifiedData = {
+  ver: VersionInfo;
+  lan: string[];
+  cat: CategoryList;
+  cnt: CountInfo;
+  def: DefaultsInfo;
+};
+
+async function get_unified_data() {
+  const req = await fetch(`/artifacts/unified.json`);
+  return (await req.json()) as unknown as UnifiedData;
+}
+
 export async function get_question_data() {
   let ids: string[] = [];
   for (const c in state.categoryMakeup) {
     const cids = random_ids(
       0,
       // @ts-ignore
-      count[state.selectedLanguage][c] - 1,
+      (await get_count_info())[state.selectedLanguage][c] - 1,
       state.categoryMakeup[c],
     );
-    ids = [...ids, ...cids.map((cid) => `${c}/${cid}`)];
+    ids = [...ids, ...cids.map((cid) => `${c}_${cid}`)];
   }
 
   shuffle(ids);
 
   const promises = ids.map((id) => {
-    return fetch(`/generated/questions/${state.selectedLanguage}/${id}.json`)
+    return fetch(`/artifacts/questions/${state.selectedLanguage}_${id}.json`)
       .then((res) => res.json())
       .then((result) => {
         return {
@@ -66,7 +99,7 @@ export async function get_question_data() {
 
 export async function get_answer_data(ids: string[]) {
   const promises = ids.map((id) => {
-    return fetch(`/generated/answers/${state.selectedLanguage}/${id}.json`)
+    return fetch(`/artifacts/answers/${state.selectedLanguage}_${id}.json`)
       .then((res) => res.json())
       .then((result) => {
         return {
@@ -78,27 +111,17 @@ export async function get_answer_data(ids: string[]) {
   return (await Promise.all(promises)) as unknown as AnswerT[];
 }
 
-export function get_language_list() {
-  // @ts-ignore
-  return languages_list as unknown as string[];
+export async function get_language_list() {
+  return (await get_unified_data())["lan"] as unknown as string[];
 }
 
-type CategoryList = {
-  [category: string]: {
-    makeup: {
-      [category: string]: number;
-    };
-    qNum: number;
-  };
-};
 
-export function get_category_list() {
-  // @ts-ignore
-  return category_list as unknown as CategoryList;
+export async function get_category_list() {
+  return (await get_unified_data())["cat"] as unknown as CategoryList;
 }
 
-export function get_category_arr() {
-  const categories = get_category_list();
+export async function get_category_arr() {
+  const categories = await get_category_list();
   let category_arr = [];
 
   for (const category in categories) {
@@ -108,21 +131,15 @@ export function get_category_arr() {
   return category_arr;
 }
 
-type VersionInfo = {
-  version: string;
-  schemaVersion: string;
-};
 
-export function get_version_info() {
-  // @ts-ignore
-  return version_info as unknown as VersionInfo;
+export async function get_version_info() {
+  return (await get_unified_data())["ver"] as unknown as VersionInfo;
 }
 
-type DefaultsInfo = {
-  l: string;
-  c: string;
-};
+export async function get_defaults_info() {
+  return (await get_unified_data())["def"] as unknown as DefaultsInfo;
+}
 
-export function get_defaults_info() {
-  return defaults_info as unknown as DefaultsInfo;
+export async function get_count_info() {
+  return (await get_unified_data())["cnt"] as unknown as CountInfo;
 }

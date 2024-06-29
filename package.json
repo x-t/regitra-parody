@@ -4,11 +4,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:pre && tsc && vite build",
+    "build": "tsc && vite build",
     "serve": "npm run build && vite preview",
     "test:unit": "vitest run",
-    "fmt": "prettier --write .",
-    "clean": "rm -rf ./src/generated && rm -rf ./public/generated && rm -rf ./dist"
+    "fmt": "prettier --write ."
   },
   "devDependencies": {
     "@vitejs/plugin-legacy": "^5.3.2",
