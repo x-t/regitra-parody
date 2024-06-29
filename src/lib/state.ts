@@ -26,10 +26,10 @@ export const defaultState: State = {
   selectedAnswers: {},
   currentQuestion: 1,
   questionIDs: [],
-  selectedLanguage: "lt",	// Overriden by database defaults
+  selectedLanguage: "lt", // Overriden by database defaults
   examFinished: false,
   currentPage: "index",
-  examCategory: "b",		// Overriden by database defaults
+  examCategory: "b", // Overriden by database defaults
   numOfQuestions: 30,
   categoryMakeup: { b: 30 },
 };

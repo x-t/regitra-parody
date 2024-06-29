@@ -115,7 +115,6 @@ export async function get_language_list() {
   return (await get_unified_data())["lan"] as unknown as string[];
 }
 
-
 export async function get_category_list() {
   return (await get_unified_data())["cat"] as unknown as CategoryList;
 }
@@ -130,7 +129,6 @@ export async function get_category_arr() {
 
   return category_arr;
 }
-
 
 export async function get_version_info() {
   return (await get_unified_data())["ver"] as unknown as VersionInfo;
