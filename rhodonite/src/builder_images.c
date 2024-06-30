@@ -176,7 +176,7 @@ void thread_builder_image(void* image_ptr) {
 }
 
 DEFINE_SELECT_SQL_CALLBACK(images_callback) {
-    struct Image image = {};
+    struct Image image;
 
     for (int i = 0; i < argc; i++) {
         if (!strcmp("image_id", column_name[i])) {
@@ -258,3 +258,4 @@ void build_images_entry(void) {
     sqlite3_close(db);
     return;
 }
+

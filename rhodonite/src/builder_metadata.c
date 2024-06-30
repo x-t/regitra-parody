@@ -330,6 +330,7 @@ void build_unified_metadata_entry(void) {
     write_file("./artifacts/unified.json", unified_output);
 
     free(unified_output);
+    tpool_destroy(thread_pool);
     cJSON_Delete(unified_json);
     return;
 }

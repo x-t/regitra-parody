@@ -233,7 +233,7 @@ DEFINE_SELECT_SQL_CALLBACK(image_alt_callback) {
 }
 
 DEFINE_SELECT_SQL_CALLBACK(question_callback) {
-    struct Question question = {};
+    struct Question question;
 
     for (int i = 0; i < argc; i++) {
         if (!strcmp("id", column_name[i])) {

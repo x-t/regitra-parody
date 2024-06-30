@@ -1,18 +1,29 @@
-# x-t.github.io (c) 2023
-# This work is licensed under the Creative Commons
-# Attribution-NonCommercial-ShareAlike 4.0 International
-# License. To view a copy of this license, visit
-# http://creativecommons.org/licenses/by-nc-sa/4.0/ or
-# send a letter to Creative Commons, PO Box 1866,
-# Mountain View, CA 94042, USA.
+#
+# Copyright (C) zxyz 2024
+# This Source Code Form is subject to the terms
+# of the Mozilla Public License, v. 2.0. If a
+# copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+#
 
 .DEFAULT_GOAL := build
 
+SOURCE_FILES = src/builder.c src/builder_metadata.c src/builder_questions.c src/builder_images.c src/main.c src/fs.c
+LIBRARY_FILES = lib/tpool.c lib/base64.c
+BINARY_NAME = rhodonite
+
+CC ?= clang
+CFLAGS_SECURITY = -D_FORTIFY_SOURCE=2 -fstack-protector-all
+CFLAGS ?= -O3 -march=native -mtune=native -DHASHNODEBUG
+DEV_CFLAGS ?= -O0 -g
+WARNINGS ?= -Wall -Wextra -pedantic -Wno-unused-parameter
+LFLAGS ?= -l sqlite3 -l cjson -l c -l pthread $(shell pkg-config vips --cflags --libs)
+
 build: clean
-	clang -o rhodonite src/builder.c src/builder_metadata.c src/builder_questions.c src/builder_images.c src/main.c lib/tpool.c lib/base64.c src/fs.c -I ./lib -O3 -march=native -mtune=native -Wall -l sqlite3 -l cjson -l c -l pthread `pkg-config vips --cflags --libs` -D_FORTIFY_SOURCE=2 -fstack-protector-all
+	$(CC) -o $(BINARY_NAME) $(SOURCE_FILES) $(LIBRARY_FILES) -I ./lib $(CFLAGS) $(CFLAGS_SECURITY) $(WARNINGS) $(LFLAGS)
 
 dev: clean
-	clang -o rhodonite-dev src/builder.c src/builder_metadata.c src/builder_questions.c src/builder_images.c src/main.c lib/tpool.c lib/base64.c src/fs.c -I ./lib -O0 -g -Wall -l sqlite3 -l cjson -l c -l pthread `pkg-config vips --cflags --libs` -D_FORTIFY_SOURCE=2 -fstack-protector-all
+	$(CC) -o $(BINARY_NAME)-dev $(SOURCE_FILES) $(LIBRARY_FILES) -I ./lib $(DEV_CFLAGS) $(CFLAGS_SECURITY) $(WARNINGS) $(LFLAGS)
 
 clean:
 	rm -rf ./rhodonite-dev.dSYM

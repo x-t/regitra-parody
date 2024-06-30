@@ -17,3 +17,4 @@ struct ImageDimensions* image_sizes_calculator(int width, int height);
 void thread_builder_image(void* image);
 DEFINE_SELECT_SQL_CALLBACK(images_callback);
 void build_images_entry(void);
+

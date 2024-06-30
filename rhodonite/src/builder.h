@@ -14,7 +14,7 @@
 
 DEFINE_SELECT_SQL_CALLBACK(counter_callback);
 
-const struct ImageDimensions MAXIMUM_SM_IMG_DIMENSIONS;
-const struct ImageDimensions MAXIMUM_MD_IMG_DIMENSIONS;
-const struct ImageDimensions MAXIMUM_LG_IMG_DIMENSIONS;
-const struct ImageDimensions MAXIMUM_ORIG_IMG_DIMENSIONS;
+extern const struct ImageDimensions MAXIMUM_SM_IMG_DIMENSIONS;
+extern const struct ImageDimensions MAXIMUM_MD_IMG_DIMENSIONS;
+extern const struct ImageDimensions MAXIMUM_LG_IMG_DIMENSIONS;
+extern const struct ImageDimensions MAXIMUM_ORIG_IMG_DIMENSIONS;
