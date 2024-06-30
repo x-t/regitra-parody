@@ -9,10 +9,10 @@
 /**
  * This tool migrates an old v4 (1.x) database
  * to a new 2.0 database.
- * 
+ *
  * Depending on the size of your database, this tool
  * might use a lot of RAM.
- * 
+ *
  * Usage: (pwd /regitra-parody/rhodonite)
  * % deno run -A --unstable-ffi scripts/migrate-2-0.ts
  */
@@ -152,31 +152,7 @@ for (let img of images) {
     h: orig_img_metadata.height,
   };
 
-  // Mobile: Images are viewed in max-width: 300px;max-height: 200px;
-  // Desktop: Images are viewed in max-width: 400px;max-height: 300px;
-  const resolution_table = {
-    sm: { w: 400 * 0.75, h: 300 * 0.75 },
-    md: { w: 400 * 1.5, h: 300 * 1.5 },
-    lg: { w: 400 * 2.25, h: 300 * 2.25 },
-    orig: { w: 400 * 3, h: 300 * 3 },
-  };
-
-  let qualifies_for_sizes = [];
-
-  for (let res in resolution_table) {
-    if (
-      orig_img_dimensions.w > resolution_table[res].w &&
-      orig_img_dimensions.h > resolution_table[res].h
-    ) {
-      qualifies_for_sizes.push(res);
-    }
-  }
-
-  if (!qualifies_for_sizes.includes("orig")) {
-    qualifies_for_sizes.push("orig");
-  }
-
-  processed_images = [...processed_images, {img, qualifies_for_sizes, mimetype, orig_img_dimensions}]
+  processed_images = [...processed_images, {img, mimetype, orig_img_dimensions}]
 }
 
 console.log(`Processed ${processed_images.length} images.`);
@@ -192,7 +168,7 @@ console.log(`Created a new database as ${NEW_DB}`)
 console.log(`> Stage 4: Insert new images`)
 
 for (let img of processed_images) {
-  new_db.exec(`insert into images (image_id, image_name, data, height, width, mimetype) values (?, ?, ?, ?, ?, ?, ?);`,
+  new_db.exec(`insert into images (image_id, image_name, data, height, width, mimetype) values (?, ?, ?, ?, ?, ?);`,
     img.img.image_id, img.img.image_name, img.img.image_data_uri, img.orig_img_dimensions.h, img.orig_img_dimensions.w, img.mimetype)
 }
 
