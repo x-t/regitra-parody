@@ -73,7 +73,7 @@ DEFINE_SELECT_SQL_CALLBACK(counter_category_callback) {
         ) + strlen(argv[0]) + 1;
     char* query = malloc(query_length);
 
-    snprintf(query, query_length - 1, 
+    snprintf(query, query_length - 1,
         "select count(id) from questions where language = '%s' and category = '%s'",
         (char*)(((struct CategoryCountPassthrough*)
             (((struct DatabaseWithData*) data))->data)->language_code),

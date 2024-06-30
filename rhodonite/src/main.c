@@ -27,9 +27,10 @@ void make_directory_structure(void) {
 int get_int_len(int value) {
     int l = 1;
     while (value > 9) {
-	l++;
-	value /= 10;
+        l++;
+        value /= 10;
     }
+
     return l;
 }
 
