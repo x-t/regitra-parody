@@ -203,3 +203,12 @@ TODO.txt
 migration_*.json
 
 import/
+
+*.dSYM
+rhodonite/rhodonite
+rhodonite/rhodonite-dev
+rhodonite/Dockerfile
+rhodonite/artifacts
+deno.lock
+
+public/artifacts
