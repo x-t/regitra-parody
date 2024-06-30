@@ -24,7 +24,7 @@ export async function generateQuestion(qi: Question, idx: number) {
             let count = 0;
             for (let size of qi.img_sizes!) {
               count++;
-              agg2 += `/generated/img/${qi.image}-${size}.${fmt} ${count}x`;
+              agg2 += `/artifacts/img/${qi.image}-${size}.${fmt} ${count}x`;
               agg2 += count === qi.img_sizes!.length ? "" : ",";
             }
             return agg2;

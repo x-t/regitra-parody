@@ -60,9 +60,15 @@ type UnifiedData = {
   def: DefaultsInfo;
 };
 
+let unified_data: UnifiedData;
+
 async function get_unified_data() {
-  const req = await fetch(`/artifacts/unified.json`);
-  return (await req.json()) as unknown as UnifiedData;
+  if (!unified_data) {
+    const req = await fetch(`/artifacts/unified.json`);
+    unified_data = (await req.json()) as unknown as UnifiedData;
+  }
+
+  return unified_data;
 }
 
 export async function get_question_data() {
