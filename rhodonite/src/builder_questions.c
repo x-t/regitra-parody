@@ -114,7 +114,11 @@ void thread_builder_question(void* question_ptr) {
 
         if (question->alt_text) {
             cJSON_AddItemToObject(question_json, "alt", cJSON_CreateString(question->alt_text));
+            free(question->alt_text);
         }
+
+        free(question->sizes);
+        free(question->extension);
     }
 
     cJSON* possible_answers = cJSON_CreateArray();
@@ -164,9 +168,6 @@ void thread_builder_question(void* question_ptr) {
     free(question->language);
     free(question->category);
     free(question->question_text);
-    free(question->alt_text);
-    free(question->sizes);
-    free(question->extension);
     cJSON_Delete(question_json);
     cJSON_Delete(correct_answers);
     sqlite3_close(db);
@@ -255,6 +256,8 @@ DEFINE_SELECT_SQL_CALLBACK(question_callback) {
             }
         }
     }
+
+    question.alt_text = NULL;
 
     char* key = malloc(strlen(question.language) + strlen(question.category) + 1);
     strcat(key, question.language);

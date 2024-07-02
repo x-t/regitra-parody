@@ -17,8 +17,11 @@
 
 #include "sql_help.h"
 
-#define DB_NAME "content.db"
-#define THREAD_COUNT 5
+#define DEFAULT_DB_NAME "content.db"
+#define DEFAULT_THREAD_COUNT 5
+
+#define DB_NAME (cmd_opts->custom_database ? cmd_opts->database_name : DEFAULT_DB_NAME)
+#define THREAD_COUNT (cmd_opts->custom_threads ? cmd_opts->thread_amount : DEFAULT_THREAD_COUNT)
 
 #define REQUIRE_MAJOR_SCHEMA_VERSION 2
 #define REQUIRE_MINOR_SCHEMA_VERSION 0
@@ -87,6 +90,19 @@ struct ImageCallbackPassthrough {
     int images_count;
     int image_iterator;
 };
+
+struct CommandLineOptions {
+    bool build;
+    bool custom_threads;
+    int thread_amount;
+    bool custom_database;
+    char* database_name;
+    bool skip_metadata_build;
+    bool skip_images_build;
+    bool skip_questions_build;
+};
+
+extern struct CommandLineOptions* cmd_opts;
 
 void make_directory_structure(void);
 int get_int_len(int value);

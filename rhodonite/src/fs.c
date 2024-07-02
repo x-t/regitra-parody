@@ -7,6 +7,7 @@
  */
 
 #include <stdio.h>
+#include <stdbool.h>
 #include <ftw.h>
 #include <fcntl.h>
 #include <unistd.h>
@@ -23,6 +24,14 @@ void write_file(char* filename, char* contents) {
     fputs(contents, fptr);
     fclose(fptr);
     return;
+}
+
+bool file_exists(char* filename) {
+    if (access(filename, F_OK) == 0) {
+        return true;
+    }
+
+    return false;
 }
 
 void* read_file(char* filename, size_t* len) {

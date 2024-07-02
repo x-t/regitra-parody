@@ -9,6 +9,7 @@
 #pragma once
 
 #include <stddef.h>
+#include <stdbool.h>
 #include <ftw.h>
 
 void write_file(char* filename, char* contents);
@@ -22,4 +23,6 @@ int unlink_cb(const char* fpath, const struct stat* sb, int typeflag, struct FTW
 int rmrf(char* path);
 
 void make_directory(char* filename);
+
+bool file_exists(char* filename);
 

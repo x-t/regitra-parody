@@ -28,5 +28,5 @@ dev: clean
 clean:
 	rm -rf ./rhodonite-dev.dSYM
 	rm -rf ./rhodonite-dev
-	rm -rf ./artifacts
+	rm -rf ./rhodonite
 
