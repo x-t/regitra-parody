@@ -260,7 +260,7 @@ DEFINE_SELECT_SQL_CALLBACK(question_callback) {
     question.alt_text = NULL;
 
     char* key = malloc(strlen(question.language) + strlen(question.category) + 1);
-    strcat(key, question.language);
+    strcpy(key, question.language);
     strcat(key, question.category);
     int* rel_cnt = (int*)(CNHashGetValue((cnhashtable*)(((struct QuestionCallbackPassthrough*)data)->counts_table), key));
     free(key);
@@ -357,7 +357,8 @@ void build_questions_entry(void) {
         for (int j = 0; j < cat_count; j++) {
             char* keyval = malloc(strlen(languages[i]) + strlen(categories[j]) + 1);
             int* counter = malloc(sizeof(int));
-            strcat(keyval, languages[i]);
+            *counter = 0;
+            strcpy(keyval, languages[i]);
             strcat(keyval, categories[j]);
             CNHashInsert(counts_table, keyval, counter);
         }

@@ -119,8 +119,8 @@ void thread_builder_image(void* image_ptr) {
         char* orig_filename = malloc(orig_filename_len);
         char* filename_webp = malloc(filename_webp_len);
         snprintf(filename, filename_len, "%d-%s.", image->image_id, dimension_name);
-        strcat(orig_filename, filename);
-        strcat(filename_webp, filename);
+        strcpy(orig_filename, filename);
+        strcpy(filename_webp, filename);
         strcat(orig_filename, image->mimetype);
         strcat(filename_webp, "webp");
 
@@ -128,9 +128,9 @@ void thread_builder_image(void* image_ptr) {
         size_t webp_image_path_len = 16 + filename_webp_len;
         char* image_path = malloc(image_path_len);
         char* webp_image_path = malloc(webp_image_path_len);
-        strcat(image_path, "./artifacts/img/");
+        strcpy(image_path, "./artifacts/img/");
         strcat(image_path, orig_filename);
-        strcat(webp_image_path, "./artifacts/img/");
+        strcpy(webp_image_path, "./artifacts/img/");
         strcat(webp_image_path, filename_webp);
 
         if (need_to_resize) {

@@ -202,13 +202,12 @@ TODO.txt
 
 migration_*.json
 
-import/
 
 *.dSYM
 rhodonite/rhodonite
 rhodonite/rhodonite-dev
-rhodonite/Dockerfile
 rhodonite/artifacts
+rhodonite/import/
 deno.lock
 
 public/artifacts
@@ -232,3 +231,6 @@ Sessionx.vim
 tags
 # Persistent undo
 [._]*.un~
+
+*.patch
+

@@ -1,10 +1,8 @@
-#
 # Copyright (C) zxyz 2024
 # This Source Code Form is subject to the terms
 # of the Mozilla Public License, v. 2.0. If a
 # copy of the MPL was not distributed with this
 # file, You can obtain one at https://mozilla.org/MPL/2.0/.
-#
 
 .DEFAULT_GOAL := build
 
@@ -14,10 +12,11 @@ BINARY_NAME = rhodonite
 
 CC ?= clang
 CFLAGS_SECURITY = -D_FORTIFY_SOURCE=2 -fstack-protector-all
-CFLAGS ?= -O3 -march=native -mtune=native -DHASHNODEBUG
-DEV_CFLAGS ?= -O0 -g
 WARNINGS ?= -Wall -Wextra -pedantic -Wno-unused-parameter
 LFLAGS ?= -l sqlite3 -l cjson -l c -l pthread $(shell pkg-config vips --cflags --libs)
+RHODONITE_VERSION = $(shell cat ../package.json | sed '3q;d' | awk -F '"' '{print $$4}')
+CFLAGS ?= -O3 -march=native -mtune=native -DHASHNODEBUG -D_XOPEN_SOURCE=700 -DRHODONITE_VERSION="\"$(RHODONITE_VERSION)\""
+DEV_CFLAGS ?= -O0 -g -D_XOPEN_SOURCE=700 -DRHODONITE_VERSION="\"$(RHODONITE_VERSION)\""
 
 build: clean
 	$(CC) -o $(BINARY_NAME) $(SOURCE_FILES) $(LIBRARY_FILES) -I ./lib $(CFLAGS) $(CFLAGS_SECURITY) $(WARNINGS) $(LFLAGS)

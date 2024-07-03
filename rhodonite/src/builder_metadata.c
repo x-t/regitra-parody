@@ -119,27 +119,11 @@ DEFINE_SELECT_SQL_CALLBACK(counter_languages_callback) {
     return 0;
 }
 
-void create_versions_json(struct MetaInfo meta_info,
-    void* package_json_data, size_t package_json_len,
-    cJSON* versions_json) {
+void create_versions_json(struct MetaInfo meta_info, cJSON* versions_json) {
     char* schema_version = meta_info.version;
-    const cJSON* j_version = NULL;
-
-    cJSON* package_json = cJSON_ParseWithLength(
-        (const char*) package_json_data, package_json_len);
-
-    if (package_json == NULL) {
-        const char *error_ptr = cJSON_GetErrorPtr();
-        if (error_ptr != NULL) {
-            fprintf(stderr, "Error before: %s\n", error_ptr);
-        }
-        goto end;
-    }
-
-    j_version = cJSON_GetObjectItemCaseSensitive(package_json, "version");
 
     if (cJSON_AddStringToObject(versions_json, "version",
-        (j_version->valuestring)) == NULL) {
+        RHODONITE_VERSION) == NULL) {
         goto end;
     }
 
@@ -149,7 +133,6 @@ void create_versions_json(struct MetaInfo meta_info,
     }
 
 end:
-    cJSON_Delete(package_json);
     return;
 }
 
@@ -267,12 +250,7 @@ void thread_builder_src_meta_ver(void* data) {
         (void*) &meta_info
     );
 
-    size_t package_json_len = 0;
-    void* package_json_data = read_file("../package.json",
-        &package_json_len);
-
-    create_versions_json(meta_info,
-        package_json_data, package_json_len, (cJSON*)data);
+    create_versions_json(meta_info, (cJSON*)data);
 
     free(meta_info.version);
 

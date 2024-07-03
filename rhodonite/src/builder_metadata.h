@@ -17,9 +17,7 @@ DEFINE_SELECT_SQL_CALLBACK(categories_callback);
 DEFINE_SELECT_SQL_CALLBACK(meta_callback);
 DEFINE_SELECT_SQL_CALLBACK(counter_category_callback);
 DEFINE_SELECT_SQL_CALLBACK(counter_languages_callback);
-void create_versions_json(struct MetaInfo meta_info,
-    void* package_json_data, size_t package_json_len,
-    cJSON* versions_json);
+void create_versions_json(struct MetaInfo meta_info, cJSON* versions_json);
 void create_languages_json(sqlite3* db, cJSON* languages_json);
 void create_categories_json(sqlite3* db, cJSON* categories_json);
 void create_count_json(sqlite3* db, cJSON* count_json);
