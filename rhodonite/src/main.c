@@ -35,15 +35,52 @@ int get_int_len(int value) {
     return l;
 }
 
-void build_main(void) {
-    // FIXME check for version requirement
+DEFINE_SELECT_SQL_CALLBACK(version_check_callback) {
+    if (argv[0][0] == 'v') {
+        fprintf(stderr, "Legacy schema version. Found: %s, required: %d.%d Exiting.\n",
+            (char*)argv[0], REQUIRE_MAJOR_SCHEMA_VERSION, REQUIRE_MINOR_SCHEMA_VERSION);
+        exit(1);
+    }
 
+    char* token_version_string = strtok((char*)argv[0], ".");
+    int major_version = atoi(token_version_string);
+    token_version_string = strtok(NULL, ".");
+    int minor_version = atoi(token_version_string);
+
+    if (major_version > REQUIRE_MAJOR_SCHEMA_VERSION) {
+        fprintf(stderr, "Schema version from the future. Found: %d.%d, required: %d.%d Exiting.\n",
+            major_version, minor_version, REQUIRE_MAJOR_SCHEMA_VERSION, REQUIRE_MINOR_SCHEMA_VERSION);
+        exit(1);
+    }
+
+    if (major_version != REQUIRE_MAJOR_SCHEMA_VERSION || minor_version < REQUIRE_MINOR_SCHEMA_VERSION) {
+        fprintf(stderr, "Outdated schema version. Found: %d.%d, required: %d.%d Exiting.\n",
+            major_version, minor_version, REQUIRE_MAJOR_SCHEMA_VERSION, REQUIRE_MINOR_SCHEMA_VERSION);
+        exit(1);
+    }
+
+    return 0;
+}
+
+void build_main(void) {
     if (!file_exists(DB_NAME)) {
         fprintf(stderr, "Database %s doesn't exist. Exiting.\n", DB_NAME);
         exit(1);
     }
 
     fprintf(stderr, "Starting build (database: %s, threads: %d)...\n", DB_NAME, THREAD_COUNT);
+
+    sqlite3* db;
+    OPEN_SQLITE(db);
+
+    EXECUTE_SELECT_SQL(
+        db,
+        "select value from meta where key='version'",
+        version_check_callback,
+        NULL
+    );
+
+    sqlite3_close(db);
 
     make_directory_structure();
 
@@ -130,9 +167,7 @@ void begin(int argc, char** argv) {
         }
 
         goto end;
-    }
-
-    if (!strcmp("build", argv[1])) {
+    } else if (!strcmp("build", argv[1])) {
         if (argc > 2) {
             for (int i = 2; i < argc; i++) {
                 if (!strcmp("-t", argv[i])) {
