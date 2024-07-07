@@ -41,7 +41,7 @@ button {
 
 .mainWindow > div.options {
   height: 150px;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .mainWindow > div.options > table {
@@ -555,6 +555,14 @@ button {
   display: none;
 }
 
+footer {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  text-align: right;
+  padding-right: 10px;
+}
+
 @media only screen and (min-width: 768px) {
   .examTaskSelectorSpacer {
     min-width: 100%;
@@ -592,6 +600,10 @@ button {
 
   .mainWindow > div.name {
     font-size: 80px;
+  }
+
+  .mainWindow > div.options {
+    font-size: 30px;
   }
 
   .testQuestion > div:first-child > div:nth-child(2) > span {

@@ -39,7 +39,7 @@ export async function beginPage(name: string) {
               for (let c of categories) {
                 concat += `
                 <button class="changeCategoryButton" id="changeCategory${c.toUpperCase()}">
-                <img width=32 height=32 
+                <img width=32 height=32
                 style="background:url(/img/category_${c}.svg) center no-repeat;"
                 src="/img/${c == state.examCategory ? "checkmark" : "blank"}Overlay.png"
                 alt="${c.toUpperCase()} category ${c == state.examCategory ? "selected" : ""}">
@@ -58,8 +58,8 @@ export async function beginPage(name: string) {
               for (let language of languages) {
                 language_list += `
                   <button class="changeLangButton" id="changeLang${language.toUpperCase()}">
-                  <img id="changeLang${language.toUpperCase()}Img" 
-                  src="/img/${language.toUpperCase()}${language == state.selectedLanguage ? "yes" : "off"}.png" 
+                  <img id="changeLang${language.toUpperCase()}Img"
+                  src="/img/${language.toUpperCase()}${language == state.selectedLanguage ? "yes" : "off"}.png"
                   alt="${language.toUpperCase()} ${language == state.selectedLanguage ? "selected" : ""}"></button>`;
               }
               return language_list;
@@ -74,8 +74,11 @@ export async function beginPage(name: string) {
         "startExam",
       )}</span><img src="/img/arrow.png" height="32" width="32" alt="Arrow"/>
     </button>
-    <p class="infoSmall">${await strings("affiliationWarning")}</p>
-    <p class="infoSmall"><a href="https://github.com/x-t/regitra-parody">v${version}</a> ©️ <a href="https://x-t.github.io">x-t</a> ${new Date().getFullYear()}</p>
+
+    <footer>
+      <p class="infoSmall">${await strings("affiliationWarning")}</p>
+      <p class="infoSmall"><a href="https://github.com/x-t/regitra-parody">v${version}</a> ©️ <a href="https://x-t.github.io">x-t</a> ${new Date().getFullYear()}</p>
+    </footer>
   </div>
   <div class="examFinishOverlay"></div>
 `;
