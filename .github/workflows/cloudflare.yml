@@ -23,9 +23,10 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: Download dependencies
-        run: |
-          sudo apt-get install -y libsqlite3-dev libcjson-dev libvips-dev clang make
+      - uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: libsqlite3-dev libcjson-dev libvips-dev clang make
+          version: 1.0
 
       - name: Compile Rhodonite
         run: |
