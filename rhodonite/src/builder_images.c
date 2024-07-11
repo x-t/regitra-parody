@@ -37,6 +37,8 @@ struct ImageDimensions resize_calc(int width, int height, int max_width, int max
         aspect_ratio_usable = aspect_ratio_per_height;
     } else if (aspect_ratio_per_height > aspect_ratio_per_width) {
         aspect_ratio_usable = aspect_ratio_per_width;
+    } else {
+        aspect_ratio_usable = aspect_ratio_per_height;
     }
 
     struct ImageDimensions dimensions = (struct ImageDimensions) {
