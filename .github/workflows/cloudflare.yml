@@ -1,0 +1,68 @@
+# Copyright (C) zxyz 2024
+# This Source Code Form is subject to the terms
+# of the Mozilla Public License, v. 2.0. If a
+# copy of the MPL was not distributed with this
+# file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
+name: Cloudflare Pages
+
+on: [push]
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.12.1
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Download dependencies
+        run: |
+          sudo apt-get install -y libsqlite3-dev libcjson-dev libvips-dev clang make
+
+      - name: Compile Rhodonite
+        run: |
+          pushd rhodonite
+          make
+          popd
+
+      - name: Download web dependencies
+        run: |
+          npm i
+
+      - name: Build frontend
+        run: |
+          npm run build
+
+      - name: Get database
+        env:
+          database_url: ${{ secrets.DATABASE_URL }}
+        run: |
+          curl -o rhodonite/content.db -L "$database_url"
+
+      - name: Build backend
+        run: |
+          pushd rhodonite
+          ./rhodonite build -t $(($(nproc --all) + 1))
+          popd
+
+      - name: Merge frontend and backend
+        run: |
+          mv ./rhodonite/artifacts dist/
+
+      - name: Publish to Cloudflare Pages
+        uses: cloudflare/pages-action@v1
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          projectName: regitra
+          directory: dist
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
